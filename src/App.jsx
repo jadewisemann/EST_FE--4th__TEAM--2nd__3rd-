@@ -13,6 +13,8 @@ import {
   TestPage
 } from './pages'
 
+import ProtectedRoute from './routes/ProtectedRoute'
+
 // css
 import './App.css'
 
@@ -33,7 +35,10 @@ const App = () => (
     <Route path="/wishlist" element={<WishlistPage />}/>
     <Route path="/*" element={<NotFoundPage />}/>
     <Route path="/test" element={<TestPage />}/>
+    <Route element={<ProtectedRoute />}>
+      {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
+    </Route>
   </Routes>
 )
 
-export default App
+export default App  
