@@ -8,6 +8,7 @@ import SearchPage from "./search";
 import SearchResultPage from "./search-result";
 import UserInfoPage from "./user-info";
 import WishlistPage from "./wishlist";
+import TestPage from "./test";
 
 export  { 
   DetailsPage,
@@ -19,5 +20,6 @@ export  {
   SearchResultPage,
   SignupPage,  
   UserInfoPage,
-  WishlistPage
+  WishlistPage,
+  TestPage
 }
