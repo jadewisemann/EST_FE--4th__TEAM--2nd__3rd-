@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+/* theme override */
+@theme {
+  --text-xxs: 10px;
+}
+
+/* 
+@utility button {
+  @apply 
+}
+*/
