@@ -11,7 +11,6 @@ import importPlugin from 'eslint-plugin-import'
 export default {
   ignores: ['dist'],
   files: ['**/*.{js,jsx}'],
-
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -19,13 +18,15 @@ export default {
       ...globals.browser,
       React: 'readonly',
     },
-    ecmaFeatures: {
-      jsx: true,
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
   },
-
   settings: {
     react: {
+      version: 'detect',
       runtime: 'automatic',
     },
     'import/resolver': {
@@ -34,7 +35,6 @@ export default {
       },
     },
   },
-
   plugins: {
     'react-hooks': reactHooks,
     'react-refresh': reactRefresh,
@@ -44,7 +44,6 @@ export default {
     'import': importPlugin,
     // 'tailwindcss': tailwindcss
   },
-
   rules: {
     ...js.configs.recommended.rules,
     ...reactHooks.configs.recommended.rules,
@@ -59,7 +58,7 @@ export default {
     ],
     'no-unused-vars': 'error',
     'eqeqeq': ['error', 'always'],
-    'func-style': ['warn', 'expression'],
+    'func-style': ['error', 'expression'],
     // 'tailwindcss/classnames-order': 'warn',    
     // 'tailwindcss/no-custom-classname': 'off'
   },
