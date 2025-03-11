@@ -1,0 +1,7 @@
+{
+  // "tailwindCSS.experimental.configFile": "src/styles/app.css"
+  "tailwindCSS.experimental.configFile": "src/App.css",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+}
