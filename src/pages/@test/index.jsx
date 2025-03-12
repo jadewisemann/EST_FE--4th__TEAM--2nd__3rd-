@@ -1,13 +1,13 @@
 // react
 import React from 'react';
-import Button from '../../components/Button';
+import Badge from '../../components/badge';
 
 // components
 
 const TestPage = () => {
   return (
     <>
-      <Button type='solid'>확인</Button>
+      <Badge />
     </>
   );
 };
