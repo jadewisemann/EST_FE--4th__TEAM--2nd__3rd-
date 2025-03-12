@@ -4,12 +4,10 @@ import Button from '../../components/Button';
 
 // components
 
-const TestPage = () => {
-  return (
-    <>
-      <Button type='solid'>확인</Button>
-    </>
-  );
-};
+const TestPage = () => (
+  <>
+    <Button type='solid'>확인</Button>
+  </>
+);
 
 export default TestPage;
