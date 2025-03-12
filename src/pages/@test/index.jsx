@@ -1,12 +1,15 @@
 // react
-import Calendar from '../../components/Calendar';
+import React from 'react';
+import Button from '../../components/Button';
 
 // components
 
-const TestPage = () => (
-  <>
-    <Calendar />
-  </>
-);
+const TestPage = () => {
+  return (
+    <>
+      <Button type='solid'>확인</Button>
+    </>
+  );
+};
 
 export default TestPage;

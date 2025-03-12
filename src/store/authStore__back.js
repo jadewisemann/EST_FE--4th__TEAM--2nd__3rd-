@@ -1,10 +1,17 @@
-// firebase와의 의존성 분리
+// firebase를 직접 의존
+  // src/firebase/auth.js 없이 직접 인증을 관리
 
 import { create } from "zustand";
-import { listenAuthState, signUp, login, logout } from "../firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import app from "../firebase/config";
+
+const auth = getAuth(app);
 
 const useAuthStore = create((set) => {
-  listenAuthState((user) => set({ user }));
+
+  onAuthStateChanged(auth, (user) => {
+    set({ user });
+  });
 
   return {
     user: null,
@@ -12,16 +19,16 @@ const useAuthStore = create((set) => {
 
     signUp: async (email, password) => {
       try {
-        const userCredential = await signUp(email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         set({ user: userCredential.user, error: null });
       } catch (error) {
         set({ error: error.message });
       }
-    },
+    }, 
 
     login: async (email, password) => {
       try {
-        const userCredential = await login(email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         set({ user: userCredential.user, error: null });
       } catch (error) {
         set({ error: error.message });
@@ -29,7 +36,7 @@ const useAuthStore = create((set) => {
     },
 
     logout: async () => {
-      await logout();
+      await signOut(auth);
       set({ user: null });
     },
   };

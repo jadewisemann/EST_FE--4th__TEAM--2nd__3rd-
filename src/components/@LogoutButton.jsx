@@ -1,4 +1,4 @@
-import useAuthStore from '../store/authStore';
+import useAuthStore from "../store/authStore";
 
 const LogoutButton = () => {
   const { user, logout } = useAuthStore();
@@ -7,3 +7,4 @@ const LogoutButton = () => {
 };
 
 export default LogoutButton;
+  
