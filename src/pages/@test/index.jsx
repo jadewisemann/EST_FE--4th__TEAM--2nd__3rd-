@@ -1,4 +1,5 @@
 // react
+
 import React from 'react';
 import Tab from '../../components/tab';
 
@@ -11,5 +12,3 @@ const TestPage = () => {
     </>
   );
 };
-
-export default TestPage;
