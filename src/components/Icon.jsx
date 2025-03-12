@@ -28,6 +28,7 @@ import {
   IoLocationSharp,
 } from 'react-icons/io5';
 import { BsFillDoorOpenFill } from 'react-icons/bs';
+import { LuArrowDownUp } from 'react-icons/lu';
 
 const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
   const icons = {
@@ -38,7 +39,8 @@ const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
     lock: CiLock,
     profile: MdOutlinePerson,
     close: IoClose,
-    //calendar
+    sort: LuArrowDownUp,
+    // calendar
     calendar: CiCalendar,
     arrow_right: FaArrowRight,
     // heart
