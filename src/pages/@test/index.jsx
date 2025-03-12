@@ -1,12 +1,14 @@
 // react
-import Calendar from '../../components/Calendar';
+
+import React from 'react';
+import Tab from '../../components/tab';
 
 // components
 
-const TestPage = () => (
-  <>
-    <Calendar />
-  </>
-);
-
-export default TestPage;
+const TestPage = () => {
+  return (
+    <>
+      <Tab></Tab>
+    </>
+  );
+};
