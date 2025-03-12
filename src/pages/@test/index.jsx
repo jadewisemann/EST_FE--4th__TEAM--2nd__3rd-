@@ -1,15 +1,14 @@
 // react
+
 import React from 'react';
-import Button from '../../components/Button';
+import Tab from '../../components/tab';
 
 // components
 
 const TestPage = () => {
   return (
     <>
-      <Button type='solid'>확인</Button>
+      <Tab></Tab>
     </>
   );
 };
-
-export default TestPage;
