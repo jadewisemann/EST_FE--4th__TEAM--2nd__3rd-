@@ -1,12 +1,11 @@
 // react
-import React from 'react';
-import Button from '../../components/Button';
+import Calendar from '../../components/Calendar';
 
 // components
 
 const TestPage = () => (
   <>
-    <Button type='solid'>확인</Button>
+    <Calendar />
   </>
 );
 

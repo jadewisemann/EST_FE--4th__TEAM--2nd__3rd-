@@ -10,7 +10,6 @@ const SignUp = () => {
     e.preventDefault();
     signUp(email, password);
   };
-
   return (
     <div>
       <h2>회원가입</h2>
