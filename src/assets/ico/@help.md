@@ -1,0 +1,14 @@
+- icon naming convention
+  - `/assets/icon/` 에 저장
+  - `ico_크기_이름_상태`
+    - 크기는 픽셀 단위
+      - 아이콘은 정사각형이므로 하나의 크기가 전체 크기를 지정함
+    - 이름
+      - 이름에 띄어 쓰기가 있더라도 언더바, 띄어쓰기 또는 대문자로 구분하지 않기
+      - `ico_24_hotelandpension`
+    - 상태
+      - 상태가 있으면 적기
+        - `ico_24_heart_fill`
+        - `ico_24_heart_empty`
+      - 없다면 적지 않아도 문제 없음
+        - `ico_36_start`
