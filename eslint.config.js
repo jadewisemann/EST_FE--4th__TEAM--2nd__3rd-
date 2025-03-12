@@ -6,6 +6,7 @@ import prettier from 'eslint-plugin-prettier'
 import react from 'eslint-plugin-react'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import importPlugin from 'eslint-plugin-import'
+import stylisticJs from '@stylistic/eslint-plugin-js'
 // import tailwindcss from 'eslint-plugin-tailwindcss'
 
 export default {
@@ -16,24 +17,24 @@ export default {
     sourceType: 'module',
     globals: {
       ...globals.browser,
-      React: 'readonly',
+      React: 'readonly'
     },
     parserOptions: {
       ecmaFeatures: {
-        jsx: true,
-      },
-    },
+        jsx: true
+      }
+    }
   },
   settings: {
     react: {
       version: 'detect',
-      runtime: 'automatic',
+      runtime: 'automatic'
     },
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.css'],
-      },
-    },
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.css']
+      }
+    }
   },
   plugins: {
     'react-hooks': reactHooks,
@@ -43,6 +44,7 @@ export default {
     'jsx-a11y': jsxA11y,
     'import': importPlugin,
     // 'tailwindcss': tailwindcss
+    '@stylistic/js': stylisticJs
   },
   rules: {
     ...js.configs.recommended.rules,
@@ -54,12 +56,21 @@ export default {
     'react/jsx-no-target-blank': 'off',
     'react-refresh/only-export-components': [
       'warn',
-      { allowConstantExport: true },
+      { allowConstantExport: true }
     ],
     'no-unused-vars': 'error',
     'eqeqeq': ['error', 'always'],
     'func-style': ['error', 'expression'],
+    'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
+    'object-curly-newline': ['error', {
+      'ObjectExpression': { 'multiline': true, 'consistent': true },
+      'ObjectPattern': { 'multiline': true, 'consistent': true },
+      'ImportDeclaration': { 'multiline': true, 'consistent': true },
+      'ExportDeclaration': { 'multiline': true, 'consistent': true }
+    }],
+    "react/jsx-uses-vars": "error"
+    // "comma-dangle": ["error", "never"]
     // 'tailwindcss/classnames-order': 'warn',    
     // 'tailwindcss/no-custom-classname': 'off'
-  },
+  }
 }
