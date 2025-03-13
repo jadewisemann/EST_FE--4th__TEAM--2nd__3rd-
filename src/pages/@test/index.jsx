@@ -19,6 +19,7 @@ const TestPage = () => {
     'Nav',
     'tab',
     'Complete',
+    'Heart',
     'Button',
     'Radio',
   ];
@@ -106,8 +107,12 @@ const TestPage = () => {
       ></Complete>
       <br />
       <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
-        <button>숙소 검색하기</button>
+        <Button color='prime' size='full' onClick={() => {}}>
+          숙소 검색하기
+        </Button>
       </Complete>
+    </>,
+    <>
       <h1 className='text-4xl'>Heart</h1>
       <br />
       <Heart />
