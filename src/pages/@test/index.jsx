@@ -26,6 +26,7 @@ const TestPage = () => {
     'Button',
     `Counter`,
     'Radio',
+    'Badge',
   ];
 
   // 라디오 버튼 예시
@@ -185,6 +186,12 @@ const TestPage = () => {
       <h1 className='text-4xl'>Radio</h1>
       <br />
       <Radio name='payment' options={radio1} />
+    </>,
+    <>
+      <h1 className='text-4xl'>Badge</h1>
+      <br />
+      <Badge type={'sale'} children={15} />
+      <Badge children={'오늘의최저가'} />
     </>,
   ];
 
