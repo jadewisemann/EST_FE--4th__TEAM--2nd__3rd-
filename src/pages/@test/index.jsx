@@ -5,6 +5,7 @@ import Icon from '../../components/Icon';
 import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
+import Complete from '../../components/Complete';
 import Heart from '../../components/Heart';
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
@@ -18,7 +19,8 @@ const TestPage = () => {
     'Rating',
     'Nav',
     'tab',
-    'heart',
+    'Complete',
+    'Heart',
     'Button',
     `Counter`,
     'Radio',
@@ -92,6 +94,25 @@ const TestPage = () => {
         categories={['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소']}
         contents={['tab1', 'tab2', 'tab3', 'tab4', 'tab5']}
       />
+    </>,
+    <>
+      <h1 className='text-4xl'>Complete</h1>
+      <br />
+      <Complete
+        type='done'
+        message='예약이 완료되었어요!'
+        description={[
+          '예약이 확정 되면',
+          '입력하신 이메일로 바우처를 보내드립니다.',
+          '(평일, 최대 12시간 내)',
+        ]}
+      ></Complete>
+      <br />
+      <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
+        <Button color='prime' size='full' onClick={() => {}}>
+          숙소 검색하기
+        </Button>
+      </Complete>
     </>,
     <>
       <h1 className='text-4xl'>Heart</h1>
