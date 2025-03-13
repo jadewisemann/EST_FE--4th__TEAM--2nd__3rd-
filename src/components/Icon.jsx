@@ -63,7 +63,7 @@ const Icon = ({
     minus: FaMinus,
     plus: FaPlus,
     minus_thin: FaMinusFa6,
-    minus_plus: FaPlusFa6,
+    plus_thin: FaPlusFa6,
     // detail
     share: IoShareSocialOutline,
     wifi: IoIosWifi,
