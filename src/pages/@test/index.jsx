@@ -6,10 +6,18 @@ import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Heart from '../../components/Heart';
-
+import Button from '../../components/Button';
 // components
 const TestPage = () => {
-  const categories = ['Calendar', 'Icon', 'Rating', 'Nav', 'tab', 'heart'];
+  const categories = [
+    'Calendar',
+    'Icon',
+    'Rating',
+    'Nav',
+    'tab',
+    'heart',
+    'Button',
+  ];
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -47,6 +55,58 @@ const TestPage = () => {
       <h1 className='text-4xl'>Heart</h1>
       <br />
       <Heart />
+    </>,
+    <>
+      <h1 className='text-4xl'>Button</h1>
+      <br />
+      <div className='flex flex-col gap-2'>
+        <h2>size = 'full'</h2>
+        <Button
+          color='prime'
+          size='full'
+          className='rounded-2xl'
+          onClick={() => {}}
+        >
+          prime, full
+        </Button>
+        <Button color='invert' size='full' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='full' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='full' onClick={() => {}}>
+          alt, full
+        </Button>
+
+        <h2>size = 'square'</h2>
+        <Button color='prime' size='square' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='square' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='square' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='square' onClick={() => {}}>
+          alt, full
+        </Button>
+
+        <h2>size = 'small'</h2>
+        <Button color='prime' size='small' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='small' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='small' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='small' onClick={() => {}}>
+          alt, full
+        </Button>
+      </div>
     </>,
   ];
 
