@@ -31,7 +31,13 @@ import {
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
 
-const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
+export default function Icon({
+  name,
+  size = 24,
+  color = '',
+  className = '',
+  strokeWidth = 1,
+}) {
   const icons = {
     // common
     home: PiHouse,
@@ -76,28 +82,29 @@ const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
   return (
     <IconName
       color={color}
+      className={`${className ? className : 'text-violet-600'}`}
       size={size}
-      className={className}
-      style={{ strokeWidth: 1 }}
+      style={{ strokeWidth: strokeWidth ? strokeWidth : '1' }}
     />
   );
-};
-
-export default Icon;
+}
 
 // 사용법
 
 // default
-// 기본 컬러 : #8E51FF(primary Color), 기본 사이즈 : 24
+// 기본 컬러 : violet-600, 기본 사이즈 : 24
 // ex) <Icon name="profile"/>
 
 // color 변경 시
 // color 속성 추가
-// ex) <Icon name="profile" color="#8E51FF"/>
+// ex) <Icon name="profile" color="red"/>
+
+// tailwind 제공 컬러로 변경 시
+// ex) <Icon name="profile" className="text-red-500"/>
 
 // size 변경 시
 // size 속성 추가
 // ex) <Icon name="profile" size={18}/>
 
 // tailwind css 추가 시
-// ex) <Icon name="profile" color="#8E51FF" size={24} className='bg-red-100'/>
+// ex) <Icon name="profile" color="red" size={24} className='bg-red-100'/>
