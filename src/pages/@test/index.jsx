@@ -5,10 +5,11 @@ import Icon from '../../components/Icon';
 import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
+import Heart from '../../components/Heart';
 
 // components
 const TestPage = () => {
-  const categories = ['Calendar', 'Icon', 'Rating', 'Nav', 'tab'];
+  const categories = ['Calendar', 'Icon', 'Rating', 'Nav', 'tab', 'heart'];
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -41,6 +42,11 @@ const TestPage = () => {
         categories={['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소']}
         contents={['tab1', 'tab2', 'tab3', 'tab4', 'tab5']}
       />
+    </>,
+    <>
+      <h1 className='text-4xl'>Heart</h1>
+      <br />
+      <Heart />
     </>,
   ];
 
