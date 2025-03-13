@@ -11,9 +11,8 @@ import {
   FaSwimmingPool,
   FaSmoking,
   FaCheck,
-  FaCircleCheck,
 } from 'react-icons/fa';
-import { FaChildReaching, FaBanSmoking } from 'react-icons/fa6';
+import { FaChildReaching, FaBanSmoking, FaCircleCheck } from 'react-icons/fa6';
 import {
   MdOutlinePerson,
   MdAlternateEmail,
