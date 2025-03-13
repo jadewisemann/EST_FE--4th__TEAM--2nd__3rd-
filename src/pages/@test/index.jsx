@@ -1,5 +1,5 @@
 // react
-import Tab from '../../components/tab';
+import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
 import ReviewRating from '../../components/ReviewRating';
@@ -191,6 +191,7 @@ const TestPage = () => {
       <h1 className='text-4xl'>Badge</h1>
       <br />
       <Badge type={'sale'} children={15} />
+      <br />
       <Badge children={'오늘의최저가'} />
     </>,
   ];
