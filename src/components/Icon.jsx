@@ -31,13 +31,13 @@ import {
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
 
-export default function Icon({
+const Icon = ({
   name,
   size = 24,
   color = '',
   className = '',
   strokeWidth = 1,
-}) {
+}) => {
   const icons = {
     // common
     home: PiHouse,
@@ -87,7 +87,9 @@ export default function Icon({
       style={{ strokeWidth: strokeWidth ? strokeWidth : '1' }}
     />
   );
-}
+};
+
+export default Icon;
 
 // 사용법
 
