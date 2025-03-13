@@ -6,10 +6,30 @@ import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Complete from '../../components/Complete';
+import Heart from '../../components/Heart';
+import Button from '../../components/Button';
+import Radio from '../../components/Radio';
 
 // components
 const TestPage = () => {
-  const categories = ['Calendar', 'Icon', 'Rating', 'Nav', 'tab', 'Complete'];
+  const categories = [
+    'Calendar',
+    'Icon',
+    'Rating',
+    'Nav',
+    'tab',
+    'Complete',
+    'Button',
+    'Radio',
+  ];
+
+  // 라디오 버튼 예시
+  const radio1 = [
+    { value: '신용카드', disabled: true },
+    { value: '포인트 결제', disabled: false },
+    { value: '현장에서 결제하기', disabled: false },
+  ];
+
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -51,6 +71,7 @@ const TestPage = () => {
       <Icon name='smoke_non' />
       <Icon name='location' />
       <Icon name='check' />
+      <Icon name='check_circle' />
     </>,
     <>
       <h1 className='text-4xl'>rating</h1>
@@ -87,6 +108,66 @@ const TestPage = () => {
       <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
         <button>숙소 검색하기</button>
       </Complete>
+      <h1 className='text-4xl'>Heart</h1>
+      <br />
+      <Heart />
+    </>,
+    <>
+      <h1 className='text-4xl'>Button</h1>
+      <br />
+      <div className='flex flex-col gap-2'>
+        <h2>size = 'full'</h2>
+        <Button
+          color='prime'
+          size='full'
+          className='rounded-2xl'
+          onClick={() => {}}
+        >
+          prime, full
+        </Button>
+        <Button color='invert' size='full' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='full' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='full' onClick={() => {}}>
+          alt, full
+        </Button>
+
+        <h2>size = 'square'</h2>
+        <Button color='prime' size='square' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='square' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='square' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='square' onClick={() => {}}>
+          alt, full
+        </Button>
+
+        <h2>size = 'small'</h2>
+        <Button color='prime' size='small' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='small' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='small' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='small' onClick={() => {}}>
+          alt, full
+        </Button>
+      </div>
+    </>,
+    <>
+      <h1 className='text-4xl'>Radio</h1>
+      <br />
+      <Radio name='payment' options={radio1} />
     </>,
   ];
 
