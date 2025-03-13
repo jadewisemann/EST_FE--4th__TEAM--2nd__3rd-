@@ -7,6 +7,8 @@ import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Heart from '../../components/Heart';
 import Button from '../../components/Button';
+import Radio from '../../components/Radio';
+
 // components
 const TestPage = () => {
   const categories = [
@@ -17,7 +19,16 @@ const TestPage = () => {
     'tab',
     'heart',
     'Button',
+    'Radio',
   ];
+
+  // 라디오 버튼 예시
+  const radio1 = [
+    { value: '신용카드', disabled: true },
+    { value: '포인트 결제', disabled: false },
+    { value: '현장에서 결제하기', disabled: false },
+  ];
+
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -107,6 +118,11 @@ const TestPage = () => {
           alt, full
         </Button>
       </div>
+    </>,
+    <>
+      <h1 className='text-4xl'>Radio</h1>
+      <br />
+      <Radio name='payment' options={radio1} />
     </>,
   ];
 
