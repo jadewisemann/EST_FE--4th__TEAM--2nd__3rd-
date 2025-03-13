@@ -11,9 +11,8 @@ import {
   FaSwimmingPool,
   FaSmoking,
   FaCheck,
-  FaCircleCheck,
 } from 'react-icons/fa';
-import { FaChildReaching, FaBanSmoking } from 'react-icons/fa6';
+import { FaChildReaching, FaBanSmoking, FaCircleCheck } from 'react-icons/fa6';
 import {
   MdOutlinePerson,
   MdAlternateEmail,
@@ -31,6 +30,7 @@ import {
 } from 'react-icons/io5';
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
+import { FaPlus as FaPlusFa6, FaMinus as FaMinusFa6 } from 'react-icons/fa6';
 
 const Icon = ({
   name,
@@ -62,6 +62,8 @@ const Icon = ({
     // counter
     minus: FaMinus,
     plus: FaPlus,
+    minus_thin: FaMinusFa6,
+    plus_thin: FaPlusFa6,
     // detail
     share: IoShareSocialOutline,
     wifi: IoIosWifi,

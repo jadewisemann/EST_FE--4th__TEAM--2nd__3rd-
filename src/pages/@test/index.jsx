@@ -5,12 +5,14 @@ import Icon from '../../components/Icon';
 import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
+import Complete from '../../components/Complete';
 import Heart from '../../components/Heart';
 import Badge from '../../components/badge';
 
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
 
+import Counter from '../../components/Counter';
 // components
 const TestPage = () => {
   const categories = [
@@ -19,9 +21,10 @@ const TestPage = () => {
     'Rating',
     'Nav',
     'tab',
-    'heart',
-    'badge',
+    'Complete',
+    'Heart',
     'Button',
+    `Counter`,
     'Radio',
   ];
 
@@ -95,6 +98,25 @@ const TestPage = () => {
       />
     </>,
     <>
+      <h1 className='text-4xl'>Complete</h1>
+      <br />
+      <Complete
+        type='done'
+        message='예약이 완료되었어요!'
+        description={[
+          '예약이 확정 되면',
+          '입력하신 이메일로 바우처를 보내드립니다.',
+          '(평일, 최대 12시간 내)',
+        ]}
+      ></Complete>
+      <br />
+      <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
+        <Button color='prime' size='full' onClick={() => {}}>
+          숙소 검색하기
+        </Button>
+      </Complete>
+    </>,
+    <>
       <h1 className='text-4xl'>Heart</h1>
       <br />
       <Heart />
@@ -149,6 +171,14 @@ const TestPage = () => {
         <Button color='alt' size='small' onClick={() => {}}>
           alt, full
         </Button>
+      </div>
+    </>,
+    <>
+      <h2>Counter</h2>
+      <div className='w-sm bg-red-50'>
+        <Counter startAt={0} setter={state => alert(state)}>
+          객실
+        </Counter>
       </div>
     </>,
     <>
