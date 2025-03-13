@@ -28,7 +28,7 @@ const Heart = ({ roomId }) => {
 
         <g transform='translate(5, 5)'>
           {!isChecked ? (
-            <Icon name='heart' color='#8E51FF' size={20} />
+            <Icon name='heart' color='#FF41BC' size={20} />
           ) : (
             <Icon name='heart_fill' color='#FF41BC' size={20} />
           )}
