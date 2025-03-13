@@ -1,4 +1,4 @@
-# commit convention
+# Commit Convention
 
 - commit 메시지 쓰는 법
 - 코딩 컨벤션은 강제가 아니지만 이건 강제적
