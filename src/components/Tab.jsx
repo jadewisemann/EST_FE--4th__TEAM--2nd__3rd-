@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Icon from './Icon';
 
-const Tab = () => {
-  const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
-  const contents = ['tab1', 'tab2', 'tab3', 'tab4', 'tab5'];
+const Tab = ({ categories, contents }) => {
+  // const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
+  // const contents = ['tab1', 'tab2', 'tab3', 'tab4', 'tab5'];
   const [activeTab, setActiveTab] = useState(0); //선택된 카테고리
   const [sort, setSort] = useState('asc'); //asc: 오름차순, desc: 내림차순
 
@@ -17,7 +17,7 @@ const Tab = () => {
               onClick={() => {
                 setActiveTab(idx);
               }}
-              className={`shrink-0 rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600' : 'border-neutral-300 text-black'}`}
+              className={`shrink-0 cursor-pointer rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600' : 'border-neutral-300 text-black'}`}
             >
               {item}
             </button>
