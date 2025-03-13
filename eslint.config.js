@@ -60,6 +60,10 @@ export default {
     ],
     'no-unused-vars': 'error',
     'eqeqeq': ['error', 'always'],
+    'react/function-component-definition': ['error', { 
+      namedComponents: ['function-expression', `arrow-function`], 
+      unnamedComponents: 'arrow-function', 
+    }],
     'func-style': ['error', 'expression'],
     'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
     'object-curly-newline': ['error', {
