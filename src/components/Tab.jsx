@@ -17,7 +17,7 @@ const Tab = ({ categories, contents }) => {
               onClick={() => {
                 setActiveTab(idx);
               }}
-              className={`shrink-0 rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600' : 'border-neutral-300 text-black'}`}
+              className={`shrink-0 cursor-pointer rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600' : 'border-neutral-300 text-black'}`}
             >
               {item}
             </button>
