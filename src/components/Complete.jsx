@@ -2,15 +2,17 @@ import Icon from './Icon';
 
 const Complete = ({ type, message, description, children }) => (
   <>
-    <div className='flex flex-col items-center gap-5.5 text-center'>
-      <Icon name='check'></Icon>
-      <strong className='text-lg'>{message}</strong>
+    <div className='my-11 flex flex-col items-center gap-5.5 text-center'>
+      <Icon name='check_circle' size={50}></Icon>
+      <strong className='px-10 text-lg'>{message}</strong>
       <div>
         {type === 'done'
           ? description.map(item => <p className='px-10 text-sm'>{item}</p>)
           : null}
       </div>
-      {type === 'notYet' ? children : null}
+      {type === 'notYet' ? (
+        <div className='mx-10 w-full'>{children}</div>
+      ) : null}
     </div>
   </>
 );
