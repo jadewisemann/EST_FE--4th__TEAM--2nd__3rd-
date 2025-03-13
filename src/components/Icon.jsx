@@ -11,6 +11,7 @@ import {
   FaSwimmingPool,
   FaSmoking,
   FaCheck,
+  FaCircleCheck ,
 } from 'react-icons/fa';
 import { FaChildReaching, FaBanSmoking } from 'react-icons/fa6';
 import {
@@ -75,6 +76,7 @@ const Icon = ({
     smoke_non: FaBanSmoking,
     location: IoLocationSharp,
     check: FaCheck,
+    check_circle;: FaCircleCheck,
   };
 
   const IconName = icons[name];
