@@ -42,6 +42,35 @@ const TestPage = () => {
       <Icon name='profile' />
       <Icon name='star_fill' className='text-yellow-400' size={18} />
       <Icon name='heart_fill' color='red' />
+      <Icon name='home' />
+      <Icon name='search' />
+      <Icon name='email' />
+      <Icon name='lock' />
+      <Icon name='close' />
+      <Icon name='sort' />
+      <Icon name='calendar' />
+      <Icon name='arrow_right' />
+      <Icon name='heart' />
+      <Icon name='heart_fill' />
+      <Icon name='star' />
+      <Icon name='star_half' />
+      <Icon name='star_fill' />
+      <Icon name='minus' />
+      <Icon name='plus' />
+      <Icon name='share' />
+      <Icon name='wifi' />
+      <Icon name='fitness' />
+      <Icon name='dining' />
+      <Icon name='swimmingpool' />
+      <Icon name='door' />
+      <Icon name='person' />
+      <Icon name='Children' />
+      <Icon name='bed' />
+      <Icon name='smoke' />
+      <Icon name='smoke_non' />
+      <Icon name='location' />
+      <Icon name='check' />
+      <Icon name='check_circle' />
     </>,
     <>
       <h1 className='text-4xl'>rating</h1>
