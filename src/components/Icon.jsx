@@ -30,6 +30,7 @@ import {
 } from 'react-icons/io5';
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
+import { FaPlus as FaPlusFa6, FaMinus as FaMinusFa6 } from 'react-icons/fa6';
 
 const Icon = ({
   name,
@@ -61,6 +62,8 @@ const Icon = ({
     // counter
     minus: FaMinus,
     plus: FaPlus,
+    minus_thin: FaMinusFa6,
+    minus_plus: FaPlusFa6,
     // detail
     share: IoShareSocialOutline,
     wifi: IoIosWifi,
