@@ -9,6 +9,7 @@ import Heart from '../../components/Heart';
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
 
+import Counter from '../../components/Counter';
 // components
 const TestPage = () => {
   const categories = [
@@ -19,6 +20,7 @@ const TestPage = () => {
     'tab',
     'heart',
     'Button',
+    `Counter`,
     'Radio',
   ];
 
@@ -146,6 +148,14 @@ const TestPage = () => {
         <Button color='alt' size='small' onClick={() => {}}>
           alt, full
         </Button>
+      </div>
+    </>,
+    <>
+      <h2>Counter</h2>
+      <div className='w-sm bg-red-50'>
+        <Counter startAt={0} setter={state => alert(state)}>
+          객실
+        </Counter>
       </div>
     </>,
     <>
