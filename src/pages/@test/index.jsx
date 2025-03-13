@@ -1,15 +1,12 @@
-// react
+Tab; // react
+
 import React from 'react';
-import Badge from '../../components/badge';
+import Tab from '../../components/tab';
 
 // components
 
-const TestPage = () => {
-  return (
-    <>
-      <Badge />
-    </>
-  );
-};
-
-export default TestPage;
+const TestPage = () => (
+  <>
+    <Tab></Tab>
+  </>
+);
