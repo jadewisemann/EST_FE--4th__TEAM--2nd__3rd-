@@ -12,7 +12,7 @@ import {
   FaSmoking,
   FaCheck,
 } from 'react-icons/fa';
-import { FaChildReaching, FaBanSmoking } from 'react-icons/fa6';
+import { FaChildReaching, FaBanSmoking, FaCircleCheck } from 'react-icons/fa6';
 import {
   MdOutlinePerson,
   MdAlternateEmail,
@@ -78,6 +78,7 @@ const Icon = ({
     smoke_non: FaBanSmoking,
     location: IoLocationSharp,
     check: FaCheck,
+    check_circle: FaCircleCheck,
   };
 
   const IconName = icons[name];

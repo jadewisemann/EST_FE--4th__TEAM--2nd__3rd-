@@ -7,6 +7,8 @@ import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Heart from '../../components/Heart';
 import Button from '../../components/Button';
+import Radio from '../../components/Radio';
+
 // components
 const TestPage = () => {
   const categories = [
@@ -17,7 +19,16 @@ const TestPage = () => {
     'tab',
     'heart',
     'Button',
+    'Radio',
   ];
+
+  // 라디오 버튼 예시
+  const radio1 = [
+    { value: '신용카드', disabled: true },
+    { value: '포인트 결제', disabled: false },
+    { value: '현장에서 결제하기', disabled: false },
+  ];
+
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -31,6 +42,35 @@ const TestPage = () => {
       <Icon name='profile' />
       <Icon name='star_fill' className='text-yellow-400' size={18} />
       <Icon name='heart_fill' color='red' />
+      <Icon name='home' />
+      <Icon name='search' />
+      <Icon name='email' />
+      <Icon name='lock' />
+      <Icon name='close' />
+      <Icon name='sort' />
+      <Icon name='calendar' />
+      <Icon name='arrow_right' />
+      <Icon name='heart' />
+      <Icon name='heart_fill' />
+      <Icon name='star' />
+      <Icon name='star_half' />
+      <Icon name='star_fill' />
+      <Icon name='minus' />
+      <Icon name='plus' />
+      <Icon name='share' />
+      <Icon name='wifi' />
+      <Icon name='fitness' />
+      <Icon name='dining' />
+      <Icon name='swimmingpool' />
+      <Icon name='door' />
+      <Icon name='person' />
+      <Icon name='Children' />
+      <Icon name='bed' />
+      <Icon name='smoke' />
+      <Icon name='smoke_non' />
+      <Icon name='location' />
+      <Icon name='check' />
+      <Icon name='check_circle' />
     </>,
     <>
       <h1 className='text-4xl'>rating</h1>
@@ -107,6 +147,11 @@ const TestPage = () => {
           alt, full
         </Button>
       </div>
+    </>,
+    <>
+      <h1 className='text-4xl'>Radio</h1>
+      <br />
+      <Radio name='payment' options={radio1} />
     </>,
   ];
 
