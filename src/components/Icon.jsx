@@ -6,6 +6,7 @@ import {
   FaRegStar,
   FaMinus,
   FaPlus,
+  FaRegUser,
   FaArrowRight,
   FaSwimmingPool,
   FaSmoking,
@@ -38,6 +39,7 @@ const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
     email: MdAlternateEmail,
     lock: CiLock,
     profile: MdOutlinePerson,
+    user: FaRegUser,
     close: IoClose,
     sort: LuArrowDownUp,
     // calendar
@@ -71,7 +73,14 @@ const Icon = ({ name, color = '#8E51FF', size = 24, className = '' }) => {
 
   const IconName = icons[name];
 
-  return <IconName color={color} size={size} className={className} />;
+  return (
+    <IconName
+      color={color}
+      size={size}
+      className={className}
+      style={{ strokeWidth: 1 }}
+    />
+  );
 };
 
 export default Icon;
