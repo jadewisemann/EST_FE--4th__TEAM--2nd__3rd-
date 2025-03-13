@@ -1,7 +1,7 @@
 import Icon from './Icon';
 
 // 상세페이지 평점
-export default function ReviewRating({ rate }) {
+const ReviewRating = ({ rate }) => {
   // 평점이 들어갈 배열 선언 (기본 값 0)
   const arr = [0, 0, 0, 0, 0];
 
@@ -36,7 +36,8 @@ export default function ReviewRating({ rate }) {
       ))}
     </div>
   );
-}
+};
 
+export default ReviewRating;
 // 사용법
 // <ReviewRating rate={3.2}></ReviewRating>;
