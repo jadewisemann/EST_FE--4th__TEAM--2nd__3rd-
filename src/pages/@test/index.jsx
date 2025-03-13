@@ -6,10 +6,19 @@ import ReviewRating from '../../components/ReviewRating';
 import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Heart from '../../components/Heart';
+import Badge from '../../components/badge';
 
 // components
 const TestPage = () => {
-  const categories = ['Calendar', 'Icon', 'Rating', 'Nav', 'tab', 'heart'];
+  const categories = [
+    'Calendar',
+    'Icon',
+    'Rating',
+    'Nav',
+    'tab',
+    'heart',
+    'badge',
+  ];
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -47,6 +56,13 @@ const TestPage = () => {
       <h1 className='text-4xl'>Heart</h1>
       <br />
       <Heart />
+    </>,
+    <>
+      <h1 className='text-4xl'>Badge</h1>
+      <br />
+      <Badge type={'sale'} children={15} />
+      <br />
+      <Badge children={'오늘의 최저가'} />
     </>,
   ];
 
