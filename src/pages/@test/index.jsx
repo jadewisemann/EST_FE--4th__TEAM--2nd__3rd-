@@ -1,5 +1,5 @@
 // react
-import Tab from '../../components/tab';
+import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
 import ReviewRating from '../../components/ReviewRating';
@@ -7,6 +7,8 @@ import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Complete from '../../components/Complete';
 import Heart from '../../components/Heart';
+import Badge from '../../components/badge';
+
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
 
@@ -24,6 +26,7 @@ const TestPage = () => {
     'Button',
     `Counter`,
     'Radio',
+    'Badge',
   ];
 
   // 라디오 버튼 예시
@@ -183,6 +186,13 @@ const TestPage = () => {
       <h1 className='text-4xl'>Radio</h1>
       <br />
       <Radio name='payment' options={radio1} />
+    </>,
+    <>
+      <h1 className='text-4xl'>Badge</h1>
+      <br />
+      <Badge type={'sale'} children={15} />
+      <br />
+      <Badge children={'오늘의최저가'} />
     </>,
   ];
 
