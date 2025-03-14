@@ -2,14 +2,13 @@ import React from 'react';
 import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';
 import Nav from '../../components/Nav';
-// 수평 리스트 임시 이미지
-import tempHotel1 from '../../assets/temp/temp_hotel1.png';
 
 const MainPage = () => {
   // 수평 리스트 데이터
   const products = [
     {
-      thumbnail: tempHotel1,
+      thumbnail:
+        'https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)',
       rate: 4.8,
       name: '갤럭시 호텔',
       location: '서울특별시, 성동구',
@@ -17,7 +16,8 @@ const MainPage = () => {
       discount: 10,
     },
     {
-      thumbnail: tempHotel1,
+      thumbnail:
+        'https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)',
       rate: 3,
       name: '원하는 호텔',
       location: '서울특별시, 중구',
