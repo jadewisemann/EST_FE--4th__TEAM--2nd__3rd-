@@ -46,7 +46,7 @@ const HorizontalList = ({ products }) => (
             </div>
           </div>
         </button>
-        <div className='absolute top-0.5 right-2'>
+        <div className='absolute top-4 right-4'>
           <Heart />
         </div>
       </SwiperSlide>
