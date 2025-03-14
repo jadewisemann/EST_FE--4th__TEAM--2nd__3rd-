@@ -20,7 +20,6 @@ import SubHeader from '../../components/SubHeader';
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
 
-
 // components
 const TestPage = () => {
   const categories = [
@@ -203,6 +202,20 @@ const TestPage = () => {
           line, full
         </Button>
         <Button color='alt' size='small' onClick={() => {}}>
+          alt, full
+        </Button>
+
+        <h2>size = 'xSmall'</h2>
+        <Button color='prime' size='xSmall' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='xSmall' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='xSmall' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='xSmall' onClick={() => {}}>
           alt, full
         </Button>
       </div>
