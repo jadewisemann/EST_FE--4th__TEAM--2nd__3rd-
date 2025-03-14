@@ -25,7 +25,7 @@ import Anchor from '../../components/Anchor';
 import RoomSelectionModal from '../../components/RoomSelectionModal';
 
 // 수평 리스트 임시 이미지
-import tempHotel1 from './../../assets/temp/temp_hotel1.png';
+import tempHotel1 from '../../assets/temp/temp_hotel1.jpg';
 
 const TestPage = () => {
   const categories = [
