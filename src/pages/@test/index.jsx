@@ -7,7 +7,7 @@ import Rating from '../../components/Rating';
 import Nav from '../../components/Nav';
 import Complete from '../../components/Complete';
 import Heart from '../../components/Heart';
-import Badge from '../../components/badge';
+import Badge from '../../components/Badge';
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
 import CheckBox from '../../components/CheckBox';
@@ -16,9 +16,10 @@ import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
 import VerticalList from '../../components/VerticalList';
 import SubHeader from '../../components/SubHeader';
+import DetailProduct from '../../components/DetailProduct';
 
 // 수평 리스트 임시 이미지
-import tempHotel1 from './../../assets/temp/temp_hotel1.png';
+import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
 // components
 const TestPage = () => {
@@ -39,6 +40,7 @@ const TestPage = () => {
     'DetailSection',
     'VerticalList',
     `SubHeader`,
+    'Detail Product',
   ];
 
   // 라디오 버튼 예시
@@ -65,6 +67,41 @@ const TestPage = () => {
       location: '서울특별시, 중구',
       price: 80000,
       discount: 15,
+    },
+  ];
+
+  const detailProducts = [
+    {
+      thumbnail: tempHotel1,
+      name: '스탠다드 트윈룸 (조식 포함)',
+      bed: '싱글 침대 2개',
+      price: 120000,
+      info: {
+        max: 2,
+        checkIn: '15:00',
+        checkOut: '11:00',
+        noRefund: true,
+        addPerson: false,
+        smoke: false,
+        wifi: true,
+      },
+      specialOffer: true,
+    },
+    {
+      thumbnail: tempHotel1,
+      name: '스탠다드 트윈룸 (조식 포함)',
+      bed: '킹사이즈 침대',
+      price: 100000,
+      info: {
+        max: 2,
+        checkIn: '15:00',
+        checkOut: '11:00',
+        noRefund: true,
+        addPerson: false,
+        smoke: true,
+        wifi: true,
+      },
+      specialOffer: false,
     },
   ];
 
@@ -193,6 +230,9 @@ const TestPage = () => {
 
         <h2>size = 'small'</h2>
         <Button color='prime' size='small' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='prime' size='xsmall' onClick={() => {}}>
           prime, full
         </Button>
         <Button color='invert' size='small' onClick={() => {}}>
@@ -342,13 +382,11 @@ const TestPage = () => {
       />
     </>,
     <>
-      <br />
       <h1 className='text-4xl'>Horizontal List</h1>
       <br />
       <VerticalList products={products} />
     </>,
     <>
-      <br />
       <h1 className='text-4xl'>SubHeader</h1>
       <br />
       <SubHeader leftButton='arrow' title='예약 세부 정보' />
@@ -356,7 +394,11 @@ const TestPage = () => {
       <SubHeader leftButton='arrow' title='결제 완료' />
       <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
       <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
-
+    </>,
+    <>
+      <h1 className='text-4xl'>Detail Product</h1>
+      <br />
+      <DetailProduct detailProducts={detailProducts} />
     </>,
   ];
 
