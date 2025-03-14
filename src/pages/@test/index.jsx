@@ -14,10 +14,11 @@ import CheckBox from '../../components/CheckBox';
 import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
+import VerticalList from '../../components/VerticalList';
+import SubHeader from '../../components/SubHeader';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
-import Input from '../../components/Input';
 
 // components
 const TestPage = () => {
@@ -36,7 +37,8 @@ const TestPage = () => {
     'Check Box',
     'Horizontal List',
     'DetailSection',
-    'Input',
+    'VerticalList',
+    `SubHeader`,
   ];
 
   // 라디오 버튼 예시
@@ -202,6 +204,20 @@ const TestPage = () => {
         <Button color='alt' size='small' onClick={() => {}}>
           alt, full
         </Button>
+
+        <h2>size = 'xSmall'</h2>
+        <Button color='prime' size='xSmall' onClick={() => {}}>
+          prime, full
+        </Button>
+        <Button color='invert' size='xSmall' onClick={() => {}}>
+          invert, full
+        </Button>
+        <Button color='line' size='xSmall' onClick={() => {}}>
+          line, full
+        </Button>
+        <Button color='alt' size='xSmall' onClick={() => {}}>
+          alt, full
+        </Button>
       </div>
     </>,
     <>
@@ -326,14 +342,20 @@ const TestPage = () => {
       />
     </>,
     <>
-      <Input type={'email'} />
-      <Input type={'password'} />
-      <Input
-        type={'password'}
-        label={'비밀번호 확인'}
-        placeholder={'비밀번호 확인'}
-      />
-      <Input type={'name'} />
+      <br />
+      <h1 className='text-4xl'>Horizontal List</h1>
+      <br />
+      <VerticalList products={products} />
+    </>,
+    <>
+      <br />
+      <h1 className='text-4xl'>SubHeader</h1>
+      <br />
+      <SubHeader leftButton='arrow' title='예약 세부 정보' />
+      <SubHeader leftButton='arrow' title='마이 페이지' />
+      <SubHeader leftButton='arrow' title='결제 완료' />
+      <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
+      <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
     </>,
   ];
 

@@ -26,6 +26,7 @@ const Button = ({
     full: 'rounded-2xl w-full h-12.5 py-3 px-4 text-base ',
     square: 'rounded-sm w-12 h-12 flex items-center justify-center',
     small: 'rounded-md py-2 px-4 w-fit text-sm',
+    xSmall: 'rounded-md py-1.5 px-4 w-fit text-sm',
   };
 
   const disabledStyle = 'opacity-50 cursor-not-allowed';

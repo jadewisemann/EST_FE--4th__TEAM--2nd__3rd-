@@ -1,8 +1,6 @@
 const Badge = ({ children, type }) => (
-  <div className='inline-flex items-center justify-center rounded-xs bg-violet-200 p-1 text-sm'>
-    <span className='font-inter text-sm font-medium text-violet-600'>
-      {type === 'sale' ? `${children}% off` : children}
-    </span>
+  <div className='font-inter text-xxs inline-flex items-center justify-center rounded-xs bg-violet-200 p-1 text-violet-600'>
+    {type === 'sale' ? `${children}% off` : children}
   </div>
 );
 
