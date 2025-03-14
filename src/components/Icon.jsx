@@ -12,25 +12,40 @@ import {
   FaSmoking,
   FaCheck,
 } from 'react-icons/fa';
-import { FaChildReaching, FaBanSmoking, FaCircleCheck } from 'react-icons/fa6';
+
+import {
+  FaChildReaching,
+  FaBanSmoking,
+  FaCircleCheck,
+  FaPlus as FaPlusFa6,
+  FaMinus as FaMinusFa6,
+  FaArrowLeftLong,
+  FaArrowLeft,
+} from 'react-icons/fa6';
+
 import {
   MdOutlinePerson,
   MdAlternateEmail,
   MdOutlineDining,
   MdPerson,
 } from 'react-icons/md';
+
 import { CiLock, CiCalendar, CiSearch } from 'react-icons/ci';
+
 import { PiHouse } from 'react-icons/pi';
+
 import { IoIosWifi, IoIosFitness } from 'react-icons/io';
+
 import {
   IoClose,
   IoShareSocialOutline,
   IoBedSharp,
   IoLocationSharp,
 } from 'react-icons/io5';
+
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
-import { FaPlus as FaPlusFa6, FaMinus as FaMinusFa6 } from 'react-icons/fa6';
+import { VscBlank } from 'react-icons/vsc';
 
 const Icon = ({
   name,
@@ -79,6 +94,10 @@ const Icon = ({
     location: IoLocationSharp,
     check: FaCheck,
     check_circle: FaCircleCheck,
+    // sub-header
+    arrow_left: FaArrowLeft,
+    arrow_left_long: FaArrowLeftLong,
+    blank: VscBlank,
   };
 
   const IconName = icons[name];
