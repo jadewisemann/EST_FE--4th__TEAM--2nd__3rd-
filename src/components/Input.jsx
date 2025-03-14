@@ -20,6 +20,11 @@ const typeConfig = {
     label: '이름',
     validation: value => value.length > 1,
   },
+  search: {
+    icon: 'search',
+    placeholder: '숙박명 검색',
+    label: '',
+  },
 };
 
 const Input = ({ label, type, placeholder }) => {
