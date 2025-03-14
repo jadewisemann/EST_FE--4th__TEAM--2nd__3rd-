@@ -11,8 +11,12 @@ import Badge from '../../components/badge';
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
 import CheckBox from '../../components/CheckBox';
-
 import Counter from '../../components/Counter';
+import HorizontalList from '../../components/HorizontalList';
+
+// 수평 리스트 임시 이미지
+import tempHotel1 from './../../assets/temp/temp_hotel1.png';
+
 // components
 const TestPage = () => {
   const categories = [
@@ -28,6 +32,7 @@ const TestPage = () => {
     'Radio',
     'Badge',
     'Check Box',
+    'Horizontal List',
   ];
 
   // 라디오 버튼 예시
@@ -35,6 +40,26 @@ const TestPage = () => {
     { value: '신용카드', disabled: true },
     { value: '포인트 결제', disabled: false },
     { value: '현장에서 결제하기', disabled: false },
+  ];
+
+  // 수평 리스트 데이터
+  const products = [
+    {
+      thumbnail: tempHotel1,
+      rate: 4.8,
+      name: '갤럭시 호텔',
+      location: '서울특별시, 성동구',
+      price: 120000,
+      discount: 10,
+    },
+    {
+      thumbnail: tempHotel1,
+      rate: 3,
+      name: '원하는 호텔',
+      location: '서울특별시, 중구',
+      price: 80000,
+      discount: 15,
+    },
   ];
 
   const contents = [
@@ -200,6 +225,11 @@ const TestPage = () => {
       <br />
       <CheckBox name='payment' txt='전체사용' />
       <CheckBox name='agreement' txt='전체동의' disabled />
+    </>,
+    <>
+      <h1 className='text-4xl'>Horizontal List</h1>
+      <br />
+      <HorizontalList products={products} />
     </>,
   ];
 
