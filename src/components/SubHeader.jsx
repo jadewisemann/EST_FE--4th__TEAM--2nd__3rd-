@@ -10,17 +10,25 @@ const SubHeader = ({
   const SubHeader = <h2 className='grow text-lg'>{title}</h2>;
 
   const Home = <Icon name='home' />;
-  const Arrow = <Icon name='arrow_right' />;
+  const ArrowLong = <Icon name='arrow_left_long' />;
+  const Arrow = <Icon name='arrow_left' />;
   const Close = <Icon name='close' />;
 
   const LeftButton = (
     <button onClick={callback}>
-      {leftButton === 'close' ? Close : leftButton === 'arrow' ? Arrow : ''}
+      {leftButton === 'close'
+        ? Close
+        : leftButton === 'arrow'
+          ? ArrowLong
+          : leftButton === 'arrow-short'
+            ? Arrow
+            : ''}
     </button>
   );
 
+  // TODO: 홈으로 가는 핸들러 추가 필요
   const homeButtonHandler = () => {};
-  const defaultStyle = 'flex h-18 items-center justify-between p-4 gap-2';
+  const defaultStyle = 'flex h-18 items-center justify-between p-4 gap-3';
   const style = defaultStyle + (hasShadow ? ' shadow-bottom' : '');
 
   return (
