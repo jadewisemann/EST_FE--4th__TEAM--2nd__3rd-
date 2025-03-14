@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../components/Button';
+import Input from '../../components/Input';
 import HorizontalList from '../../components/HorizontalList';
 import Nav from '../../components/Nav';
 
@@ -47,25 +48,41 @@ const MainPage = () => {
   return (
     <>
       <div className='flex h-screen flex-col justify-between bg-[url(https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)]'>
-        <div className='flex flex-col p-5'>
+        <div className='flex flex-col px-5 pt-16 pb-10'>
           <div className='flex flex-col items-center text-xl text-white'>
             <strong>누구누구 님</strong>
             <strong>환영합니다.</strong>
           </div>
-          <input type='text' />
-          <input type='text' />
-          <input type='text' />
+          <div className='flex flex-col gap-3'>
+            <Input type={'name'} placeholder={'숙박명 검색'} />
+            <Button
+              color='line'
+              size='full'
+              className='h-[58px] cursor-pointer rounded-4xl border-neutral-300'
+              onClick={() => {}}
+            >
+              3월 05일 (수) ~ 3월 06일 (목)
+            </Button>
+            <Button
+              color='line'
+              size='full'
+              className='h-[58px] cursor-pointer rounded-4xl border-neutral-300'
+              onClick={() => {}}
+            >
+              객실 1개 성인1명 아동 0명
+            </Button>
+          </div>
           <Button
             color='prime'
             size='full'
-            className='rounded-2xl'
+            className='mt-5 rounded-2xl'
             onClick={() => {}}
           >
             확인 (1박)
           </Button>
         </div>
         <div className='rounded-t-md bg-white p-5 pb-[80px]'>
-          <div className='flex items-center justify-center gap-5'>
+          <div className='mt-1 flex items-center justify-center gap-5'>
             {categories.map((item, idx) => (
               <button
                 key={idx}
