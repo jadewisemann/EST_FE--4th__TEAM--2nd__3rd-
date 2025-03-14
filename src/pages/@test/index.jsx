@@ -14,6 +14,7 @@ import CheckBox from '../../components/CheckBox';
 import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
+import VerticalList from '../../components/VerticalList';
 import SubHeader from '../../components/SubHeader';
 
 // 수평 리스트 임시 이미지
@@ -37,6 +38,7 @@ const TestPage = () => {
     'Check Box',
     'Horizontal List',
     'DetailSection',
+    'VerticalList',
     `SubHeader`,
   ];
 
@@ -327,6 +329,13 @@ const TestPage = () => {
       />
     </>,
     <>
+      <br />
+      <h1 className='text-4xl'>Horizontal List</h1>
+      <br />
+      <VerticalList products={products} />
+    </>,
+    <>
+      <br />
       <h1 className='text-4xl'>SubHeader</h1>
       <br />
       <SubHeader leftButton='arrow' title='예약 세부 정보' />
@@ -334,6 +343,7 @@ const TestPage = () => {
       <SubHeader leftButton='arrow' title='결제 완료' />
       <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
       <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
+
     </>,
   ];
 
