@@ -8,9 +8,9 @@ import Nav from '../../components/Nav';
 import Complete from '../../components/Complete';
 import Heart from '../../components/Heart';
 import Badge from '../../components/badge';
-
 import Button from '../../components/Button';
 import Radio from '../../components/Radio';
+import CheckBox from '../../components/CheckBox';
 
 import Counter from '../../components/Counter';
 // components
@@ -27,6 +27,7 @@ const TestPage = () => {
     `Counter`,
     'Radio',
     'Badge',
+    'Check Box',
   ];
 
   // 라디오 버튼 예시
@@ -193,6 +194,12 @@ const TestPage = () => {
       <Badge type={'sale'} children={15} />
       <br />
       <Badge children={'오늘의최저가'} />
+    </>,
+    <>
+      <h1 className='text-4xl'>Check Box</h1>
+      <br />
+      <CheckBox name='payment' txt='전체사용' />
+      <CheckBox name='agreement' txt='전체동의' disabled />
     </>,
   ];
 
