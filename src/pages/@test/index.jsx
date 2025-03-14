@@ -17,6 +17,7 @@ import DetailSection from '../../components/DetailSection';
 import VerticalList from '../../components/VerticalList';
 import SubHeader from '../../components/SubHeader';
 import DetailProduct from '../../components/DetailProduct';
+import Input from '../../components/Input';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
@@ -41,6 +42,7 @@ const TestPage = () => {
     'VerticalList',
     `SubHeader`,
     'Detail Product',
+    'Input',
   ];
 
   // 라디오 버튼 예시
@@ -399,6 +401,11 @@ const TestPage = () => {
       <h1 className='text-4xl'>Detail Product</h1>
       <br />
       <DetailProduct detailProducts={detailProducts} />
+    </>,
+    <>
+      <Input type={'email'} />
+      <Input type={'password'} />
+      <Input type={'name'} />
     </>,
   ];
 
