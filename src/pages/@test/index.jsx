@@ -1,4 +1,7 @@
 // react
+import { useState } from 'react';
+
+// component
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -15,12 +18,11 @@ import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
 import SubHeader from '../../components/SubHeader';
+import RoomSelectionModal from '../../components/RoomSelectionModal';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
 
-
-// components
 const TestPage = () => {
   const categories = [
     'Calendar',
@@ -38,6 +40,7 @@ const TestPage = () => {
     'Horizontal List',
     'DetailSection',
     `SubHeader`,
+    `FullPopup`,
   ];
 
   // 라디오 버튼 예시
@@ -67,6 +70,28 @@ const TestPage = () => {
     },
   ];
 
+  // full popup
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [roomsDetails, setRoomDetails] = useState({
+    rooms: 1,
+    adults: 1,
+    children: 0,
+    infants: 0,
+  });
+  console.log(roomsDetails);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirm = details => {
+    setRoomDetails(details);
+    setIsModalOpen(false);
+  };
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -334,6 +359,16 @@ const TestPage = () => {
       <SubHeader leftButton='arrow' title='결제 완료' />
       <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
       <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
+    </>,
+    <>
+      <h1 className='text-4xl'>FullPopup</h1>
+      <br />
+      <Button onClick={handleOpenModal}>Room Selection Modal</Button>
+      <RoomSelectionModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirm}
+      />
     </>,
   ];
 
