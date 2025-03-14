@@ -1,7 +1,5 @@
 // react
 import { useState } from 'react';
-
-// component
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -22,12 +20,13 @@ import SubHeader from '../../components/SubHeader';
 import DetailProduct from '../../components/DetailProduct';
 import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
-import RoomSelectionModal from '../../components/RoomSelectionModal';
-
 // 수평 리스트 임시 이미지
-import tempHotel1 from '../../assets/temp/temp_hotel1.jpg';
+import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
+// components
 const TestPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
   const categories = [
     'Calendar',
     'Icon',
@@ -48,7 +47,6 @@ const TestPage = () => {
     'Detail Product',
     'Input',
     'Anchor',
-    `FullPopup`,
   ];
 
   // 라디오 버튼 예시
@@ -113,28 +111,6 @@ const TestPage = () => {
     },
   ];
 
-  // full popup
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [roomsDetails, setRoomDetails] = useState({
-    rooms: 1,
-    adults: 1,
-    children: 0,
-    infants: 0,
-  });
-  console.log(roomsDetails);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirm = details => {
-    setRoomDetails(details);
-    setIsModalOpen(false);
-  };
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -193,9 +169,12 @@ const TestPage = () => {
       <h1 className='text-4xl'>Tab</h1>
       <br />
       <Tab
-        categories={['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소']}
-        contents={['tab1', 'tab2', 'tab3', 'tab4', 'tab5']}
-      />
+        categories={categories}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      >
+        내용임돠
+      </Tab>
     </>,
     <>
       <h1 className='text-4xl'>Complete</h1>
@@ -442,21 +421,17 @@ const TestPage = () => {
       <br />
       <Anchor type='login' children={'login'} />
     </>,
-    <>
-      <h1 className='text-4xl'>FullPopup</h1>
-      <br />
-      <Button onClick={handleOpenModal}>Room Selection Modal</Button>
-      <RoomSelectionModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirm}
-      />
-    </>,
   ];
 
   return (
     <>
-      <Tab categories={categories} contents={contents} />
+      <Tab
+        categories={categories}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      >
+        {contents[activeTab]}
+      </Tab>
     </>
   );
 };
