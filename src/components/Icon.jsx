@@ -94,6 +94,10 @@ const Icon = ({
     location: IoLocationSharp,
     check: FaCheck,
     check_circle: FaCircleCheck,
+    // sub-header
+    arrow_left: FaArrowLeft,
+    arrow_left_long: FaArrowLeftLong,
+    blank: VscBlank,
   };
 
   const IconName = icons[name];
