@@ -47,16 +47,16 @@ const Nav = () => {
   return (
     <>
       <div
-        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-center rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'opacity-100" translate-y-0' : 'translate-y-full opacity-0'} `}
+        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'opacity-100" translate-y-0' : 'translate-y-full opacity-0'} `}
       >
         {navMenus.map((item, idx) => (
-          <Link to={item.path}>
+          <Link to={item.path} key={idx} className='flex-1'>
             <button
               key={idx}
               onClick={() => {
                 setActiveNavMenu(idx);
               }}
-              className='px-6 py-5'
+              className='flex w-full flex-col items-center py-5'
             >
               <Icon
                 name={item.name}
