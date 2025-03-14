@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import Icon from './Icon';
+import { Link } from 'react-router-dom';
 
 const Nav = () => {
   const [navMenus, setNavMenu] = useState([
-    { name: 'home', size: '18' },
-    { name: 'search', size: '18' },
-    { name: 'heart', size: '16' },
-    { name: 'user', size: '16' },
+    { name: 'home', size: '18', path: '/' },
+    { name: 'search', size: '18', path: '/search' },
+    { name: 'heart', size: '16', path: '/heart' },
+    { name: 'user', size: '16', path: '/user' },
   ]);
 
   const [activeNavMenu, setActiveNavMenu] = useState(0); //선택된 메뉴
@@ -45,11 +46,11 @@ const Nav = () => {
 
   return (
     <>
-      <div className='relative'>
-        <div
-          className={`fixed bottom-0 left-0 flex w-full items-center justify-center rounded-t-lg shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'opacity-100" translate-y-0' : 'translate-y-full opacity-0'} `}
-        >
-          {navMenus.map((item, idx) => (
+      <div
+        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-center rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'opacity-100" translate-y-0' : 'translate-y-full opacity-0'} `}
+      >
+        {navMenus.map((item, idx) => (
+          <Link to={item.path}>
             <button
               key={idx}
               onClick={() => {
@@ -63,8 +64,8 @@ const Nav = () => {
                 color={`${activeNavMenu === idx ? '#8E51FF' : '#AEACAC'}`}
               />
             </button>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
     </>
   );

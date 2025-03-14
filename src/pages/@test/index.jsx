@@ -22,6 +22,7 @@ import Anchor from '../../components/Anchor';
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
+
 // components
 const TestPage = () => {
   const categories = [
@@ -284,7 +285,7 @@ const TestPage = () => {
       <Badge children={'오늘의최저가'} />
     </>,
     <>
-      <h1 className='text-4xl'>Check Box</h1>
+      <h1 className='text-4xl'>Check BoxButton</h1>
       <br />
       <CheckBox name='payment' txt='전체사용' />
       <CheckBox name='agreement' txt='전체동의' disabled />
