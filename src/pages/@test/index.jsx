@@ -13,6 +13,7 @@ import Radio from '../../components/Radio';
 import CheckBox from '../../components/CheckBox';
 import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
+import DetailSection from '../../components/DetailSection';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
@@ -33,6 +34,7 @@ const TestPage = () => {
     'Badge',
     'Check Box',
     'Horizontal List',
+    'DetailSection',
   ];
 
   // 라디오 버튼 예시
@@ -230,6 +232,96 @@ const TestPage = () => {
       <h1 className='text-4xl'>Horizontal List</h1>
       <br />
       <HorizontalList products={products} />
+    </>,
+    <>
+      <h1 className='text-4xl'>DetailSection</h1>
+      <br />
+      <DetailSection
+        type='list-left'
+        title='판매자 정보'
+        contents={[
+          '연락처 : 010-1234-5678',
+          '주소 : 서울시 강남구 어쩌구 저쩌구',
+          '고객센터 : 080 - 1234- 5678',
+        ]}
+      />
+      <br />
+      <DetailSection
+        type='list-left-dot'
+        title='취소 / 환불 규정에 대한 동의'
+        contents={[
+          '체크인일 기준 1일전 18시 까지 : 100% 환불',
+          '체크아웃 오전 11시 이전',
+          '흡연 금지',
+        ]}
+      />
+      <br />
+      <DetailSection
+        type='list-left-dot-title'
+        title='숙소 규정'
+        contents={[
+          {
+            subTitle: '체크인 & 체크아웃 시간',
+            subContents: [
+              '체크인은 오후 3시 이후입니다.',
+              '체크아웃은 오전 11시 이전입니다.',
+            ],
+          },
+          {
+            subTitle: '어린이 정책',
+            subContents: [
+              '어린이 투숙객은 일부 객실에만 가능합니다.',
+              '기존 침대를 사용하면 추가 요금이 부과될 수 있습니다.',
+            ],
+          },
+        ]}
+      />
+      <br />
+      <DetailSection
+        type='table-left'
+        title='객실 정보'
+        contents={[
+          {
+            hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
+            roomName: '디럭스 더블룸',
+            schedule: '2024-04-10 ~ 2024-04-12',
+            labels: {
+              hotelName: '숙소명',
+              roomName: '객실',
+              schedule: '일정',
+            },
+          },
+        ]}
+      />
+      <br />
+      <DetailSection
+        title='결제 정보'
+        type='table-spacebetween'
+        contents={[
+          { label: '숙소 가격 (객실 1개 x 1박)', value: '120,000원' },
+          { label: '할인가격', value: '0원' },
+          { label: '세금 및 수수료 (10%)', value: '12,000원' },
+          { label: '최종 결제금액', value: '132,000원' },
+          { label: '결제방법', value: '포인트 결제' },
+          {
+            label: '적립 포인트',
+            value: '포인트 결제는 적립 대상이 아닙니다.',
+          },
+        ]}
+      />
+      <br />
+      <DetailSection
+        title='내 정보'
+        type='table-spacebetween'
+        contents={[
+          { label: '이름', value: '홍길동' },
+          { label: '이메일', value: 'honh_honh_good@gmail.com' },
+          { label: '비밀번호 변경', showMore: true },
+          { label: '관심숙소', showMore: true },
+          { label: '보유포인트', value: '500,000 P' },
+        ]}
+        // onMoreClick={handleMoreClick} 더보기 클릭 시 열리는 팝업 넣기
+      />
     </>,
   ];
 
