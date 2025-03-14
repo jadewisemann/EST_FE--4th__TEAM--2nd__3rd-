@@ -14,6 +14,7 @@ import CheckBox from '../../components/CheckBox';
 import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
+import VerticalList from '../../components/VerticalList';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
@@ -35,6 +36,7 @@ const TestPage = () => {
     'Check Box',
     'Horizontal List',
     'DetailSection',
+    'VerticalList',
   ];
 
   // 라디오 버튼 예시
@@ -322,6 +324,12 @@ const TestPage = () => {
         ]}
         // onMoreClick={handleMoreClick} 더보기 클릭 시 열리는 팝업 넣기
       />
+    </>,
+    <>
+      <br />
+      <h1 className='text-4xl'>Horizontal List</h1>
+      <br />
+      <VerticalList products={products} />
     </>,
   ];
 
