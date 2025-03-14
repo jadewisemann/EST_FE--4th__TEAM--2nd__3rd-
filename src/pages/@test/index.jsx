@@ -17,6 +17,7 @@ import DetailSection from '../../components/DetailSection';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
+import Input from '../../components/Input';
 
 // components
 const TestPage = () => {
@@ -35,6 +36,7 @@ const TestPage = () => {
     'Check Box',
     'Horizontal List',
     'DetailSection',
+    'Input',
   ];
 
   // 라디오 버튼 예시
@@ -322,6 +324,16 @@ const TestPage = () => {
         ]}
         // onMoreClick={handleMoreClick} 더보기 클릭 시 열리는 팝업 넣기
       />
+    </>,
+    <>
+      <Input type={'email'} />
+      <Input type={'password'} />
+      <Input
+        type={'password'}
+        label={'비밀번호 확인'}
+        placeholder={'비밀번호 확인'}
+      />
+      <Input type={'name'} />
     </>,
   ];
 
