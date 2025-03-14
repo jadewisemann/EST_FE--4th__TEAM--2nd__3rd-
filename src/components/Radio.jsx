@@ -1,4 +1,4 @@
-const Rating = ({ name, options }) => (
+const Radio = ({ name, options }) => (
   <ul>
     {options?.map((option, index) => (
       <li key={index} className='mt-3 flex items-center gap-2 first:mt-0'>
@@ -21,7 +21,7 @@ const Rating = ({ name, options }) => (
   </ul>
 );
 
-export default Rating;
+export default Radio;
 
 // 데이터 예시
 // [
