@@ -15,9 +15,11 @@ import Counter from '../../components/Counter';
 import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
 import VerticalList from '../../components/VerticalList';
+import SubHeader from '../../components/SubHeader';
 
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.png';
+
 
 // components
 const TestPage = () => {
@@ -37,6 +39,7 @@ const TestPage = () => {
     'Horizontal List',
     'DetailSection',
     'VerticalList',
+    `SubHeader`,
   ];
 
   // 라디오 버튼 예시
@@ -330,6 +333,17 @@ const TestPage = () => {
       <h1 className='text-4xl'>Horizontal List</h1>
       <br />
       <VerticalList products={products} />
+    </>,
+    <>
+      <br />
+      <h1 className='text-4xl'>SubHeader</h1>
+      <br />
+      <SubHeader leftButton='arrow' title='예약 세부 정보' />
+      <SubHeader leftButton='arrow' title='마이 페이지' />
+      <SubHeader leftButton='arrow' title='결제 완료' />
+      <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
+      <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
+
     </>,
   ];
 
