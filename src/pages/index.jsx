@@ -5,7 +5,7 @@ import SignupPage from './signup';
 import NotFoundPage from './not-found';
 import PaymentPage from './payment';
 import SearchPage from './search';
-import SearchResultPage from './search-result';
+import StayListpage from './search-result';
 import UserInfoPage from './user-info';
 import WishlistPage from './wishlist';
 import TestPage from './@test';
@@ -17,7 +17,7 @@ export {
   NotFoundPage,
   PaymentPage,
   SearchPage,
-  SearchResultPage,
+  StayListpage,
   SignupPage,
   UserInfoPage,
   WishlistPage,
