@@ -21,7 +21,11 @@ const HorizontalList = ({ products }) => (
         className='relative rounded-[10px] p-3 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)]'
       >
         <button type='button' className='w-full'>
-          <img className='block w-full' src={product.thumbnail} alt='' />
+          <img
+            className='block w-full rounded-lg'
+            src={product.thumbnail}
+            alt=''
+          />
           <div className='mt-2'>
             <div className='flex'>
               <Badge type='sale'>{product.discount}</Badge>
@@ -42,7 +46,7 @@ const HorizontalList = ({ products }) => (
             </div>
           </div>
         </button>
-        <div className='absolute top-0.5 right-2'>
+        <div className='absolute top-4 right-4'>
           <Heart />
         </div>
       </SwiperSlide>
