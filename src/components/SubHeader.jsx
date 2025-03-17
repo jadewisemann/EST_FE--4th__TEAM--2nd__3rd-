@@ -6,13 +6,14 @@ const SubHeader = ({
   rightButton = true,
   title = '',
   hasShadow = true,
+  fixed = true,
 }) => {
   const SubHeader = <h2 className='grow text-lg'>{title}</h2>;
 
-  const Home = <Icon name='home' />;
-  const ArrowLong = <Icon name='arrow_left_long' />;
-  const Arrow = <Icon name='arrow_left' />;
-  const Close = <Icon name='close' />;
+  const Home = <Icon name='home' color='black' />;
+  const ArrowLong = <Icon name='arrow_left_long' color='black' />;
+  const Arrow = <Icon name='arrow_left' color='black' />;
+  const Close = <Icon name='close' color='black' />;
 
   const LeftButton = (
     <button onClick={callback}>
@@ -29,7 +30,8 @@ const SubHeader = ({
   // TODO: 홈으로 가는 핸들러 추가 필요
   const homeButtonHandler = () => {};
   const defaultStyle = 'flex h-18 items-center justify-between p-4 gap-3';
-  const style = defaultStyle + (hasShadow ? ' shadow-bottom' : '');
+  const style =
+    defaultStyle + (hasShadow ? ' shadow-bottom' : '') + (fixed ? 'fixed' : '');
 
   return (
     <>
