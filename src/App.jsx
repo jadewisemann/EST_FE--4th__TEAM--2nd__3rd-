@@ -1,6 +1,7 @@
 // components
 import {
   DetailsPage,
+  CheckoutPage,
   LoginPage,
   MainPage,
   NotFoundPage,
@@ -27,6 +28,7 @@ const App = () => (
   <Routes>
     <Route path='/' element={<MainPage />} />
     <Route path='/details' element={<DetailsPage />} />
+    <Route path='/checkout' element={<CheckoutPage />} />
     <Route path='/login' element={<LoginPage />} />
     <Route path='/payment' element={<PaymentPage />} />
     <Route path='/search' element={<SearchPage />} />
