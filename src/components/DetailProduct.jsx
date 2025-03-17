@@ -50,10 +50,10 @@ const DetailProduct = ({ detailProducts }) => (
             <ul className='flex flex-col gap-0.5 text-xs tracking-tight text-neutral-600'>
               <li>성인 2명 요금 / 최대 2인</li>
               <li>
-                체크인 {product.info.checkIn}
+                체크인 {product.info.checkInHour}
                 <span> ~ </span>
                 <span className='whitespace-nowrap'>
-                  체크아웃 {product.info.checkOut}
+                  체크아웃 {product.info.checkOutHour}
                 </span>
               </li>
               {product.info.noRefund && (
