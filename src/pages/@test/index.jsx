@@ -100,8 +100,8 @@ const TestPage = () => {
       price: 100000,
       info: {
         max: 2,
-        checkIn: '15:00',
-        checkOut: '11:00',
+        checkInHour: '15:00',
+        checkOutHour: '11:00',
         noRefund: true,
         addPerson: false,
         smoke: true,
@@ -143,10 +143,10 @@ const TestPage = () => {
       <Icon name='wifi' />
       <Icon name='fitness' />
       <Icon name='dining' />
-      <Icon name='swimmingpool' />
+      <Icon name='swimmingPool' />
       <Icon name='door' />
       <Icon name='person' />
-      <Icon name='Children' />
+      <Icon name='children' />
       <Icon name='bed' />
       <Icon name='smoke' />
       <Icon name='smoke_non' />
