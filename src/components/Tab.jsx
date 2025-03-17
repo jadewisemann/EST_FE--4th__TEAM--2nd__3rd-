@@ -21,7 +21,7 @@ const Tab = ({ categories = [], activeTab = 0, setActiveTab, children }) => {
           ))}
         </div>
         <button
-          className='ml-auto flex h-9 flex-none items-center gap-x-1 border-l-1 border-neutral-300 bg-white py-2 pl-3 text-xs'
+          className='ml-auto flex h-9 flex-none items-center gap-x-0.5 border-l-1 border-neutral-300 bg-white py-2 pl-1.5 text-xs'
           onClick={() => {
             setSort(prev => (prev === 'asc' ? 'desc' : 'asc'));
           }}
@@ -30,7 +30,7 @@ const Tab = ({ categories = [], activeTab = 0, setActiveTab, children }) => {
           <span className='sr-only'> 위아래 화살표 아이콘</span>정렬
         </button>
       </div>
-      <div className='aa mx-5 mt-5'>{children}</div>
+      <div className='mx-5 pb-[80px]'>{children}</div>
     </>
   );
 };
