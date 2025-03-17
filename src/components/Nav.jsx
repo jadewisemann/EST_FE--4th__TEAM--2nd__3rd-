@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import Icon from './Icon';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Nav = () => {
-  const [navMenus, setNavMenu] = useState([
+  const [navMenus] = useState([
     { name: 'home', size: '18', path: '/' },
-    { name: 'search', size: '18', path: '/search' },
+    { name: 'search', size: '18', path: '/result' },
     { name: 'heart', size: '16', path: '/heart' },
     { name: 'user', size: '16', path: '/user' },
   ]);
-
   const [activeNavMenu, setActiveNavMenu] = useState(0); //선택된 메뉴
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
+  const location = useLocation();
 
   const handleScroll = () => {
     const scrollTop = window.scrollY;
@@ -37,7 +37,17 @@ const Nav = () => {
   };
 
   useEffect(() => {
-    handleScroll(); //페이지 로드 시에도 실행하여 스크롤이 없을 때 네비바를 보이게 처리
+    // 경로가 변경될 때 activeNavMenu 업데이트 (네비게이션 유지)
+    const currentIdx = navMenus.findIndex(
+      menu => menu.path === location.pathname,
+    );
+    if (currentIdx !== -1) {
+      setActiveNavMenu(currentIdx);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // handleScroll(); //페이지 로드 시에도 실행하여 스크롤이 없을 때 네비바를 보이게 처리
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll); //clean up
