@@ -17,6 +17,8 @@ import ProtectedRoute from './routes/ProtectedRoute';
 
 // css
 import './App.css';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 // library
 import { Routes, Route } from 'react-router-dom';
