@@ -1,5 +1,6 @@
 import MainPage from './main';
 import DetailsPage from './details';
+import CheckoutPage from './checkout';
 import LoginPage from './login';
 import SignupPage from './signup';
 import NotFoundPage from './not-found';
@@ -12,6 +13,7 @@ import TestPage from './@test';
 
 export {
   DetailsPage,
+  CheckoutPage,
   LoginPage,
   MainPage,
   NotFoundPage,
