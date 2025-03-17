@@ -34,7 +34,7 @@ import { CiLock, CiCalendar, CiSearch } from 'react-icons/ci';
 
 import { PiHouse } from 'react-icons/pi';
 
-import { IoIosWifi, IoIosFitness } from 'react-icons/io';
+import { IoIosWifi, IoIosFitness, IoIosArrowDown } from 'react-icons/io';
 
 import {
   IoClose,
@@ -64,6 +64,7 @@ const Icon = ({
     user: FaRegUser,
     close: IoClose,
     sort: LuArrowDownUp,
+    arrow_down: IoIosArrowDown,
     // calendar
     calendar: CiCalendar,
     arrow_right: FaArrowRight,
@@ -84,10 +85,10 @@ const Icon = ({
     wifi: IoIosWifi,
     fitness: IoIosFitness,
     dining: MdOutlineDining,
-    swimmingpool: FaSwimmingPool,
+    swimmingPool: FaSwimmingPool,
     door: BsFillDoorOpenFill,
     person: MdPerson,
-    Children: FaChildReaching,
+    children: FaChildReaching,
     bed: IoBedSharp,
     smoke: FaSmoking,
     smoke_non: FaBanSmoking,

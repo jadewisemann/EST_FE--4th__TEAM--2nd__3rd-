@@ -1,4 +1,5 @@
 // react
+import { useState } from 'react';
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -22,9 +23,10 @@ import Anchor from '../../components/Anchor';
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
-
 // components
 const TestPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
   const categories = [
     'Calendar',
     'Icon',
@@ -98,8 +100,8 @@ const TestPage = () => {
       price: 100000,
       info: {
         max: 2,
-        checkIn: '15:00',
-        checkOut: '11:00',
+        checkInHour: '15:00',
+        checkOutHour: '11:00',
         noRefund: true,
         addPerson: false,
         smoke: true,
@@ -141,10 +143,10 @@ const TestPage = () => {
       <Icon name='wifi' />
       <Icon name='fitness' />
       <Icon name='dining' />
-      <Icon name='swimmingpool' />
+      <Icon name='swimmingPool' />
       <Icon name='door' />
       <Icon name='person' />
-      <Icon name='Children' />
+      <Icon name='children' />
       <Icon name='bed' />
       <Icon name='smoke' />
       <Icon name='smoke_non' />
@@ -167,9 +169,12 @@ const TestPage = () => {
       <h1 className='text-4xl'>Tab</h1>
       <br />
       <Tab
-        categories={['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소']}
-        contents={['tab1', 'tab2', 'tab3', 'tab4', 'tab5']}
-      />
+        categories={categories}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      >
+        내용임돠
+      </Tab>
     </>,
     <>
       <h1 className='text-4xl'>Complete</h1>
@@ -420,7 +425,13 @@ const TestPage = () => {
 
   return (
     <>
-      <Tab categories={categories} contents={contents} />
+      <Tab
+        categories={categories}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      >
+        {contents[activeTab]}
+      </Tab>
     </>
   );
 };

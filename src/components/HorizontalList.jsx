@@ -1,10 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Heart from '../components/Heart';
-import Rating from '../components/Rating';
-import Icon from '../components/Icon';
-import Badge from './badge';
-
-import 'swiper/css';
+import Heart from './Heart';
+import Rating from './Rating';
+import Icon from './Icon';
+import Badge from './Badge';
 
 const HorizontalList = ({ products }) => (
   <Swiper

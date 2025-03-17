@@ -15,7 +15,7 @@ const Counter = ({ children, setter = () => {}, startAt = 0 }) => {
       <div className='info flex items-center gap-10'>
         <span className='text-5xl'>{count}</span>
         <span className='text-base'>{children}</span>
-      </div>
+      </div>{' '}
       <div className='controller flex items-center gap-6'>
         <Button
           onClick={() => count > 0 && updateCount(count - 1)}

@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import Icon from './Icon';
 
-const Tab = ({ categories, contents }) => {
-  // const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
-  // const contents = ['tab1', 'tab2', 'tab3', 'tab4', 'tab5'];
-  const [activeTab, setActiveTab] = useState(0); //선택된 카테고리
+const Tab = ({ categories = [], activeTab = 0, setActiveTab, children }) => {
   const [sort, setSort] = useState('asc'); //asc: 오름차순, desc: 내림차순
 
   return (
@@ -24,7 +21,7 @@ const Tab = ({ categories, contents }) => {
           ))}
         </div>
         <button
-          className='ml-auto flex h-9 flex-none items-center gap-x-1 border-l-1 border-neutral-300 bg-white py-2 pl-3 text-xs'
+          className='ml-auto flex h-9 flex-none items-center gap-x-0.5 border-l-1 border-neutral-300 bg-white py-2 pl-1.5 text-xs'
           onClick={() => {
             setSort(prev => (prev === 'asc' ? 'desc' : 'asc'));
           }}
@@ -33,7 +30,7 @@ const Tab = ({ categories, contents }) => {
           <span className='sr-only'> 위아래 화살표 아이콘</span>정렬
         </button>
       </div>
-      <div className='mx-5 mt-5'>{contents[activeTab]}</div>
+      <div className='mx-5 pb-[80px]'>{children}</div>
     </>
   );
 };
