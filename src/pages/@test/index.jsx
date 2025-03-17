@@ -419,11 +419,21 @@ const TestPage = () => {
     <>
       <h1 className='text-4xl'>SubHeader</h1>
       <br />
-      <SubHeader leftButton='arrow' title='예약 세부 정보' />
-      <SubHeader leftButton='arrow' title='마이 페이지' />
-      <SubHeader leftButton='arrow' title='결제 완료' />
-      <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
-      <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
+      <SubHeader leftButton='arrow' title='예약 세부 정보' fixed={false} />
+      <SubHeader leftButton='arrow' title='마이 페이지' fixed={false} />
+      <SubHeader leftButton='arrow' title='결제 완료' fixed={false} />
+      <SubHeader
+        leftButton='close'
+        title='비밀번호 변경'
+        rightButton={false}
+        fixed={false}
+      />
+      <SubHeader
+        leftButton='arrow'
+        rightButton={false}
+        hasShadow={false}
+        fixed={false}
+      />
     </>,
     <>
       <h1 className='text-4xl'>Detail Product</h1>
