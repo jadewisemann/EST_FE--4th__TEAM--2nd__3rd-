@@ -1,11 +1,12 @@
-
 import React from 'react';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
+import SubHeader from '../../components/SubHeader';
 import Button from '../../components/Button';
 
 const OrderConfirm = () => (
   <>
+    <SubHeader leftButton='arrow' title='결제 완료' fixed={true} />
     <div className='container mb-[60px]'>
       <Complete
         type='done'
