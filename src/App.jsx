@@ -11,6 +11,7 @@ import {
   SignupPage,
   UserInfoPage,
   WishlistPage,
+  OrderConfirm,
   ReservationDetailPage,
   TestPage,
 } from './pages';
