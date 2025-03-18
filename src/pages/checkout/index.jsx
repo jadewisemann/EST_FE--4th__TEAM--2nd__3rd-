@@ -1,21 +1,13 @@
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { useState } from 'react';
-
 // component
 import SubHeader from '../../components/SubHeader';
-
-// temp
-import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
-import Rating from '../../components/Rating';
-import Icon from '../../components/Icon';
-import Nav from '../../components/Nav';
 import Input from '../../components/Input';
 import DetailSection from '../../components/DetailSection';
-import DetailProduct from '../../components/DetailProduct';
 import Button from '../../components/Button';
 import CheckBox from '../../components/CheckBox';
 import Radio from '../../components/Radio';
+
+// temp
+import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
 const CheckoutPage = () => {
   const data = {
@@ -101,9 +93,9 @@ const CheckoutPage = () => {
   return (
     <>
       <SubHeader leftButton='arrow' title='예약 확인 및 결제' />
-      <div className='container mb-[82px]'>
+      <div className='container mt-5 mb-[40px]'>
         <div>
-          <h2 className='flex items-center gap-2 font-medium'>
+          <h2 className='mb-2 flex items-center gap-2 font-medium'>
             <span className='text-xl'>{data.title}</span>
             <span className='text-sm'>({data.engTitle})</span>
           </h2>
