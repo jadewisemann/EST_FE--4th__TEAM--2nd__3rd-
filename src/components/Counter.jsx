@@ -2,12 +2,12 @@ import { useState } from 'react';
 import Button from './Button';
 import Icon from './Icon';
 
-const Counter = ({ children, setter = () => {}, startAt = 0 }) => {
-  const [count, setCount] = useState(startAt);
+const Counter = ({ children, onChange = () => {}, initialValue = 0 }) => {
+  const [count, setCount] = useState(initialValue);
 
   const updateCount = newCount => {
     setCount(newCount);
-    setter(newCount);
+    onChange(newCount);
   };
 
   return (
