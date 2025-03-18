@@ -21,9 +21,9 @@ const OrderConfirm = () => (
       <DetailSection
         type='table-left'
         title='객실 정보'
-        color='neutral600'
-        size='sm'
-        weight='normal'
+        color='text-neutral-600'
+        size='text-sm'
+        weight='font-normal'
         contents={[
           {
             hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
@@ -41,9 +41,9 @@ const OrderConfirm = () => (
       <DetailSection
         type='table-left'
         title='투숙객 정보'
-        color='neutral600'
-        size='sm'
-        weight='normal'
+        color='text-neutral-600'
+        size='text-sm'
+        weight='font-normal'
         contents={[
           {
             hotelName: '홍길동',
