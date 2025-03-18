@@ -31,8 +31,9 @@ const SubHeader = ({
   const homeButtonHandler = () => {};
   const defaultStyle = 'flex h-18 items-center justify-between p-4 gap-3';
   const style =
-    defaultStyle + (hasShadow ? ' shadow-bottom' : '') + (fixed ? 'fixed' : '');
-
+    defaultStyle +
+    (hasShadow ? ' shadow-bottom' : '') +
+    (fixed ? ' fixed' : '');
   return (
     <>
       <div className={style}>
