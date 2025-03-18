@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Icon from './Icon';
 
 // inputtype 정의
@@ -55,6 +54,7 @@ const Input = ({
   inputType,
   value = '',
   label = '',
+  className,
   compareValue = '',
   placeholder = '',
   errorMessage = '',
@@ -62,6 +62,7 @@ const Input = ({
   onValidChange = () => {},
 }) => {
   const config = typeConfig[inputType] || {};
+  const inputId = `input-${inputType}`;
 
   // 유효성 검사
   const checkValidity = (val, compVal) =>
@@ -78,52 +79,55 @@ const Input = ({
   };
 
   return (
-    <div className='flex flex-col'>
-      {label ||
-        (config.label && (
-          <label className='mb-1 text-base tracking-tight'>
-            {label || config.label}
-          </label>
-        ))}
-      {/* 값에 따른 보더색상 변경 */}
-      <div
-        className={`flex items-center gap-2.5 rounded-full border-2 bg-white px-5 py-4 text-neutral-600 transition-all outline-none ${
-          value === ''
-            ? 'border-neutral-300'
-            : isValid
-              ? 'border-violet-600'
-              : 'border-red-500'
-        }`}
-      >
-        {/* 아이콘 */}
-        <div className='min-w-[24px] flex-shrink-0'>
-          {config.icon && <Icon name={config.icon} strokeWidth={0} />}
-        </div>
+    <div className={className}>
+      <div className='flex flex-col'>
+        <label className='mb-1 text-base tracking-tight' htmlFor={inputId}>
+          {label || config.label}
+        </label>
+        {/* 값에 따른 보더색상 변경 */}
+        <div
+          className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none ${
+            value === ''
+              ? 'border-neutral-300'
+              : isValid
+                ? 'border-violet-600'
+                : 'border-red-500'
+          }`}
+        >
+          {/* 아이콘 */}
+          <div className='absolute left-5 min-w-[20px]'>
+            {config.icon && <Icon name={config.icon} strokeWidth={0} />}
+          </div>
 
-        {/* 인풋 필드 */}
-        <div className='w-full flex-grow'>
+          {/* 인풋 필드 */}
+
           <input
+            id={inputId}
             type={config.type}
-            className='w-full border-none outline-none'
+            className='w-full border-none px-14 py-4 outline-none'
             placeholder={placeholder || config.placeholder}
             value={value}
             onChange={handleChange}
           />
-        </div>
 
-        {/* 닫기 버튼 */}
-        {value && (
-          <button type='button' onClick={() => onChange('')}>
-            <Icon name='close' color='black' />
-          </button>
+          {/* 닫기 버튼 */}
+          {value && (
+            <button
+              type='button'
+              className='absolute right-5'
+              onClick={() => onChange('')}
+            >
+              <Icon name='close' color='black' />
+            </button>
+          )}
+        </div>
+        {/* 에러 메세지 */}
+        {showError && (
+          <p className='mt-1 text-sm text-red-500'>
+            {errorMessage || config.errorMessage}
+          </p>
         )}
       </div>
-      {/* 에러 메세지 */}
-      {showError && (
-        <p className='mt-1 text-sm text-red-500'>
-          {errorMessage || config.errorMessage}
-        </p>
-      )}
     </div>
   );
 };
@@ -143,7 +147,10 @@ export default Input;
 // const [password, setPassword] = useState('');
 
 // 인풋 컴포넌트 호출후 onChange에 기능을 추가하면 됩니다
+
 /* <Input inputType='email' value={email} onChange={setEmail} />
 <Input inputType='password' value={password} onChange={setPassword} />
 <Input inputType='name' value={name} onChange={setName} /> 
 <Input inputType='search' value={search} onChange={setSearch} /> */
+
+// 최상단에 classname으로 스타일 적용 할 수 있도록 하였습니다 className=""
