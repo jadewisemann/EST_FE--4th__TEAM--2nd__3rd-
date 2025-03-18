@@ -1,11 +1,12 @@
-
 import React from 'react';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
+import SubHeader from '../../components/SubHeader';
 import Button from '../../components/Button';
 
 const OrderConfirm = () => (
   <>
+    <SubHeader leftButton='arrow' title='결제 완료' fixed={true} />
     <div className='container mb-[60px]'>
       <Complete
         type='done'
@@ -20,9 +21,9 @@ const OrderConfirm = () => (
       <DetailSection
         type='table-left'
         title='객실 정보'
-        color='neutral600'
-        size='sm'
-        weight='normal'
+        color='text-neutral-600'
+        size='text-sm'
+        weight='font-normal'
         contents={[
           {
             hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
@@ -40,9 +41,9 @@ const OrderConfirm = () => (
       <DetailSection
         type='table-left'
         title='투숙객 정보'
-        color='neutral600'
-        size='sm'
-        weight='normal'
+        color='text-neutral-600'
+        size='text-sm'
+        weight='font-normal'
         contents={[
           {
             hotelName: '홍길동',
