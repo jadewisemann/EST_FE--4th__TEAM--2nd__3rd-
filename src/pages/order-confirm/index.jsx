@@ -1,3 +1,4 @@
+import React from 'react';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
 import Button from '../../components/Button';
@@ -16,24 +17,42 @@ const OrderConfirm = () => (
       ></Complete>
       <hr className='mb-4 border-neutral-300' />
       <DetailSection
-        type='list-left'
+        type='table-left'
         title='객실 정보'
-        className=''
+        color='neutral600'
+        size='sm'
+        weight='normal'
         contents={[
-          '숙소명 : 리츠칼튼 호텔(Ritz-Carlton Hotel)',
-          '객실 : 스탠다드 트윈룸 (조식포함)',
-          '일정 : 2025.03.05 (수) 15:00 ~ 2025.03.06 (목) 11:00',
+          {
+            hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
+            roomName: '디럭스 더블룸',
+            schedule: ['2025.03.05 (수) 15:00 ~', '2025.03.06 (목) 11:00'],
+            labels: {
+              hotelName: '숙소명',
+              roomName: '객실',
+              schedule: '일정',
+            },
+          },
         ]}
       />
       <hr className='my-4 border-neutral-300' />
       <DetailSection
-        type='list-left'
+        type='table-left'
         title='투숙객 정보'
-        className=''
+        color='neutral600'
+        size='sm'
+        weight='normal'
         contents={[
-          '이름 : 홍길동',
-          '인원 : 성인 2인',
-          '요청사항 : 늦은 체크인 예정',
+          {
+            hotelName: '홍길동',
+            roomName: '성인 2인',
+            schedule: '늦은 체크인 예정',
+            labels: {
+              hotelName: '이름',
+              roomName: '인원',
+              schedule: '요청사항',
+            },
+          },
         ]}
       />
       <hr className='my-4 border-neutral-300' />
