@@ -1,5 +1,5 @@
 // react
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -26,6 +26,12 @@ import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 // components
 const TestPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmpassword, setConfirmpassword] = useState('');
+  const [search, setSearch] = useState('');
+  const [tel, setTel] = useState('');
 
   const categories = [
     'Calendar',
@@ -398,11 +404,21 @@ const TestPage = () => {
     <>
       <h1 className='text-4xl'>SubHeader</h1>
       <br />
-      <SubHeader leftButton='arrow' title='예약 세부 정보' />
-      <SubHeader leftButton='arrow' title='마이 페이지' />
-      <SubHeader leftButton='arrow' title='결제 완료' />
-      <SubHeader leftButton='close' title='비밀번호 변경' rightButton={false} />
-      <SubHeader leftButton='arrow' rightButton={false} hasShadow={false} />
+      <SubHeader leftButton='arrow' title='예약 세부 정보' fixed={false} />
+      <SubHeader leftButton='arrow' title='마이 페이지' fixed={false} />
+      <SubHeader leftButton='arrow' title='결제 완료' fixed={false} />
+      <SubHeader
+        leftButton='close'
+        title='비밀번호 변경'
+        rightButton={false}
+        fixed={false}
+      />
+      <SubHeader
+        leftButton='arrow'
+        rightButton={false}
+        hasShadow={false}
+        fixed={false}
+      />
     </>,
     <>
       <h1 className='text-4xl'>Detail Product</h1>
@@ -410,9 +426,28 @@ const TestPage = () => {
       <DetailProduct detailProducts={detailProducts} />
     </>,
     <>
-      <Input type={'email'} />
-      <Input type={'password'} />
-      <Input type={'name'} />
+      <Input inputType='email' value={email} onChange={setEmail} />
+      <Input inputType='password' value={password} onChange={setPassword} />
+      <Input
+        inputType='confirmPassword'
+        value={confirmpassword}
+        onChange={setConfirmpassword}
+        compareValue={password}
+      />
+      <Input
+        inputType='name'
+        label='이름 넣어요'
+        value={name}
+        onChange={setName}
+      />
+      <Input inputType='tel' value={tel} onChange={setTel} />
+      <Input
+        inputType='search'
+        label='search'
+        value={search}
+        onChange={setSearch}
+        placeholder='hi'
+      />
     </>,
     <>
       <Anchor type='searchPassword' />

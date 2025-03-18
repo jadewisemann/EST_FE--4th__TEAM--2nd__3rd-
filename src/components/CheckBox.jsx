@@ -1,5 +1,5 @@
-const CheckBox = ({ name, txt, disabled }) => (
-  <div className='flex items-center gap-1'>
+const CheckBox = ({ name, txt, disabled, className }) => (
+  <div className={`flex items-center gap-1 ${className || ''}`}>
     <input
       id={name}
       type='checkbox'
