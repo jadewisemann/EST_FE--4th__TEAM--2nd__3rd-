@@ -117,6 +117,35 @@ const TestPage = () => {
     },
   ];
 
+  // // 디테일섹션 타입:list-left-dot 데이터
+  // const contents2 = [
+  //   {
+  //     keyName: 'refund-full',
+  //     text: '체크인일 기준 1일전 18시 까지 : 100% 환불',
+  //   },
+  //   {
+  //     keyName: 'refund-no-show',
+  //     text: '체크인일 기준 1일전 18시 이후 ~ 당일 및 No-show : 환불 불가',
+  //   },
+  //   {
+  //     keyName: 'additional-fee',
+  //     text: '취소, 환불시 수수료가 발생할 수 있습니다.',
+  //   },
+  //   {
+  //     keyName: 'special-refund',
+  //     text: '아래 객실은 별도의 취소규정이 적용되오니 참고 부탁드립니다.',
+  //     isHighlighted: true, //빨간색 적용
+  //   },
+  //   {
+  //     keyName: 'special-room',
+  //     text: '[한불불가] [단독] 12시 체크인 & 13시 체크아웃',
+  //   },
+  //   {
+  //     keyName: 'special-cancel',
+  //     text: '예약 후 10분 내 취소를 포함한 일부 취소 수수료가 발생하지 않습니다.',
+  //   },
+  // ];
+
   const contents = [
     <>
       <h1 className='text-4xl'>Calendar</h1>
@@ -312,6 +341,9 @@ const TestPage = () => {
       <DetailSection
         type='list-left'
         title='판매자 정보'
+        color='text-neutral-600'
+        size='text-xs'
+        weight='font-normal'
         contents={[
           '연락처 : 010-1234-5678',
           '주소 : 서울시 강남구 어쩌구 저쩌구',
@@ -322,16 +354,29 @@ const TestPage = () => {
       <DetailSection
         type='list-left-dot'
         title='취소 / 환불 규정에 대한 동의'
+        color='text-neutral-600'
+        size='text-xs'
+        weight='font-normal'
         contents={[
-          '체크인일 기준 1일전 18시 까지 : 100% 환불',
-          '체크아웃 오전 11시 이전',
-          '흡연 금지',
+          { text: '체크인일 기준 1일전 18시 까지 : 100% 환불' },
+          { text: '체크아웃 오전 11시 이전' },
+          {
+            text: '아래 객실은 별도의 취소규정이 적용되오니 참고 부탁드립니다.',
+            isHighlighted: true, //빨간색 적용
+          },
+          { text: '[환불불가] [단독] 12시 체크인 & 13시 체크아웃' },
+          {
+            text: '예약 후 10분 내 취소를 포함한 일부 취소 수수료가 발생하지 않습니다.',
+          },
         ]}
       />
       <br />
       <DetailSection
         type='list-left-dot-title'
         title='숙소 규정'
+        color='text-neutral-600'
+        size='text-xs'
+        weight='font-normal'
         contents={[
           {
             subTitle: '체크인 & 체크아웃 시간',
@@ -353,11 +398,14 @@ const TestPage = () => {
       <DetailSection
         type='table-left'
         title='객실 정보'
+        color='text-neutral-600'
+        size='text-sm'
+        weight='font-normal'
         contents={[
           {
             hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
             roomName: '디럭스 더블룸',
-            schedule: '2024-04-10 ~ 2024-04-12',
+            schedule: ['2025.03.05 (수) 15:00 ~', '2025.03.06 (목) 11:00'],
             labels: {
               hotelName: '숙소명',
               roomName: '객실',
@@ -472,3 +520,6 @@ const TestPage = () => {
 };
 
 export default TestPage;
+
+//사용법
+// 어떤 프롭스 값을 넣어야할지는 DetailSection.jsx 열고 보는게 빠름
