@@ -29,7 +29,8 @@ const SubHeader = ({
 
   // TODO: 홈으로 가는 핸들러 추가 필요
   const homeButtonHandler = () => {};
-  const defaultStyle = 'flex h-18 items-center justify-between p-4 gap-3';
+  const defaultStyle =
+    'flex h-18 items-center justify-between p-4 gap-3 w-full bg-white';
   const style =
     defaultStyle +
     (hasShadow ? ' shadow-bottom' : '') +
