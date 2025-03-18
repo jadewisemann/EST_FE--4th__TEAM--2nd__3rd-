@@ -1,5 +1,5 @@
 // react
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -26,6 +26,12 @@ import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 // components
 const TestPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmpassword, setConfirmpassword] = useState('');
+  const [search, setSearch] = useState('');
+  const [tel, setTel] = useState('');
 
   const categories = [
     'Calendar',
@@ -420,9 +426,28 @@ const TestPage = () => {
       <DetailProduct detailProducts={detailProducts} />
     </>,
     <>
-      <Input type={'email'} />
-      <Input type={'password'} />
-      <Input type={'name'} />
+      <Input inputType='email' value={email} onChange={setEmail} />
+      <Input inputType='password' value={password} onChange={setPassword} />
+      <Input
+        inputType='confirmPassword'
+        value={confirmpassword}
+        onChange={setConfirmpassword}
+        compareValue={password}
+      />
+      <Input
+        inputType='name'
+        label='이름 넣어요'
+        value={name}
+        onChange={setName}
+      />
+      <Input inputType='tel' value={tel} onChange={setTel} />
+      <Input
+        inputType='search'
+        label='search'
+        value={search}
+        onChange={setSearch}
+        placeholder='hi'
+      />
     </>,
     <>
       <Anchor type='searchPassword' />
