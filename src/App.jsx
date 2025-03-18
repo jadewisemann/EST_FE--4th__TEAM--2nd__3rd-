@@ -11,6 +11,7 @@ import {
   SignupPage,
   UserInfoPage,
   WishlistPage,
+  OrderConfirm,
   TestPage,
 } from './pages';
 
@@ -36,6 +37,7 @@ const App = () => (
     <Route path='/signup' element={<SignupPage />} />
     <Route path='/userinfo' element={<UserInfoPage />} />
     <Route path='/wishlist' element={<WishlistPage />} />
+    <Route path='/order-confirm' element={<OrderConfirm />} />
     <Route path='/*' element={<NotFoundPage />} />
     <Route path='/test' element={<TestPage />} />
     <Route element={<ProtectedRoute />}>

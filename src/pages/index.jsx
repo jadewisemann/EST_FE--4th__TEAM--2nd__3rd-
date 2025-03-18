@@ -9,6 +9,7 @@ import SearchPage from './search';
 import StayListpage from './search-result';
 import UserInfoPage from './user-info';
 import WishlistPage from './wishlist';
+import OrderConfirm from './order-confirm';
 import TestPage from './@test';
 
 export {
@@ -23,5 +24,6 @@ export {
   SignupPage,
   UserInfoPage,
   WishlistPage,
+  OrderConfirm,
   TestPage,
 };
