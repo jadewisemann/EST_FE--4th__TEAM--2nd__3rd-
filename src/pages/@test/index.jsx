@@ -312,6 +312,9 @@ const TestPage = () => {
       <DetailSection
         type='list-left'
         title='판매자 정보'
+        color='neutral600'
+        size='xs'
+        weight='normal'
         contents={[
           '연락처 : 010-1234-5678',
           '주소 : 서울시 강남구 어쩌구 저쩌구',
@@ -322,6 +325,9 @@ const TestPage = () => {
       <DetailSection
         type='list-left-dot'
         title='취소 / 환불 규정에 대한 동의'
+        color='neutral600'
+        size='xs'
+        weight='normal'
         contents={[
           '체크인일 기준 1일전 18시 까지 : 100% 환불',
           '체크아웃 오전 11시 이전',
@@ -332,6 +338,9 @@ const TestPage = () => {
       <DetailSection
         type='list-left-dot-title'
         title='숙소 규정'
+        color='neutral600'
+        size='xs'
+        weight='normal'
         contents={[
           {
             subTitle: '체크인 & 체크아웃 시간',
@@ -353,11 +362,14 @@ const TestPage = () => {
       <DetailSection
         type='table-left'
         title='객실 정보'
+        color='neutral600'
+        size='sm'
+        weight='normal'
         contents={[
           {
             hotelName: '리츠칼튼 호텔(Ritz-Carlton Hotel)',
             roomName: '디럭스 더블룸',
-            schedule: '2024-04-10 ~ 2024-04-12',
+            schedule: ['2025.03.05 (수) 15:00 ~', '2025.03.06 (목) 11:00'],
             labels: {
               hotelName: '숙소명',
               roomName: '객실',
@@ -472,3 +484,6 @@ const TestPage = () => {
 };
 
 export default TestPage;
+
+//사용법
+// 어떤 프롭스 값을 넣어야할지는 DetailSection.jsx 열고 보는게 빠름
