@@ -74,7 +74,7 @@ const DetailSection = ({
                 className={`flex flex-col gap-1.5 ${fontStyleClasses}`}
               >
                 {Object.entries(item.labels).map(([key, label]) => (
-                  <div key={key} className='flex items-center'>
+                  <div key={key} className='flex items-start'>
                     <div className='basis-1/5 text-neutral-500'>{label}</div>
                     <div>
                       {Array.isArray(item[key])
