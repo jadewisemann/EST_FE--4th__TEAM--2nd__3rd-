@@ -4,9 +4,6 @@ import { useState } from 'react';
 
 // component
 import SubHeader from '../../components/SubHeader';
-
-// temp
-import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 import Rating from '../../components/Rating';
 import Icon from '../../components/Icon';
 import Nav from '../../components/Nav';
@@ -14,6 +11,9 @@ import ReviewRating from '../../components/ReviewRating';
 import DetailSection from '../../components/DetailSection';
 import DetailProduct from '../../components/DetailProduct';
 import Button from '../../components/Button';
+
+// temp
+import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
 const DetailsPage = () => {
   const data = {
@@ -126,7 +126,7 @@ const DetailsPage = () => {
             disableOnInteraction: false,
           }}
           speed={500}
-          style={{ marginInline: '-20px', marginTop: '-20px' }}
+          style={{ marginInline: '-20px' }}
         >
           {data.slides.map((slide, index) => (
             <SwiperSlide key={index}>

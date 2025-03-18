@@ -17,8 +17,7 @@
 
 @layer utilities {
   .container {
-    padding: 20px;
-    padding-bottom: 78px;
+    padding: 72px 20px 120px;
   }
 }
 
