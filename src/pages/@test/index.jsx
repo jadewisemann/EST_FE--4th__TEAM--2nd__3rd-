@@ -257,7 +257,6 @@ const TestPage = () => {
         <Button color='alt' size='full' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'square'</h2>
         <Button color='prime' size='square' onClick={() => {}}>
           prime, full
@@ -271,7 +270,6 @@ const TestPage = () => {
         <Button color='alt' size='square' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'small'</h2>
         <Button color='prime' size='small' onClick={() => {}}>
           prime, full
@@ -288,7 +286,6 @@ const TestPage = () => {
         <Button color='alt' size='small' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'xSmall'</h2>
         <Button color='prime' size='xSmall' onClick={() => {}}>
           prime, full
@@ -301,6 +298,10 @@ const TestPage = () => {
         </Button>
         <Button color='alt' size='xSmall' onClick={() => {}}>
           alt, full
+        </Button>
+        <h2>size = 'xSmall'</h2>
+        <Button color='invert' size='full' icon='calendar'>
+          3월 5일 수 ~ 3월 6일 목
         </Button>
       </div>
     </>,
