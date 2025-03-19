@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/authStore';
+import useAuthStore from '../../store/useAuthStore';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Button from '../../components/Button';

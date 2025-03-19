@@ -7,6 +7,7 @@ import {
   login,
   logout,
   resetPassword,
+  googleLogin,
 } from '../firebase/auth';
 
 const useAuthStore = create(set => {
@@ -32,6 +33,16 @@ const useAuthStore = create(set => {
         set({ user: userCredential.user, error: null });
       } catch (error) {
         set({ error: error.message });
+      }
+    },
+
+    googleLogin: async () => {
+      try {
+        const { user } = await googleLogin();
+        set({ user, error: null });
+      } catch (error) {
+        set({ error: error.message });
+        throw error;
       }
     },
 
