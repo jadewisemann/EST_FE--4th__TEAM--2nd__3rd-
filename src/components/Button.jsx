@@ -67,7 +67,9 @@ const Button = ({
     >
       <div className='flex items-center gap-2'>
         {hasIcon && <Icon name={icon} size={iconSize} />}
-        <div className={`grow ${childrenStyle}`}>
+        <div
+          className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
+        >
           {!children && content ? content : children}
         </div>
       </div>
