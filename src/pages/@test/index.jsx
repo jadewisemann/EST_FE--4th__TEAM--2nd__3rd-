@@ -1,5 +1,5 @@
 // react
-import { use, useState } from 'react';
+import { useState } from 'react';
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -307,7 +307,13 @@ const TestPage = () => {
     <>
       <h2>Counter</h2>
       <div className='w-sm bg-red-50'>
-        <Counter startAt={0} setter={state => alert(state)}>
+        <Counter
+          initialValue={0}
+          minValue={0}
+          maxValue={9}
+          onChange={state => alert(state)}
+          subTitle='3세 미만'
+        >
           객실
         </Counter>
       </div>
