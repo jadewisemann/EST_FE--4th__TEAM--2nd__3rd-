@@ -7,15 +7,19 @@ const VerticalList = ({ products }) => (
     <div></div>
     {products?.map((product, index) => (
       <div key={index} className='border-b-1 border-neutral-200 py-4'>
-        <button type='button' className='flex w-full gap-3'>
-          <img
-            className='block h-20 w-20 rounded-[10px]'
-            src={product.thumbnail}
-            alt=''
-          />
+        <div type='button' className='flex w-full gap-3'>
+          <button className='cursor-pointer'>
+            <img
+              className='block h-20 w-20 rounded-[10px]'
+              src={product.thumbnail}
+              alt=''
+            />
+          </button>
           <div className='flex grow justify-between'>
             <div className='flex flex-col'>
-              <h2 className='mb-1.5 text-left text-sm'>{product.name}</h2>
+              <button className='cursor-pointer'>
+                <h2 className='mb-1.5 text-left text-sm'>{product.name}</h2>
+              </button>
               <address className='flex items-center text-[11px] text-neutral-500 not-italic'>
                 <Icon name='location' className='text-neutral-500' size={20} />
                 {product.location}
@@ -36,7 +40,7 @@ const VerticalList = ({ products }) => (
               </div>
             </div>
           </div>
-        </button>
+        </div>
       </div>
     ))}
   </>
