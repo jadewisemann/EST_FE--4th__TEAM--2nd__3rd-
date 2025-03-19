@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUp } from '../../firebase/auth';
+import useAuthStore from '../../store/authStore';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -13,6 +13,7 @@ const SignupPage = () => {
   const [name, setName] = useState('');
   const [confirmpassword, setConfirmpassword] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+  const { signUp } = useAuthStore();
 
   // 토스트 메시지 표시 함수
   const showToast = message => {
@@ -22,16 +23,23 @@ const SignupPage = () => {
 
   // 회원가입 처리 함수
   const handleSignup = async () => {
+    if (password !== confirmpassword) {
+      showToast('비밀번호가 일치하지 않습니다.');
+      return;
+    }
     try {
       await signUp(email, password);
       navigate('/login'); // 회원가입 성공 시 로그인 페이지 이동
     } catch (error) {
       console.error('회원가입 에러:', error.message);
 
-      // 토스트 메세지
-      if (error.code === 'auth/email-already-in-use') {
+      if (error.message.includes('auth/email-already-in-use')) {
         setEmail('');
         showToast('중복된 이메일이 있습니다.');
+      } else if (error.message.includes('auth/invalid-email')) {
+        showToast('올바른 이메일을 입력해주세요');
+      } else if (error.message.includes('auth/missing-password')) {
+        showToast('비밀번호를 입력해주세요');
       } else {
         showToast('회원가입에 실패했습니다.');
       }
@@ -52,7 +60,8 @@ const SignupPage = () => {
         </button>
         <div className='mb-7 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>회원가입</h2>
-          <p>숙박 예약 기능을 사용하려면 계정을 만드세요!</p>
+          숙박 예약 기능을 사용하려면 <br />
+          계정을 만드세요!
         </div>
         <div className='mb-6 flex flex-col gap-5'>
           <Input inputType='email' value={email} onChange={setEmail} />
@@ -65,11 +74,11 @@ const SignupPage = () => {
             onChange={setConfirmpassword}
           />
         </div>
-
+        {/*버튼*/}
         <Button
           color='prime'
           size='full'
-          className='cursor-pointer rounded-2xl'
+          className='flex cursor-pointer justify-center rounded-2xl'
           onClick={handleSignup}
         >
           회원가입
