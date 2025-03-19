@@ -274,9 +274,7 @@ const TestPage = () => {
         <Button color='prime' size='small' onClick={() => {}}>
           prime, full
         </Button>
-        <Button color='prime' size='xsmall' onClick={() => {}}>
-          prime, full
-        </Button>
+
         <Button color='invert' size='small' onClick={() => {}}>
           invert, full
         </Button>
@@ -299,9 +297,13 @@ const TestPage = () => {
         <Button color='alt' size='xSmall' onClick={() => {}}>
           alt, full
         </Button>
-        <h2>size = 'xSmall'</h2>
+        <h2>has icon</h2>
         <Button color='invert' size='full' icon='calendar'>
           3월 5일 수 ~ 3월 6일 목
+        </Button>
+        <h2>google</h2>
+        <Button color='line'>
+          <Icon name='google_colored' /> Google로 로그인
         </Button>
       </div>
     </>,
