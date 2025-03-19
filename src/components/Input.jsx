@@ -104,7 +104,7 @@ const Input = ({
           <input
             id={inputId}
             type={config.type}
-            className='w-full border-none px-14 py-4 outline-none'
+            className='w-full rounded-full border-none px-14 py-4 outline-none'
             placeholder={placeholder || config.placeholder}
             value={value}
             onChange={handleChange}
