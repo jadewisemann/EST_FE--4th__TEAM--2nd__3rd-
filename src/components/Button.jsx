@@ -55,7 +55,7 @@ const Button = ({
     className,
   );
 
-  const childrenStyle = hasIcon ? `text-left` : `text-center`;
+  const childrenStyle = hasIcon ? `text-left ` : `text-center justify-center`;
 
   return (
     <button
