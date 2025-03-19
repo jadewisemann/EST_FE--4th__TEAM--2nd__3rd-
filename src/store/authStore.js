@@ -16,6 +16,7 @@ const useAuthStore = create(set => {
         set({ user: userCredential.user, error: null });
       } catch (error) {
         set({ error: error.message });
+        throw error;
       }
     },
 
