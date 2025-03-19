@@ -12,6 +12,7 @@ const Button = ({
   onClick,
   disabled = false,
   className,
+  content = '',
   ...props
 }) => {
   const [hasIcon, setHasIcon] = useState(false);
@@ -66,7 +67,9 @@ const Button = ({
     >
       <div className='flex items-center gap-2'>
         {hasIcon && <Icon name={icon} size={iconSize} />}
-        <div className={`grow ${childrenStyle}`}>{children}</div>
+        <div className={`grow ${childrenStyle}`}>
+          {!children && content ? content : children}
+        </div>
       </div>
     </button>
   );
