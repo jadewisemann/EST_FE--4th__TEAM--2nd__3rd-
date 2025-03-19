@@ -46,6 +46,7 @@ import {
 import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
 import { VscBlank } from 'react-icons/vsc';
+import { FcGoogle } from 'react-icons/fc';
 
 const Icon = ({
   name,
@@ -99,6 +100,8 @@ const Icon = ({
     arrow_left: FaArrowLeft,
     arrow_left_long: FaArrowLeftLong,
     blank: VscBlank,
+    // button
+    google_colored: FcGoogle,
   };
 
   const IconName = icons[name];
