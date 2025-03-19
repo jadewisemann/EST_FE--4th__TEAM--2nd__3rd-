@@ -4,7 +4,7 @@ import Input from '../../components/Input';
 import HorizontalList from '../../components/HorizontalList';
 import Nav from '../../components/Nav';
 import Icon from '../../components/Icon';
-import searchHotelsAdvanced from '../../firebase/search';
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
 import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
