@@ -1,13 +1,27 @@
+import { useEffect, useState } from 'react';
+import Icon from './Icon';
+
 const Button = ({
   children,
   color = 'prime',
   size = 'full',
   type = 'button',
-  disabled = false,
-  className = '',
+  icon = '',
+  iconSize = '',
+  childrenClassName = '',
   onClick,
+  disabled = false,
+  className,
   ...props
 }) => {
+  const [hasIcon, setHasIcon] = useState(false);
+
+  useEffect(() => {
+    if (icon) {
+      setHasIcon(true);
+    }
+  }, [icon]);
+
   const cx = (...classes) => classes.filter(Boolean).join(' ');
 
   const defaultStyle = 'text-base transition-colors duration-200 font-medium';
@@ -40,6 +54,8 @@ const Button = ({
     className,
   );
 
+  const childrenStyle = childrenClassName ? childrenClassName : 'text-left';
+
   return (
     <button
       type={type}
@@ -48,7 +64,10 @@ const Button = ({
       onClick={onClick}
       {...props}
     >
-      {children}
+      <div className='flex items-center gap-2'>
+        {hasIcon && <Icon name={icon} size={iconSize} />}
+        <div className={`grow ${childrenStyle}`}>{children}</div>
+      </div>
     </button>
   );
 };

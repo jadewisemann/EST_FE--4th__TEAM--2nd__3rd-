@@ -1,5 +1,5 @@
 // react
-import { use, useState } from 'react';
+import { useState } from 'react';
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -257,7 +257,6 @@ const TestPage = () => {
         <Button color='alt' size='full' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'square'</h2>
         <Button color='prime' size='square' onClick={() => {}}>
           prime, full
@@ -271,7 +270,6 @@ const TestPage = () => {
         <Button color='alt' size='square' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'small'</h2>
         <Button color='prime' size='small' onClick={() => {}}>
           prime, full
@@ -288,7 +286,6 @@ const TestPage = () => {
         <Button color='alt' size='small' onClick={() => {}}>
           alt, full
         </Button>
-
         <h2>size = 'xSmall'</h2>
         <Button color='prime' size='xSmall' onClick={() => {}}>
           prime, full
@@ -302,12 +299,22 @@ const TestPage = () => {
         <Button color='alt' size='xSmall' onClick={() => {}}>
           alt, full
         </Button>
+        <h2>size = 'xSmall'</h2>
+        <Button color='invert' size='full' icon='calendar'>
+          3월 5일 수 ~ 3월 6일 목
+        </Button>
       </div>
     </>,
     <>
       <h2>Counter</h2>
       <div className='w-sm bg-red-50'>
-        <Counter startAt={0} setter={state => alert(state)}>
+        <Counter
+          initialValue={0}
+          minValue={0}
+          maxValue={9}
+          onChange={state => alert(state)}
+          subTitle='3세 미만'
+        >
           객실
         </Counter>
       </div>
