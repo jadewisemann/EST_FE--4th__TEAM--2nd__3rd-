@@ -1,7 +1,13 @@
 // firebase와의 의존성 분리
 
 import { create } from 'zustand';
-import { listenAuthState, signUp, login, logout } from '../firebase/auth';
+import {
+  listenAuthState,
+  signUp,
+  login,
+  logout,
+  resetPassword,
+} from '../firebase/auth';
 
 const useAuthStore = create(set => {
   listenAuthState(user => set({ user }));
@@ -32,6 +38,14 @@ const useAuthStore = create(set => {
     logout: async () => {
       await logout();
       set({ user: null });
+    },
+
+    resetPassword: async email => {
+      try {
+        await resetPassword(email);
+      } catch (error) {
+        set({ error: error.message });
+      }
     },
   };
 });
