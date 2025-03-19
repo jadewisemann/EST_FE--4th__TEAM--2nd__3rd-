@@ -40,15 +40,13 @@ const searchHotelsAdvanced = async (
   try {
     const resultLimit = pageSize || limit;
 
-    const searchNgrams = generateNgrams(searchText);
-    if (searchNgrams.length === 0 && !region) {
+    if (searchText.length === 0 && !region) {
       return pagination ? { hotels: [], lastDoc: null } : [];
     }
-
-    const hotelsRef = collection(db, 'hotels');
+    const searchNgrams = generateNgrams(searchText);
 
     let baseQuery = query(
-      hotelsRef,
+      collection(db, 'hotels'),
       orderBy('name'),
       firestoreLimit(resultLimit),
     );
