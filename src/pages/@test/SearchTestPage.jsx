@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import searchHotelsAdvanced from '../../firebase/search';
-import getHotelById from '../../firebase/getHotelByID';
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
 
 const DEBOUNCE_TIMEOUT = 300; //ms
 
@@ -11,7 +10,6 @@ const SearchTestPage = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [debounceTimer, setDebounceTimer] = useState(null);
-  const [selectedHotel, setSelectedHotel] = useState(null);
 
   useEffect(() => {
     if (query.trim() === '') {
