@@ -5,6 +5,9 @@ import {
   getDocs,
   doc,
   getDoc,
+  limit as firestoreLimit,
+  startAfter,
+  orderBy,
 } from 'firebase/firestore';
 import { db } from './config';
 
@@ -13,110 +16,184 @@ import { db } from './config';
  */
 const generateNgrams = text => {
   if (!text) return [];
-
   const cleanText = text.replace(/\s+/g, '');
   const ngrams = new Set();
-
   for (let n = 1; n <= 3; n++) {
     for (let i = 0; i <= cleanText.length - n; i++) {
       ngrams.add(cleanText.substring(i, i + n));
     }
   }
-
   return [...ngrams];
 };
 
 /**
  * n-gram 기반 호텔 검색 함수
  */
-const searchHotelsAdvanced = async (searchText, region = null) => {
+const searchHotelsAdvanced = async (
+  searchText,
+  region = null,
+  limit = 20,
+  pageSize = limit,
+  lastDoc = null,
+  pagination = false,
+) => {
   try {
+    const resultLimit = pageSize || limit;
+
+    if (searchText.length === 0 && !region) {
+      return pagination ? { hotels: [], lastDoc: null } : [];
+    }
     const searchNgrams = generateNgrams(searchText);
 
-    if (searchNgrams.length === 0 && !region) return [];
-
-    const searchIndexRef = collection(db, 'search_index');
-    const queryPromises = [];
-
-    if (searchNgrams.length > 0) {
-      searchNgrams.forEach(ngram => {
-        queryPromises.push(
-          getDocs(
-            query(
-              searchIndexRef,
-              where(`combined_ngrams.${ngram}`, '==', true),
-              ...(region ? [where('region', '==', region)] : []),
-            ),
-          ),
-        );
-      });
-    } else if (region) {
-      queryPromises.push(
-        getDocs(query(searchIndexRef, where('region', '==', region))),
-      );
-    }
-
-    if (queryPromises.length === 0) return [];
-
-    const queryResults = await Promise.all(queryPromises);
-    const hotelMatches = {};
-
-    queryResults.forEach((querySnapshot, index) => {
-      querySnapshot.forEach(docSnapshot => {
-        const hotelId = docSnapshot.data().hotel_id;
-
-        if (hotelId in hotelMatches) {
-          hotelMatches[hotelId].score += 1;
-          if (searchNgrams.length > 0) {
-            hotelMatches[hotelId].matchedNgrams.push(searchNgrams[index]);
-          }
-        } else {
-          hotelMatches[hotelId] = {
-            id: hotelId,
-            score: 1,
-            matchedNgrams: searchNgrams.length > 0 ? [searchNgrams[index]] : [],
-          };
-        }
-      });
-    });
-
-    const sortedHotelIds = Object.values(hotelMatches)
-      .sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score;
-
-        const aMaxLength =
-          a.matchedNgrams.length > 0
-            ? Math.max(...a.matchedNgrams.map(ng => ng.length))
-            : 0;
-
-        const bMaxLength =
-          b.matchedNgrams.length > 0
-            ? Math.max(...b.matchedNgrams.map(ng => ng.length))
-            : 0;
-
-        return bMaxLength - aMaxLength;
-      })
-      .map(match => match.id);
-
-    const hotelDocs = await Promise.all(
-      sortedHotelIds.map(id => getDoc(doc(db, 'hotels', id))),
+    let baseQuery = query(
+      collection(db, 'hotels'),
+      orderBy('name'),
+      firestoreLimit(resultLimit),
     );
 
-    return hotelDocs
-      .filter(doc => doc.exists())
-      .map((doc, index) => ({
+    if (region) {
+      baseQuery = query(baseQuery, where('region', '==', region));
+    }
+
+    if (lastDoc) {
+      baseQuery = query(baseQuery, startAfter(lastDoc));
+    }
+
+    if (searchNgrams.length > 0) {
+      const searchResults = {};
+
+      for (const ngram of searchNgrams) {
+        const searchIndexRef = collection(db, 'search_index');
+        const ngramQuery = query(
+          searchIndexRef,
+          where(`combined_ngrams.${ngram}`, '==', true),
+          ...(region ? [where('region', '==', region)] : []),
+        );
+
+        const ngramSnapshot = await getDocs(ngramQuery);
+
+        ngramSnapshot.forEach(doc => {
+          const hotelId = doc.data().hotel_id;
+          if (searchResults[hotelId]) {
+            searchResults[hotelId].score += 1;
+            searchResults[hotelId].matchedNgrams.push(ngram);
+          } else {
+            searchResults[hotelId] = {
+              id: hotelId,
+              score: 1,
+              matchedNgrams: [ngram],
+            };
+          }
+        });
+      }
+
+      const sortedIds = Object.values(searchResults)
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          const aMaxLength =
+            a.matchedNgrams.length > 0
+              ? Math.max(...a.matchedNgrams.map(ng => ng.length))
+              : 0;
+          const bMaxLength =
+            b.matchedNgrams.length > 0
+              ? Math.max(...b.matchedNgrams.map(ng => ng.length))
+              : 0;
+          return bMaxLength - aMaxLength;
+        })
+        .map(item => item.id);
+
+      let startIndex = 0;
+      if (lastDoc) {
+        const lastId = lastDoc.id;
+        startIndex = sortedIds.indexOf(lastId) + 1;
+      }
+
+      const paginatedIds = sortedIds.slice(
+        startIndex,
+        startIndex + resultLimit,
+      );
+
+      const hotelDocs = await Promise.all(
+        paginatedIds.map(id => getDoc(doc(db, 'hotels', id))),
+      );
+
+      const hotels = hotelDocs
+        .filter(doc => doc.exists())
+        .map((doc, index) => ({
+          id: doc.id,
+          ...doc.data(),
+          _debug: {
+            score: searchResults[doc.id].score,
+            matchedNgrams: searchResults[doc.id].matchedNgrams,
+            index: index + startIndex,
+          },
+        }));
+
+      const lastHotelDoc =
+        hotels.length > 0
+          ? await getDoc(doc(db, 'hotels', hotels[hotels.length - 1].id))
+          : null;
+
+      return pagination
+        ? {
+            hotels,
+            lastDoc: lastHotelDoc,
+          }
+        : hotels;
+    } else {
+      const snapshot = await getDocs(baseQuery);
+
+      const hotels = snapshot.docs.map((doc, index) => ({
         id: doc.id,
         ...doc.data(),
         _debug: {
-          score: hotelMatches[doc.id].score,
-          matchedNgrams: hotelMatches[doc.id].matchedNgrams,
-          index: index,
+          index,
         },
       }));
+
+      return pagination
+        ? {
+            hotels,
+            lastDoc:
+              snapshot.docs.length > 0
+                ? snapshot.docs[snapshot.docs.length - 1]
+                : null,
+          }
+        : hotels;
+    }
   } catch (error) {
     console.error('호텔 검색 중 오류 발생:', error);
     throw error;
   }
 };
 
-export default searchHotelsAdvanced;
+/**
+ * 호텔 ID로 단일 호텔 정보를 가져오는 함수
+ * @param {string} hotelId - 가져올 호텔의 ID
+ * @returns {Promise<object|null>} - 호텔 데이터 객체 또는 존재하지 않을 경우 null
+ */
+
+const getHotelById = async hotelId => {
+  try {
+    if (!hotelId) {
+      throw new Error('호텔 ID가 필요합니다');
+    }
+
+    const hotelDocRef = doc(db, 'hotels', hotelId);
+    const hotelDoc = await getDoc(hotelDocRef);
+
+    if (hotelDoc.exists()) {
+      return {
+        id: hotelDoc.id,
+        ...hotelDoc.data(),
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('호텔 정보 가져오기 실패:', error);
+    throw error;
+  }
+};
+
+export { getHotelById, searchHotelsAdvanced };

@@ -11,5 +11,10 @@
     "source.fixAll.eslint": "always"
   },
   "editor.formatOnSave": false,
-  "eslint.format.enable": false
+  "eslint.format.enable": false,
+  "cSpell.words": [
+    "firestore",
+    "ngram",
+    "Ngrams"
+  ]
 }  
