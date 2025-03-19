@@ -2,12 +2,23 @@ import { useState } from 'react';
 import Button from './Button';
 import Icon from './Icon';
 
-const Counter = ({ children, setter = () => {}, startAt = 0 }) => {
-  const [count, setCount] = useState(startAt);
+const Counter = ({
+  children,
+  onChange = () => {},
+  initialValue = 0,
+  minValue = 0,
+  maxValue = 9,
+}) => {
+  const [count, setCount] = useState(initialValue);
+  if (initialValue < minValue) {
+    setCount(minValue);
+  } else if (initialValue > maxValue) {
+    setCount(maxValue);
+  }
 
   const updateCount = newCount => {
     setCount(newCount);
-    setter(newCount);
+    onChange(newCount);
   };
 
   return (
@@ -18,14 +29,14 @@ const Counter = ({ children, setter = () => {}, startAt = 0 }) => {
       </div>{' '}
       <div className='controller flex items-center gap-6'>
         <Button
-          onClick={() => count > 0 && updateCount(count - 1)}
+          onClick={() => count > minValue && updateCount(count - 1)}
           size='square'
           color='alt'
         >
           <Icon name='minus_thin' color='black' strokeWidth={0} />
         </Button>
         <Button
-          onClick={() => updateCount(count + 1)}
+          onClick={() => count < maxValue && updateCount(count + 1)}
           size='square'
           color='prime'
         >
