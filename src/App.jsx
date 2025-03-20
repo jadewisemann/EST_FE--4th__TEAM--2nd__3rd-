@@ -43,7 +43,7 @@ const App = () => (
     <Route path='/reservationdetail' element={<ReservationDetailPage />} />
     <Route path='/*' element={<NotFoundPage />} />
     <Route path='/test' element={<TestPage />} />
-    <Route path='/searchPassword' element={<SearchPassword />} />
+    <Route path='/searchpassword' element={<SearchPassword />} />
     <Route element={<ProtectedRoute />}>
       {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
     </Route>

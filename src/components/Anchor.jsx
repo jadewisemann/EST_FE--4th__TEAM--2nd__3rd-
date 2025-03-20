@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 const Anchor = ({ type, children }) => {
   const getLabel = () => {
     switch (type) {
-      case 'searchPassword':
+      case 'searchpassword':
         return '닉네임 / 비밀번호 찾기';
-      case 'signUp':
+      case 'signup':
         return '회원가입';
       default:
         return children;
@@ -15,10 +15,10 @@ const Anchor = ({ type, children }) => {
   return (
     <Link
       to={
-        type === 'searchPassword'
-          ? '/searchPassword'
-          : type === 'signUp'
-            ? '/signUp'
+        type === 'searchpassword'
+          ? '/searchpassword'
+          : type === 'signup'
+            ? '/signup'
             : `/${type}}`
       }
       className={`font-inter text-base text-violet-600 underline underline-offset-4 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} hover:opacity-70`}
