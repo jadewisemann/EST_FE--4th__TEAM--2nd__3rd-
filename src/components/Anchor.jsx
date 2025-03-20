@@ -19,7 +19,7 @@ const Anchor = ({ type, children }) => {
           ? '/searchpassword'
           : type === 'signup'
             ? '/signup'
-            : `/${type}}`
+            : `/${type}`
       }
       className={`font-inter text-base text-violet-600 underline underline-offset-4 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} hover:opacity-70`}
     >
