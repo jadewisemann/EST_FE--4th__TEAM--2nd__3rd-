@@ -14,10 +14,11 @@ import {
   OrderConfirm,
   ReservationDetailPage,
   TestPage,
+  SearchPasswordPage,
 } from './pages';
 
 import ProtectedRoute from './routes/ProtectedRoute';
-
+import Toast from './components/Toast';
 // css
 import './App.css';
 import 'swiper/css';
@@ -25,8 +26,6 @@ import 'swiper/css/pagination';
 
 // library
 import { Routes, Route } from 'react-router-dom';
-import SearchPassword from './pages/searchPassword';
-import Toast from './components/Toast';
 
 const App = () => (
   <>
@@ -46,7 +45,7 @@ const App = () => (
       <Route path='/reservationdetail' element={<ReservationDetailPage />} />
       <Route path='/*' element={<NotFoundPage />} />
       <Route path='/test' element={<TestPage />} />
-      <Route path='/searchpassword' element={<SearchPassword />} />
+      <Route path='/searchpassword' element={<SearchPasswordPage />} />
       <Route element={<ProtectedRoute />}>
         {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
       </Route>

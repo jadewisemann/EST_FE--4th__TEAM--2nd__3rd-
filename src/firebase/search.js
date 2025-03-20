@@ -11,6 +11,31 @@ import {
 } from 'firebase/firestore';
 import { db } from './config';
 
+const convertPriceToNumber = price => {
+  if (typeof price === 'number') return price;
+  if (!price) return 0;
+
+  return parseInt(price.replace(/,/g, ''), 10);
+};
+
+const convertHotelPrices = hotel => {
+  if (!hotel) return null;
+
+  const convertedHotel = { ...hotel };
+
+  if (convertedHotel.rooms && Array.isArray(convertedHotel.rooms)) {
+    convertedHotel.rooms = convertedHotel.rooms.map(room => ({
+      ...room,
+      price: convertPriceToNumber(room.price),
+      price_final: room.price_final
+        ? convertPriceToNumber(room.price_final)
+        : '',
+    }));
+  }
+
+  return convertedHotel;
+};
+
 /**
  * 검색어로부터 n-gram을 생성하는 함수
  */
@@ -119,15 +144,18 @@ const searchHotelsAdvanced = async (
 
       const hotels = hotelDocs
         .filter(doc => doc.exists())
-        .map((doc, index) => ({
-          id: doc.id,
-          ...doc.data(),
-          _debug: {
-            score: searchResults[doc.id].score,
-            matchedNgrams: searchResults[doc.id].matchedNgrams,
-            index: index + startIndex,
-          },
-        }));
+        .map((doc, index) => {
+          const hotelData = {
+            id: doc.id,
+            ...doc.data(),
+            _debug: {
+              score: searchResults[doc.id].score,
+              matchedNgrams: searchResults[doc.id].matchedNgrams,
+              index: index + startIndex,
+            },
+          };
+          return convertHotelPrices(hotelData);
+        });
 
       const lastHotelDoc =
         hotels.length > 0
@@ -143,13 +171,16 @@ const searchHotelsAdvanced = async (
     } else {
       const snapshot = await getDocs(baseQuery);
 
-      const hotels = snapshot.docs.map((doc, index) => ({
-        id: doc.id,
-        ...doc.data(),
-        _debug: {
-          index,
-        },
-      }));
+      const hotels = snapshot.docs.map((doc, index) => {
+        const hotelData = {
+          id: doc.id,
+          ...doc.data(),
+          _debug: {
+            index,
+          },
+        };
+        return convertHotelPrices(hotelData);
+      });
 
       return pagination
         ? {
@@ -167,12 +198,6 @@ const searchHotelsAdvanced = async (
   }
 };
 
-/**
- * 호텔 ID로 단일 호텔 정보를 가져오는 함수
- * @param {string} hotelId - 가져올 호텔의 ID
- * @returns {Promise<object|null>} - 호텔 데이터 객체 또는 존재하지 않을 경우 null
- */
-
 const getHotelById = async hotelId => {
   try {
     if (!hotelId) {
@@ -183,10 +208,11 @@ const getHotelById = async hotelId => {
     const hotelDoc = await getDoc(hotelDocRef);
 
     if (hotelDoc.exists()) {
-      return {
+      const hotelData = {
         id: hotelDoc.id,
         ...hotelDoc.data(),
       };
+      return convertHotelPrices(hotelData);
     } else {
       return null;
     }
@@ -196,4 +222,9 @@ const getHotelById = async hotelId => {
   }
 };
 
-export { getHotelById, searchHotelsAdvanced };
+export {
+  getHotelById,
+  searchHotelsAdvanced,
+  convertHotelPrices,
+  convertPriceToNumber,
+};
