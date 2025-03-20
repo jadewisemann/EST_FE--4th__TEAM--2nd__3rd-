@@ -5,7 +5,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import useAuthStore from '../../store/useAuthStore';
 
-const SearchPassword = () => {
+const SearchPasswordPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [toastMessage, setToastMessage] = useState('');
@@ -89,4 +89,4 @@ const SearchPassword = () => {
   );
 };
 
-export default SearchPassword;
+export default SearchPasswordPage;

@@ -12,7 +12,7 @@ import WishlistPage from './wishlist';
 import OrderConfirm from './order-confirm';
 import ReservationDetailPage from './reservation-detail';
 import TestPage from './@test';
-
+import SearchPasswordPage from './search-password';
 export {
   DetailsPage,
   CheckoutPage,
@@ -28,4 +28,5 @@ export {
   OrderConfirm,
   ReservationDetailPage,
   TestPage,
+  SearchPasswordPage,
 };
