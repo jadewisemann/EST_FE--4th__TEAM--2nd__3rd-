@@ -20,19 +20,21 @@ const HorizontalList = ({ products }) => (
       >
         <button type='button' className='w-full'>
           <img
-            className='block w-full rounded-lg'
+            className='block aspect-video w-full rounded-lg'
             src={product.thumbnail}
             alt=''
           />
           <div className='mt-2'>
-            <div className='flex'>
-              <Badge type='sale'>{product.discount}</Badge>
+            <div className='flex items-center'>
+              {/* <Badge type='sale'>{product.discount}</Badge> */}
+              <h2 className='my-1.5 overflow-hidden text-left text-sm text-ellipsis whitespace-nowrap'>
+                {product.name}
+              </h2>
               <div className='ml-auto'>
                 <Rating rate={product.rate} />
               </div>
             </div>
-            <h2 className='my-1.5 text-left text-sm'>{product.name}</h2>
-            <address className='flex items-center text-[11px] text-neutral-500 not-italic'>
+            <address className='flex items-center overflow-hidden text-[11px] text-ellipsis whitespace-nowrap text-neutral-500 not-italic'>
               <Icon name='location' className='text-neutral-500' size={20} />
               {product.location}
             </address>
