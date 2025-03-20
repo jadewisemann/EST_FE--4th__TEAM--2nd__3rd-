@@ -18,6 +18,7 @@ import {
 
 import ProtectedRoute from './routes/ProtectedRoute';
 
+import ModalTestPage from './pages/test/ModalTestPage';
 // css
 import './App.css';
 import 'swiper/css';
@@ -44,6 +45,8 @@ const App = () => (
     <Route path='/*' element={<NotFoundPage />} />
     <Route path='/test' element={<TestPage />} />
     <Route path='/searchPassword' element={<SearchPassword />} />
+    <Route path='/test/modal' element={<ModalTestPage />} />
+
     <Route element={<ProtectedRoute />}>
       {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
     </Route>
