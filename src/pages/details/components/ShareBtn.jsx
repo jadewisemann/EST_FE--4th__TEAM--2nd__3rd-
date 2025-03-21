@@ -9,7 +9,6 @@ const ShareBtn = ({ product }) => {
   useEffect(() => {
     Kakao.cleanup();
     Kakao.init('983d34c88017f45446c8245032e3722e');
-    console.log(Kakao.isInitialized());
   }, []);
 
   const shareKakao = () => {
