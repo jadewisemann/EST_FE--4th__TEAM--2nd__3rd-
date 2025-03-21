@@ -1,82 +1,59 @@
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // component
 import SubHeader from '../../components/SubHeader';
-import Rating from '../../components/Rating';
 import Icon from '../../components/Icon';
 import Nav from '../../components/Nav';
-import ReviewRating from '../../components/ReviewRating';
 import DetailSection from '../../components/DetailSection';
 import DetailProduct from '../../components/DetailProduct';
 import Button from '../../components/Button';
 
-// temp
-import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
+// data
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+
+import { useParams } from 'react-router-dom';
+
+import ShareBtn from './components/ShareBtn';
 
 const DetailsPage = () => {
-  const data = {
-    slides: [tempHotel1, tempHotel1, tempHotel1, tempHotel1, tempHotel1],
-    title: '리츠칼튼 호텔',
-    engTitle: 'Ritz-Carlton Hotel',
-    hotelStar: 5,
-    rate: 4.5,
-    location: '서울시 송파구',
-    reviewAmount: 2888,
-    price: 120000,
-    options: { wifi: true, fitness: true, dining: true, swimmingPool: true },
-    room: [
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '싱글 침대 2개',
-        price: 120000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: true,
-          addPerson: false,
-          smoke: false,
-          wifi: true,
-        },
-        specialOffer: true,
-      },
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '킹사이즈 침대',
-        price: 100000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: false,
-          addPerson: false,
-          smoke: true,
-          wifi: true,
-        },
-        specialOffer: false,
-      },
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '킹사이즈 침대',
-        price: 100000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: false,
-          addPerson: false,
-          smoke: true,
-          wifi: true,
-        },
-        specialOffer: false,
-      },
-    ],
-  };
+  const [data, setData] = useState(null);
+  const [visibleRooms, setVisibleRooms] = useState(2);
+
+  // 호텔 ID
+  const { hotelId } = useParams();
+  const decodedHotelId = decodeURIComponent(hotelId);
+
+  useEffect(() => {
+    const fetchHotel = async () => {
+      try {
+        const test = await searchHotelsAdvanced('test');
+        console.log(test);
+
+        const hotelData = await getHotelById(`${decodedHotelId}`);
+
+        if (hotelData) {
+          console.log('호텔 정보:', hotelData);
+          setData(hotelData);
+        } else {
+          console.log('해당 ID의 호텔이 존재하지 않습니다.');
+        }
+      } catch (error) {
+        console.error('에러 발생:', error);
+      }
+    };
+
+    fetchHotel();
+
+    if (data) {
+      setVisibleRooms(Math.min(2, data.rooms.length));
+    }
+  }, []);
+
+  if (!data) {
+    return <div>로딩 중</div>;
+  }
 
   const userData = {
     checkIn: '3/4',
@@ -87,16 +64,9 @@ const DetailsPage = () => {
     },
   };
 
-  const share = () => {};
-
-  const [visibleRooms, setVisibleRooms] = useState(
-    // room의 갯수가 3개 이상인 경우도 초기에 2개만을 보여주기 위한 초기값 설정
-    Math.min(2, data.room.length),
-  );
-
   // 더보기 버튼 클릭 시 room 더 보여주기
   const moreRoom = () => {
-    const remainingRooms = data.room.length - visibleRooms;
+    const remainingRooms = data.rooms.length - visibleRooms;
 
     if (remainingRooms > 2) {
       // 남아있는 room의 갯수가 2보다 크면 현재 보여주고 있는 room의 갯수에 2를 더해서 보여줌
@@ -108,7 +78,13 @@ const DetailsPage = () => {
   };
 
   // 남아있는 방 개수
-  const remainingRooms = data.room.length - visibleRooms;
+  const remainingRooms = data.rooms.length - visibleRooms;
+
+  const openMap = () => {
+    const query = encodeURIComponent(data.location[0]);
+    // 카카오 맵
+    window.open(`https://map.kakao.com/link/search/${query}`, '_blank');
+  };
 
   return (
     <>
@@ -128,66 +104,48 @@ const DetailsPage = () => {
           speed={500}
           style={{ marginInline: '-20px' }}
         >
-          {data.slides.map((slide, index) => (
+          {data.image.map((slide, index) => (
             <SwiperSlide key={index}>
               <img className='block w-full' src={slide} alt='' />
             </SwiperSlide>
           ))}
-          <button
-            type='button'
-            className='absolute top-3 right-3 z-1 cursor-pointer'
-            onClick={share}
-          >
-            <Icon name='share' color='white' size={30} />
-          </button>
+          <div className='absolute top-3 right-3 z-1 cursor-pointer'>
+            <ShareBtn product={data} />
+          </div>
         </Swiper>
 
         <div className='mt-5'>
-          <h2 className='flex flex-col gap-1 font-medium'>
+          <h2 className='flex flex-col gap-1 font-medium tracking-tight'>
             <span className='text-xl'>{data.title}</span>
-            <span className='text-sm'>({data.engTitle})</span>
           </h2>
           <div className='mt-2 flex items-center justify-between'>
-            <ReviewRating rate={data.hotelStar} />
-            <Rating rate={data.rate} />
+            {/* <ReviewRating rate={data.hotelStar} /> */}
+            {/* <Rating rate={data.rate} /> */}
           </div>
-          <div className='mt-2 flex items-center justify-between [&>span]:text-sm [&>span]:text-neutral-400'>
-            <span>{data.location}</span>
-            <span>이용후기 {data.reviewAmount.toLocaleString()}건</span>
-          </div>
+          <button
+            type='button'
+            className='flex items-center gap-1 text-xs text-neutral-400'
+            onClick={openMap}
+          >
+            <Icon name='location' size={16} className='text-neutral-600' />
+            {data.location[0]}
+          </button>
         </div>
 
         <hr className='my-4 border-gray-200' />
 
         <ul className='grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 [&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li]:text-xs'>
-          {data.options.wifi && (
-            <li>
-              <Icon name='wifi' className='text-neutral-600' size={16} />
-              <span>객실 내 WiFi</span>
+          {data.facility.map((item, index) => (
+            <li key={index}>
+              <i
+                style={{
+                  background: `url(${item.image}) no-repeat center/contain`,
+                }}
+                className='aspect-square w-4'
+              ></i>
+              <span>{item.text}</span>
             </li>
-          )}
-          {data.options.fitness && (
-            <li>
-              <Icon name='fitness' className='text-neutral-600' size={16} />
-              <span>피트니스센터</span>
-            </li>
-          )}
-          {data.options.dining && (
-            <li>
-              <Icon name='dining' className='text-neutral-600' size={16} />
-              <span>조식, 석식</span>
-            </li>
-          )}
-          {data.options.swimmingPool && (
-            <li>
-              <Icon
-                name='swimmingPool'
-                className='text-neutral-600'
-                size={16}
-              />
-              <span>수영장</span>
-            </li>
-          )}
+          ))}
         </ul>
         <hr className='my-4 border-gray-200' />
 
@@ -214,13 +172,13 @@ const DetailsPage = () => {
           </div>
         </div>
 
-        <DetailProduct detailProducts={data.room.slice(0, visibleRooms)} />
+        <DetailProduct detailProducts={data.rooms.slice(0, visibleRooms)} />
 
         {remainingRooms > 0 && (
           <Button
             color='invert'
             size='full'
-            className='flex items-center justify-center gap-1'
+            childrenClassName='flex items-center justify-center gap-1'
             onClick={moreRoom}
           >
             더보기 ({remainingRooms}개)
@@ -233,6 +191,9 @@ const DetailsPage = () => {
         <DetailSection
           type='list-left-dot-title'
           title='숙소 규정'
+          color='text-neutral-600'
+          size='text-xs'
+          weight='font-normal'
           contents={[
             {
               subTitle: '체크인 & 체크아웃 시간',
@@ -255,10 +216,13 @@ const DetailsPage = () => {
         <DetailSection
           type='list-left'
           title='판매자 정보'
+          color='text-neutral-600'
+          size='text-xs'
+          weight='font-normal'
           contents={[
             '연락처 : 010-1234-5678',
-            '주소 : 서울시 강남구 어쩌구 저쩌구',
-            '고객센터 : 080 - 1234- 5678',
+            `주소 : ${data.location[0]}`,
+            '고객센터 : 080 - 2465 - 6585',
           ]}
         />
         <Nav />
