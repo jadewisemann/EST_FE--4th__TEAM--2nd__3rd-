@@ -1,38 +1,33 @@
+// React
 import { useState, useEffect } from 'react';
+
+// Store
+import useModalStore from '../../store/modalStore';
+import useAppDataStore from '../../store/appDataStore';
+
+// Component
 import Modal from './Modal';
-import Counter from '../Counter';
 import SubHeader from '../SubHeader';
+import Counter from '../Counter';
 import FooterButton from '../FooterButton';
 
-const GuestModal = ({
-  isOpen,
-  onClose,
-  onConfirm = () => {},
-  initialGuests = {
-    rooms: 1,
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-}) => {
-  const [localSelection, setLocalSelection] = useState({ ...initialGuests });
+const GuestModal = () => {
+  // 모달 상태
+  const { modals, closeGuestModal } = useModalStore();
+  const { isOpen, onConfirm } = modals.guest;
 
+  // 전역 게스트 상태
+  const { guests, updateGuests } = useAppDataStore();
+
+  // 로컬 게스트 정보 관리
+  const [localSelection, setLocalSelection] = useState({ ...guests });
+
+  // 모달이 열릴 때 동기화
   useEffect(() => {
     if (isOpen) {
-      setLocalSelection({
-        rooms: initialGuests.rooms || 1,
-        adults: initialGuests.adults || 1,
-        children: initialGuests.children || 0,
-        infants: initialGuests.infants || 0,
-      });
+      setLocalSelection({ ...guests });
     }
-  }, [
-    isOpen,
-    initialGuests.rooms,
-    initialGuests.adults,
-    initialGuests.children,
-    initialGuests.infants,
-  ]);
+  }, [isOpen, guests]);
 
   const handleCounterChange = (key, newValue) => {
     setLocalSelection(prev => ({
@@ -42,50 +37,53 @@ const GuestModal = ({
   };
 
   const handleConfirmClick = () => {
-    onConfirm({ ...localSelection });
-    onClose();
-  };
+    // 중앙 스토어에 업데이트
+    updateGuests(localSelection);
 
-  const content = (
-    <>
-      <Counter
-        minValue={1}
-        initialValue={localSelection.rooms}
-        onChange={newValue => handleCounterChange('rooms', newValue)}
-      >
-        객실
-      </Counter>
-      <Counter
-        initialValue={localSelection.adults}
-        onChange={newValue => handleCounterChange('adults', newValue)}
-      >
-        성인
-      </Counter>
-      <Counter
-        initialValue={localSelection.children}
-        onChange={newValue => handleCounterChange('children', newValue)}
-      >
-        아동
-      </Counter>
-      <Counter
-        initialValue={localSelection.infants}
-        onChange={newValue => handleCounterChange('infants', newValue)}
-      >
-        유아
-      </Counter>
-    </>
-  );
+    // prop으로 받은 콜백 실행
+    if (onConfirm && typeof onConfirm === 'function') {
+      onConfirm(localSelection);
+    }
+
+    closeGuestModal();
+  };
 
   return (
     <Modal isOpen={isOpen} isFull={true}>
       <div className='flex h-full flex-col'>
         <SubHeader
           title='객실 수 및 투숙 인원 선택'
-          callback={onClose}
+          callback={closeGuestModal}
           rightButton={false}
           fixed={false}
         />
-        <div className='flex grow flex-col'>{content}</div>
+        <div className='flex grow flex-col'>
+          <Counter
+            minValue={1}
+            initialValue={localSelection.rooms}
+            onChange={newValue => handleCounterChange('rooms', newValue)}
+          >
+            객실
+          </Counter>
+          <Counter
+            initialValue={localSelection.adults}
+            onChange={newValue => handleCounterChange('adults', newValue)}
+          >
+            성인
+          </Counter>
+          <Counter
+            initialValue={localSelection.children}
+            onChange={newValue => handleCounterChange('children', newValue)}
+          >
+            아동
+          </Counter>
+          <Counter
+            initialValue={localSelection.infants}
+            onChange={newValue => handleCounterChange('infants', newValue)}
+          >
+            유아
+          </Counter>
+        </div>
         <FooterButton name='확인' onClick={handleConfirmClick} />
       </div>
     </Modal>
