@@ -1,5 +1,3 @@
-// firebase와의 의존성 분리
-
 import { create } from 'zustand';
 import {
   listenAuthState,
@@ -32,7 +30,7 @@ const useAuthStore = create(set => {
         const userCredential = await login(email, password);
         set({ user: userCredential.user, error: null });
       } catch (error) {
-        set({ error: error.message });
+        set({ error: error });
         throw error;
       }
     },

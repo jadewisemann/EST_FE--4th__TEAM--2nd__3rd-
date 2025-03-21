@@ -11,9 +11,43 @@ import {
 } from 'firebase/firestore';
 import { db } from './config';
 
-/**
- * 검색어로부터 n-gram을 생성하는 함수
- */
+const convertPriceToNumber = price => {
+  if (typeof price === 'number') return price;
+  if (!price) return 0;
+
+  return parseInt(price.replace(/,/g, ''), 10);
+};
+
+const convertHotelPrices = hotel => {
+  if (!hotel) return null;
+  const convertedHotel = { ...hotel };
+
+  if (convertedHotel.rooms && Array.isArray(convertedHotel.rooms)) {
+    convertedHotel.rooms = convertedHotel.rooms.map(room => {
+      const numericPrice = convertPriceToNumber(room.price);
+      const numericPriceFinal = room.price_final
+        ? convertPriceToNumber(room.price_final)
+        : '';
+
+      const [price, priceFinal] =
+        numericPrice &&
+        numericPriceFinal !== '' &&
+        numericPriceFinal > numericPrice
+          ? [numericPriceFinal, numericPrice]
+          : [numericPrice, numericPriceFinal];
+
+      return {
+        ...room,
+
+        price: price,
+        price_final: priceFinal,
+      };
+    });
+  }
+
+  return convertedHotel;
+};
+
 const generateNgrams = text => {
   if (!text) return [];
   const cleanText = text.replace(/\s+/g, '');
@@ -26,9 +60,6 @@ const generateNgrams = text => {
   return [...ngrams];
 };
 
-/**
- * n-gram 기반 호텔 검색 함수
- */
 const searchHotelsAdvanced = async (
   searchText,
   region = null,
@@ -38,27 +69,27 @@ const searchHotelsAdvanced = async (
   pagination = false,
 ) => {
   try {
+    // prop 검증
     const resultLimit = pageSize || limit;
 
+    // 검색어 ? n gram 생성 : []
     if (searchText.length === 0 && !region) {
       return pagination ? { hotels: [], lastDoc: null } : [];
     }
+
     const searchNgrams = generateNgrams(searchText);
 
-    let baseQuery = query(
-      collection(db, 'hotels'),
+    // 호텔 검색 쿼리 설정
+    const queryConditions = [
       orderBy('name'),
       firestoreLimit(resultLimit),
-    );
+      region ? where('region', '==', region) : null,
+      lastDoc ? startAfter(lastDoc) : null,
+    ].filter(Boolean);
 
-    if (region) {
-      baseQuery = query(baseQuery, where('region', '==', region));
-    }
+    const baseQuery = query(collection(db, 'hotels'), ...queryConditions);
 
-    if (lastDoc) {
-      baseQuery = query(baseQuery, startAfter(lastDoc));
-    }
-
+    // n gram 인덱스 검색
     if (searchNgrams.length > 0) {
       const searchResults = {};
 
@@ -113,21 +144,23 @@ const searchHotelsAdvanced = async (
         startIndex + resultLimit,
       );
 
-      const hotelDocs = await Promise.all(
-        paginatedIds.map(id => getDoc(doc(db, 'hotels', id))),
-      );
+      const hotelPromises = paginatedIds.map(async id => {
+        const hotelData = await getHotelById(id);
 
-      const hotels = hotelDocs
-        .filter(doc => doc.exists())
-        .map((doc, index) => ({
-          id: doc.id,
-          ...doc.data(),
-          _debug: {
-            score: searchResults[doc.id].score,
-            matchedNgrams: searchResults[doc.id].matchedNgrams,
-            index: index + startIndex,
-          },
-        }));
+        if (hotelData) {
+          return {
+            ...hotelData,
+            _debug: {
+              score: searchResults[id].score,
+              matchedNgrams: searchResults[id].matchedNgrams,
+            },
+          };
+        }
+        return null;
+      });
+
+      const hotelsWithData = await Promise.all(hotelPromises);
+      const hotels = hotelsWithData.filter(hotel => hotel !== null);
 
       const lastHotelDoc =
         hotels.length > 0
@@ -143,13 +176,23 @@ const searchHotelsAdvanced = async (
     } else {
       const snapshot = await getDocs(baseQuery);
 
-      const hotels = snapshot.docs.map((doc, index) => ({
-        id: doc.id,
-        ...doc.data(),
-        _debug: {
-          index,
-        },
-      }));
+      const hotelPromises = snapshot.docs.map(async (document, index) => {
+        const hotelId = document.id;
+        const hotelData = await getHotelById(hotelId);
+
+        if (hotelData) {
+          return {
+            ...hotelData,
+            _debug: {
+              index,
+            },
+          };
+        }
+        return null;
+      });
+
+      const hotelsWithData = await Promise.all(hotelPromises);
+      const hotels = hotelsWithData.filter(hotel => hotel !== null);
 
       return pagination
         ? {
@@ -167,12 +210,6 @@ const searchHotelsAdvanced = async (
   }
 };
 
-/**
- * 호텔 ID로 단일 호텔 정보를 가져오는 함수
- * @param {string} hotelId - 가져올 호텔의 ID
- * @returns {Promise<object|null>} - 호텔 데이터 객체 또는 존재하지 않을 경우 null
- */
-
 const getHotelById = async hotelId => {
   try {
     if (!hotelId) {
@@ -183,10 +220,11 @@ const getHotelById = async hotelId => {
     const hotelDoc = await getDoc(hotelDocRef);
 
     if (hotelDoc.exists()) {
-      return {
+      const hotelData = {
         id: hotelDoc.id,
         ...hotelDoc.data(),
       };
+      return convertHotelPrices(hotelData);
     } else {
       return null;
     }
@@ -196,4 +234,9 @@ const getHotelById = async hotelId => {
   }
 };
 
-export { getHotelById, searchHotelsAdvanced };
+export {
+  getHotelById,
+  searchHotelsAdvanced,
+  convertHotelPrices,
+  convertPriceToNumber,
+};

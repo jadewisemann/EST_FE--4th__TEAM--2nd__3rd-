@@ -1,52 +1,71 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+// React
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+// Store
+import useModalStore from '../../store/modalStore';
+import useAppDataStore from '../../store/appDataStore';
+
+// Component
 import Modal from './Modal';
 import SubHeader from '../SubHeader';
 import Calendar from '../Calendar';
 import FooterButton from '../FooterButton';
 
-const DateModal = ({ isOpen, onClose, onConfirm = () => {}, initialDates }) => {
+const DateModal = () => {
+  // 모달 상태
+  const { modals, closeDateModal } = useModalStore();
+  const { isOpen, onConfirm } = modals.date;
+
+  //  전역 날짜 & 스크롤 위치
+  const { dates, updateDates } = useAppDataStore();
+
+  // 로컬 날짜 상태
   const [selectedDates, setSelectedDates] = useState({
-    startDate: initialDates?.startDate || null,
-    endDate: initialDates?.endDate || null,
+    startDate: dates.startDate || null,
+    endDate: dates.endDate || null,
   });
 
+  // 모달 열릴때 마다 날짜 동기화
   useEffect(() => {
     if (isOpen) {
       setSelectedDates({
-        startDate: initialDates?.startDate || null,
-        endDate: initialDates?.endDate || null,
+        startDate: dates.startDate || null,
+        endDate: dates.endDate || null,
       });
     }
-  }, [isOpen, initialDates]);
+  }, [isOpen, dates]);
 
-  const handleCalendarDateChange = useCallback(
-    newDates => {
-      setSelectedDates(newDates);
-      console.log(selectedDates);
-    },
-    [selectedDates],
-  );
+  // 핸들러
+  const handleCalendarDateChange = useCallback(newDates => {
+    setSelectedDates(newDates);
+  }, []);
 
-  const handleConfirm = useCallback(() => {
-    onConfirm(selectedDates);
-  }, [selectedDates, onConfirm]);
+  const handleConfirm = () => {
+    // 중앙 스토어에 업데이트
+    updateDates(selectedDates);
+
+    // prop으로 받은 콜백 실행
+    if (onConfirm && typeof onConfirm === 'function') {
+      onConfirm(selectedDates);
+    }
+
+    closeDateModal();
+  };
 
   return (
     <Modal isOpen={isOpen} isFull={true}>
       <div className='flex h-screen flex-col'>
-        <SubHeader title='날짜 선택' callback={onClose} fixed={false} />
-
+        <SubHeader title='날짜 선택' callback={closeDateModal} fixed={false} />
         <div
           className='flex-1 overflow-y-auto'
           style={{ scrollbarWidth: 'none' }}
         >
-          <MemoizedCalendar
+          <Calendar
             startDate={selectedDates.startDate}
             endDate={selectedDates.endDate}
             onChange={handleCalendarDateChange}
           />
         </div>
-
         <FooterButton
           onClick={handleConfirm}
           disabled={!selectedDates.startDate || !selectedDates.endDate}
@@ -57,7 +76,5 @@ const DateModal = ({ isOpen, onClose, onConfirm = () => {}, initialDates }) => {
     </Modal>
   );
 };
-
-const MemoizedCalendar = memo(Calendar);
 
 export default DateModal;

@@ -1,55 +1,49 @@
-import { useMemo, useCallback } from 'react';
+// Store
+import useModalStore from '../../store/modalStore';
+import useAppDataStore from '../../store/appDataStore';
+
+// Components
 import Modal from './Modal';
 import Button from '../Button';
 import SubHeader from '../SubHeader';
 
-const SearchModal = ({
-  isOpen,
-  onClose,
-  onConfirm = () => {},
-  initialDates = {},
-  initialGuests = {},
-  openModal,
-}) => {
-  const { startDate = '', endDate = '', duration = 1 } = initialDates || {};
-  const { rooms = 1, adults = 1, children = 0 } = initialGuests || {};
+const SearchModal = () => {
+  // 모달 상태
+  const { modals, closeSearchModal, openDateModal, openGuestModal } =
+    useModalStore();
+  const { isOpen, onConfirm } = modals.search;
 
-  const handleConfirmClick = useCallback(() => {
-    onConfirm();
-    onClose();
-  }, [onConfirm, onClose]);
+  // 전역 상태
+  const { dates, guests } = useAppDataStore();
 
-  const header = useMemo(
-    () => (
-      <SubHeader
-        title='모든 객실'
-        leftButton='close'
-        callback={onClose}
-        rightButton={false}
-        fixed={false}
-      />
-    ),
-    [onClose],
-  );
-
-  const content = (
-    <div className='flex flex-col gap-4'>
-      <Button
-        onClick={() => openModal('dateModal')}
-      >{`${startDate} ~ ${endDate}`}</Button>
-      <Button
-        onClick={() => openModal('guestModal')}
-      >{`객실 ${rooms}개 성인 ${adults}명 아동 ${children}명`}</Button>
-      <Button color='prime' size='full' onClick={handleConfirmClick}>
-        확인({duration}박)
-      </Button>
-    </div>
-  );
+  // 핸들러
+  const handleConfirmClick = () => {
+    if (onConfirm && typeof onConfirm === 'function') {
+      onConfirm();
+    }
+    closeSearchModal();
+  };
 
   return (
     <Modal isOpen={isOpen} isFull={false}>
-      {header}
-      <div className='p-4'>{content}</div>
+      <SubHeader
+        title='모든 객실'
+        leftButton='close'
+        callback={closeSearchModal}
+        rightButton={false}
+        fixed={false}
+      />
+      <div className='flex flex-col gap-4 p-4'>
+        <Button onClick={() => openDateModal()}>
+          {`${dates.startDate} ~ ${dates.endDate}`}
+        </Button>
+        <Button onClick={() => openGuestModal()}>
+          {`객실 ${guests.rooms}개 성인 ${guests.adults}명 아동 ${guests.children}명`}
+        </Button>
+        <Button color='prime' size='full' onClick={handleConfirmClick}>
+          확인({dates.duration}박)
+        </Button>
+      </div>
     </Modal>
   );
 };

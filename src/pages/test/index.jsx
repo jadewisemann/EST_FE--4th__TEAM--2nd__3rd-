@@ -20,6 +20,8 @@ import SubHeader from '../../components/SubHeader';
 import DetailProduct from '../../components/DetailProduct';
 import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
+import useToastStore from '../../store/useToastStore';
+
 // 수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
@@ -32,6 +34,11 @@ const TestPage = () => {
   const [confirmpassword, setConfirmpassword] = useState('');
   const [search, setSearch] = useState('');
   const [tel, setTel] = useState('');
+  const { showToast } = useToastStore();
+
+  const handleClick = () => {
+    showToast('토스트 메시지가 표시됩니다!');
+  };
 
   const categories = [
     'Calendar',
@@ -53,6 +60,7 @@ const TestPage = () => {
     'Detail Product',
     'Input',
     'Anchor',
+    'Toast',
   ];
 
   // 라디오 버튼 예시
@@ -507,11 +515,16 @@ const TestPage = () => {
       />
     </>,
     <>
-      <Anchor type='searchPassword' />
+      <Anchor type='searchpassword' />
       <br />
-      <Anchor type='signUp' />
+      <Anchor type='signup' />
       <br />
-      <Anchor type='login' children={'login'} />
+      <Anchor type='login' children='/login' />
+    </>,
+    <>
+      <button className='mt-7 border-2' onClick={handleClick}>
+        토스트 메시지 표시 버튼
+      </button>
     </>,
   ];
 
