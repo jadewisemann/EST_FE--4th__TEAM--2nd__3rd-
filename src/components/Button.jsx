@@ -25,7 +25,8 @@ const Button = ({
 
   const cx = (...classes) => classes.filter(Boolean).join(' ');
 
-  const defaultStyle = 'text-base transition-colors duration-200 font-medium';
+  const defaultStyle =
+    'inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
   const focusedStyle = '';
   // const focusedStyle = 'focus:outline-none focus:ring-2 focus:ring-violet-300';
 
@@ -38,7 +39,7 @@ const Button = ({
   };
 
   const sizes = {
-    full: 'rounded-2xl w-full h-12.5 py-3 px-4 text-base ',
+    full: 'rounded-xl w-full h-12.5 py-3 px-4 text-base ',
     square: 'rounded-sm w-12 h-12 flex items-center justify-center',
     small: 'rounded-md py-2 px-4 w-fit text-sm',
     xSmall: 'rounded-md py-1.5 px-4 w-fit text-sm',
@@ -65,14 +66,12 @@ const Button = ({
       onClick={onClick}
       {...props}
     >
-      <div className='flex items-center gap-2'>
-        {hasIcon && <Icon name={icon} size={iconSize} />}
-        <div
-          className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
-        >
-          {!children && content ? content : children}
-        </div>
-      </div>
+      {hasIcon && <Icon name={icon} size={iconSize} />}
+      <span
+        className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
+      >
+        {!children && content ? content : children}
+      </span>
     </button>
   );
 };

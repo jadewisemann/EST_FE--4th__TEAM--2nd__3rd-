@@ -17,6 +17,8 @@ import {
   SearchPasswordPage,
 } from './pages';
 
+import SearchTestPage from './pages/@test/SearchTestPage';
+
 import ProtectedRoute from './routes/ProtectedRoute';
 import Toast from './components/Toast';
 // css
@@ -28,29 +30,27 @@ import 'swiper/css/pagination';
 import { Routes, Route } from 'react-router-dom';
 
 const App = () => (
-  <>
-    <Toast />
-    <Routes>
-      <Route path='/' element={<MainPage />} />
-      <Route path='/details' element={<DetailsPage />} />
-      <Route path='/checkout' element={<CheckoutPage />} />
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/payment' element={<PaymentPage />} />
-      <Route path='/search' element={<SearchPage />} />
-      <Route path='/result' element={<StayListpage />} />
-      <Route path='/signup' element={<SignupPage />} />
-      <Route path='/userinfo' element={<UserInfoPage />} />
-      <Route path='/wishlist' element={<WishlistPage />} />
-      <Route path='/order-confirm' element={<OrderConfirm />} />
-      <Route path='/reservationdetail' element={<ReservationDetailPage />} />
-      <Route path='/*' element={<NotFoundPage />} />
-      <Route path='/test' element={<TestPage />} />
-      <Route path='/searchpassword' element={<SearchPasswordPage />} />
-      <Route element={<ProtectedRoute />}>
-        {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
-      </Route>
-    </Routes>
-  </>
+  <Routes>
+    <Route path='/' element={<MainPage />} />
+    <Route path='/details' element={<DetailsPage />} />
+    <Route path='/checkout' element={<CheckoutPage />} />
+    <Route path='/login' element={<LoginPage />} />
+    <Route path='/payment' element={<PaymentPage />} />
+    <Route path='/search' element={<SearchPage />} />
+    <Route path='/result' element={<StayListpage />} />
+    <Route path='/signup' element={<SignupPage />} />
+    <Route path='/userinfo' element={<UserInfoPage />} />
+    <Route path='/wishlist' element={<WishlistPage />} />
+    <Route path='/order-confirm' element={<OrderConfirm />} />
+    <Route path='/reservationdetail' element={<ReservationDetailPage />} />
+    <Route path='/*' element={<NotFoundPage />} />
+    <Route path='/test' element={<TestPage />} />
+    <Route path='/searchpassword' element={<SearchPasswordPage />} />
+    <Route element={<ProtectedRoute />}>
+      {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
+    </Route>
+    <Route path='/test/search' element={<SearchTestPage />} />
+  </Routes>
 );
 
 export default App;

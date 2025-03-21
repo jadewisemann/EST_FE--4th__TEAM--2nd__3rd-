@@ -17,20 +17,30 @@ const convertPriceToNumber = price => {
 
   return parseInt(price.replace(/,/g, ''), 10);
 };
-
 const convertHotelPrices = hotel => {
   if (!hotel) return null;
-
   const convertedHotel = { ...hotel };
 
   if (convertedHotel.rooms && Array.isArray(convertedHotel.rooms)) {
-    convertedHotel.rooms = convertedHotel.rooms.map(room => ({
-      ...room,
-      price: convertPriceToNumber(room.price),
-      price_final: room.price_final
+    convertedHotel.rooms = convertedHotel.rooms.map(room => {
+      const numericPrice = convertPriceToNumber(room.price);
+      const numericPriceFinal = room.price_final
         ? convertPriceToNumber(room.price_final)
-        : '',
-    }));
+        : '';
+
+      const [finalPrice, finalPriceFinal] =
+        numericPrice &&
+        numericPriceFinal !== '' &&
+        numericPrice > numericPriceFinal
+          ? [numericPriceFinal, numericPrice]
+          : [numericPrice, numericPriceFinal];
+
+      return {
+        ...room,
+        price: finalPrice,
+        price_final: finalPriceFinal,
+      };
+    });
   }
 
   return convertedHotel;
