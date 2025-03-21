@@ -7,9 +7,9 @@ const SubHeader = ({
   title = '',
   hasShadow = true,
   fixed = true,
+  zIndex = null,
 }) => {
   const SubHeader = <h2 className='grow text-lg'>{title}</h2>;
-
   const Home = <Icon name='home' color='black' />;
   const ArrowLong = <Icon name='arrow_left_long' color='black' />;
   const Arrow = <Icon name='arrow_left' color='black' />;
@@ -29,12 +29,21 @@ const SubHeader = ({
 
   // TODO: 홈으로 가는 핸들러 추가 필요
   const homeButtonHandler = () => {};
+
   const defaultStyle =
     'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white top-0 left-0';
+
+  let zIndexStyle = '';
+  if (zIndex !== null && !isNaN(Number(zIndex))) {
+    zIndexStyle = ` z-${zIndex}`;
+  }
+
   const style =
     defaultStyle +
     (hasShadow ? ' shadow-bottom' : '') +
-    (fixed ? ' fixed' : '');
+    (fixed ? ' fixed' : '') +
+    zIndexStyle;
+
   return (
     <>
       <div className={style}>
