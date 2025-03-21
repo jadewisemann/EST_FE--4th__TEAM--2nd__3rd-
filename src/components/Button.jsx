@@ -25,7 +25,8 @@ const Button = ({
 
   const cx = (...classes) => classes.filter(Boolean).join(' ');
 
-  const defaultStyle = 'text-base transition-colors duration-200 font-medium';
+  const defaultStyle =
+    'inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
   const focusedStyle = '';
   // const focusedStyle = 'focus:outline-none focus:ring-2 focus:ring-violet-300';
 
@@ -65,13 +66,11 @@ const Button = ({
       onClick={onClick}
       {...props}
     >
-      <span className='flex items-center gap-2'>
-        {hasIcon && <Icon name={icon} size={iconSize} />}
-        <span
-          className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
-        >
-          {!children && content ? content : children}
-        </span>
+      {hasIcon && <Icon name={icon} size={iconSize} />}
+      <span
+        className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
+      >
+        {!children && content ? content : children}
       </span>
     </button>
   );
