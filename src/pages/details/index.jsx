@@ -79,8 +79,13 @@ const DetailsPage = () => {
 
   return (
     <>
-      <SubHeader leftButton='arrow' title={data.title} hasShadow={false} />
       <div className='container'>
+        <SubHeader
+          leftButton='arrow'
+          title={data.title}
+          hasShadow={false}
+          zIndex={10}
+        />
         <Swiper
           modules={[Pagination]}
           slidesPerView={1}

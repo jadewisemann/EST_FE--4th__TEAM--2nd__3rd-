@@ -107,7 +107,7 @@ const CheckoutPage = () => {
 
   return (
     <>
-      <SubHeader leftButton='arrow' title='예약 확인 및 결제' />
+      <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
       <div className='container mt-5 mb-[40px]'>
         <div>
           <h2 className='mb-2 flex items-center gap-2 font-medium'>
