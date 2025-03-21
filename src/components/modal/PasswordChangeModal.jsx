@@ -1,17 +1,32 @@
+// React
 import { useState } from 'react';
+// Component
 import Modal from './Modal';
 import SubHeader from '../SubHeader';
 import Input from '../Input';
 import Button from '../Button';
+import useModalStore from '../../store/modalStore';
 
-const PasswordChangeModal = ({ isOpen = false, onClose, onConfirm }) => {
+const PasswordChangeModal = () => {
+  // 전역 상태
+  const { modals, closePasswordChangeModal } = useModalStore();
+  const { isOpen, onConfirm } = modals.passwordChange;
+
+  // 로컬 상태
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  // 제출 핸들러
   const handleSubmit = () => {
-    onConfirm();
+    // 상위 콜백 실행
+    if (onConfirm && typeof onConfirm === 'function') {
+      onConfirm({ password });
+    }
+
     setPassword('');
     setConfirmPassword('');
+
+    closePasswordChangeModal();
   };
 
   return (
@@ -20,7 +35,7 @@ const PasswordChangeModal = ({ isOpen = false, onClose, onConfirm }) => {
         leftButton='close'
         title='비밀번호 변경'
         rightButton={false}
-        callback={onClose}
+        callback={closePasswordChangeModal}
         fixed={false}
       />
       <div className='flex flex-col gap-4 p-4'>
@@ -36,6 +51,7 @@ const PasswordChangeModal = ({ isOpen = false, onClose, onConfirm }) => {
           color='prime'
           size='full'
           onClick={handleSubmit}
+          disabled={!password || password !== confirmPassword}
         />
       </div>
     </Modal>

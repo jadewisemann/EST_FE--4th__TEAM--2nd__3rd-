@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 const useModalStore = create(set => ({
-  // 모달 상태 관리
   modals: {
     search: {
       isOpen: false,
@@ -15,9 +14,12 @@ const useModalStore = create(set => ({
       isOpen: false,
       onConfirm: () => {},
     },
+    passwordChange: {
+      isOpen: false,
+      onConfirm: () => {},
+    },
   },
 
-  // 검색 모달 열기
   openSearchModal: (onConfirm = () => {}) =>
     set(state => ({
       modals: {
@@ -29,7 +31,6 @@ const useModalStore = create(set => ({
       },
     })),
 
-  // 검색 모달 닫기
   closeSearchModal: () =>
     set(state => ({
       modals: {
@@ -41,7 +42,6 @@ const useModalStore = create(set => ({
       },
     })),
 
-  // 날짜 모달 열기
   openDateModal: (onConfirm = () => {}) =>
     set(state => ({
       modals: {
@@ -53,7 +53,6 @@ const useModalStore = create(set => ({
       },
     })),
 
-  // 날짜 모달 닫기
   closeDateModal: () =>
     set(state => ({
       modals: {
@@ -65,8 +64,7 @@ const useModalStore = create(set => ({
       },
     })),
 
-  // 게스트 모달 열기
-  openGuestModal: (onConfirm = null) =>
+  openGuestModal: (onConfirm = () => {}) =>
     set(state => ({
       modals: {
         ...state.modals,
@@ -77,13 +75,34 @@ const useModalStore = create(set => ({
       },
     })),
 
-  // 게스트 모달 닫기
   closeGuestModal: () =>
     set(state => ({
       modals: {
         ...state.modals,
         guest: {
           ...state.modals.guest,
+          isOpen: false,
+        },
+      },
+    })),
+
+  openPasswordChangeModal: (onConfirm = () => {}) =>
+    set(state => ({
+      modals: {
+        ...state.modals,
+        passwordChange: {
+          isOpen: true,
+          onConfirm,
+        },
+      },
+    })),
+
+  closePasswordChangeModal: () =>
+    set(state => ({
+      modals: {
+        ...state.modals,
+        passwordChange: {
+          ...state.modals.passwordChange,
           isOpen: false,
         },
       },
