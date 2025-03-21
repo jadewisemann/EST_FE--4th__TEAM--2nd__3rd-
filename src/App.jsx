@@ -17,6 +17,8 @@ import {
   SearchPasswordPage,
 } from './pages';
 
+import SearchTestPage from './pages/@test/SearchTestPage';
+
 import ProtectedRoute from './routes/ProtectedRoute';
 
 // css
@@ -47,6 +49,7 @@ const App = () => (
     <Route element={<ProtectedRoute />}>
       {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
     </Route>
+    <Route path='/test/search' element={<SearchTestPage />} />
   </Routes>
 );
 
