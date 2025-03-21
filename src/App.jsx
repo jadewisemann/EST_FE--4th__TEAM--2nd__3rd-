@@ -20,7 +20,7 @@ import {
 import SearchTestPage from './pages/@test/SearchTestPage';
 
 import ProtectedRoute from './routes/ProtectedRoute';
-import Toast from './components/Toast';
+import ToastProvider from './components/Toast';
 // css
 import './App.css';
 import 'swiper/css';
@@ -31,7 +31,7 @@ import { Routes, Route } from 'react-router-dom';
 
 const App = () => (
   <>
-    <Toast />
+    <ToastProvider />
     <Routes>
       <Route path='/' element={<MainPage />} />
       <Route path='/details' element={<DetailsPage />} />
