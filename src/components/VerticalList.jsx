@@ -3,13 +3,16 @@ import Rating from '../components/Rating';
 import Icon from '../components/Icon';
 
 const VerticalList = ({ products }) => (
-  <>
+  <div className='flex flex-col'>
     {products?.map((product, index) => (
-      <button
+      <a
+        href='#'
         key={index}
         className='w-full cursor-pointer border-b-1 border-neutral-200 py-4'
-        onClick={() => {
-          alert('확인');
+        onClick={e => {
+          e.preventDefault();
+          console.log('리스트 클릭:', product.id);
+          // navigate(`/detail/${product.id}`); ← 이런 식으로 라우팅 가능
         }}
       >
         <div type='button' className='flex w-full gap-3'>
@@ -50,8 +53,8 @@ const VerticalList = ({ products }) => (
             </div>
           </div>
         </div>
-      </button>
+      </a>
     ))}
-  </>
+  </div>
 );
 export default VerticalList;
