@@ -11,7 +11,8 @@ import DetailProduct from '../../components/DetailProduct';
 import Button from '../../components/Button';
 
 // data
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import { getHotelById } from '../../firebase/search';
+import useAppDataStore from '../../store/appDataStore';
 
 import { useParams } from 'react-router-dom';
 
@@ -25,16 +26,15 @@ const DetailsPage = () => {
   const { hotelId } = useParams();
   const decodedHotelId = decodeURIComponent(hotelId);
 
+  // 사용자 정보
+  const { dates, guests } = useAppDataStore();
+
   useEffect(() => {
     const fetchHotel = async () => {
       try {
-        const test = await searchHotelsAdvanced('test');
-        console.log(test);
-
         const hotelData = await getHotelById(`${decodedHotelId}`);
 
         if (hotelData) {
-          console.log('호텔 정보:', hotelData);
           setData(hotelData);
         } else {
           console.log('해당 ID의 호텔이 존재하지 않습니다.');
@@ -54,15 +54,6 @@ const DetailsPage = () => {
   if (!data) {
     return <div>로딩 중</div>;
   }
-
-  const userData = {
-    checkIn: '3/4',
-    checkOut: '3/5',
-    visitor: {
-      adult: 2,
-      children: 0,
-    },
-  };
 
   // 더보기 버튼 클릭 시 room 더 보여주기
   const moreRoom = () => {
@@ -154,19 +145,19 @@ const DetailsPage = () => {
           <div className='flex flex-col gap-1'>
             <span className='text-xs text-neutral-600'>체크인 & 체크아웃</span>
             <span className='text-lg font-bold'>
-              {userData.checkIn} ~ {userData.checkOut}(1박)
+              {dates.startDate} ~ {dates.endDate}({dates.duration}박)
             </span>
           </div>
           <div className='flex flex-col gap-1'>
-            <span className='text-xs text-neutral-600'>객실 & 투숙객</span>
+            <span className='text-xs text-neutral-600'>투숙객</span>
             <ul className='flex gap-1 text-lg font-bold [&>li]:flex [&>li]:items-center [&>li]:gap-1'>
               <li>
                 <Icon name='user' size={16} color='black' />
-                {userData.visitor.adult}
+                {guests.adults}
               </li>
               <li>
                 <Icon name='children' size={16} color='black' />
-                {userData.visitor.children}
+                {guests.children}
               </li>
             </ul>
           </div>
