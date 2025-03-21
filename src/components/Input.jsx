@@ -52,6 +52,7 @@ const typeConfig = {
 
 const Input = ({
   inputType,
+  type,
   value = '',
   label = '',
   className,
@@ -74,60 +75,65 @@ const Input = ({
   // 핸들러
   const handleChange = e => {
     const newValue = e.target.value;
+
+    // tel 타입일 경우 숫자와 - 만 허용
+    if (inputType === 'tel') {
+      const filteredValue = newValue.replace(/[^\d-]/g, '');
+      if (filteredValue !== newValue) {
+        onChange(filteredValue);
+        onValidChange(checkValidity(filteredValue, compareValue));
+        return;
+      }
+    }
+
     onChange(newValue);
     onValidChange(checkValidity(newValue, compareValue));
   };
 
   return (
-    <div className={className}>
-      <div className='flex flex-col'>
-        <label className='mb-1 text-base tracking-tight' htmlFor={inputId}>
-          {label || config.label}
-        </label>
-        {/* 값에 따른 보더색상 변경 */}
-        <div
-          className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none ${
-            value === ''
-              ? 'border-neutral-300'
-              : isValid
-                ? 'border-violet-600'
-                : 'border-red-500'
-          }`}
-        >
-          {/* 아이콘 */}
-          <div className='absolute left-5 min-w-[20px]'>
-            {config.icon && <Icon name={config.icon} strokeWidth={0} />}
-          </div>
-
-          {/* 인풋 필드 */}
-
-          <input
-            id={inputId}
-            type={config.type}
-            className='w-full rounded-full border-none px-14 py-4 outline-none'
-            placeholder={placeholder || config.placeholder}
-            value={value}
-            onChange={handleChange}
-          />
-
-          {/* 닫기 버튼 */}
-          {value && (
-            <button
-              type='button'
-              className='absolute right-5'
-              onClick={() => onChange('')}
-            >
-              <Icon name='close' color='black' />
-            </button>
-          )}
+    <div className={`flex flex-col ${className}`}>
+      <label className='mb-1 text-base tracking-tight' htmlFor={inputId}>
+        {label || config.label}
+      </label>
+      {/* 값에 따른 보더색상 변경 */}
+      <div
+        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none ${
+          value === ''
+            ? 'border-neutral-300'
+            : isValid
+              ? 'border-violet-600'
+              : 'border-red-500'
+        }`}
+      >
+        {/* 아이콘 */}
+        <div className='absolute left-5 min-w-[20px]'>
+          {config.icon && <Icon name={config.icon} strokeWidth={0} />}
         </div>
-        {/* 에러 메세지 */}
-        {showError && (
-          <p className='mt-1 text-sm text-red-500'>
-            {errorMessage || config.errorMessage}
-          </p>
+
+        {/* 인풋 필드 */}
+
+        <input
+          id={inputId}
+          type={type || config.type}
+          className='w-full rounded-full border-none px-14 py-4 outline-none'
+          placeholder={placeholder || config.placeholder}
+          value={value}
+          onChange={handleChange}
+        />
+
+        {/* 닫기 버튼 */}
+        {value && (
+          <button className='absolute right-5' onClick={() => onChange('')}>
+            <Icon name='close' color='black' />
+          </button>
         )}
       </div>
+      {/* 에러 메세지 */}
+      {showError && (
+        <p className='mt-1 text-sm text-red-500'>
+          {errorMessage || config.errorMessage}
+        </p>
+      )}
     </div>
   );
 };
@@ -135,8 +141,8 @@ const Input = ({
 export default Input;
 
 // 사용법
-// 기본적으로 label과 placeholder는 inputType에 따라 자동으로 설정됩니다
-// prop으로 placeholder,label로 .
+// 기본적으로 label과 placeholder는 inputType에 따라 정적으로 설정됩니다
+// prop으로 placeholder,label로
 
 // onChange를 기입하기 위해 부모 페이지에 상태 정의를 하도록 변경 했습니다 .
 
@@ -146,7 +152,7 @@ export default Input;
 // const [name, setName] = useState('');
 // const [password, setPassword] = useState('');
 
-// 인풋 컴포넌트 호출후 onChange에 기능을 추가하면 됩니다
+// 인풋 컴포넌트 호출후 onChange에 상태변경을 추가하면 됩니다
 
 /* <Input inputType='email' value={email} onChange={setEmail} />
 <Input inputType='password' value={password} onChange={setPassword} />
@@ -154,3 +160,4 @@ export default Input;
 <Input inputType='search' value={search} onChange={setSearch} /> */
 
 // 최상단에 classname으로 스타일 적용 할 수 있도록 하였습니다 className=""
+// type을 지정 할 수 있도록 하였습니다
