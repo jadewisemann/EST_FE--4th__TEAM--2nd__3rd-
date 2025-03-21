@@ -6,7 +6,10 @@ const Toast = () => {
   if (!message) return null;
 
   return (
-    <div className='fixed top-10 left-1/2 z-[1000] -translate-x-1/2 transform rounded-lg bg-gray-800 px-4 py-2 text-white shadow-md'>
+    <div
+      role='alert'
+      className='fixed top-10 left-1/2 z-[1000] -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-white shadow-md'
+    >
       {message}
     </div>
   );
