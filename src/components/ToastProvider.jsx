@@ -1,6 +1,6 @@
 import useToastStore from '../store/useToastStore';
 
-const Toast = () => {
+const ToastProvider = () => {
   const { message } = useToastStore();
 
   if (!message) return null;
@@ -15,7 +15,7 @@ const Toast = () => {
   );
 };
 
-export default Toast;
+export default ToastProvider;
 
 // 토스트 메세지를 전역에서 이용 할 수 있도록 컴포넌트 단위로 수정했습니다
 // 사용법

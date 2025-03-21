@@ -22,7 +22,7 @@ import {
 
 // Provider
 import ModalProvider from './components/modal/ModalProvider';
-import ToastProvider from './components/Toast';
+import ToastProvider from './components/ToastProvider';
 
 // @test pages
 import ModalTestPage from './pages/@test/ModalTestPage';
@@ -30,6 +30,7 @@ import SearchTestPage from './pages/@test/SearchTestPage';
 
 // Routes
 import ProtectedRoute from './routes/ProtectedRoute';
+
 // CSS
 import './App.css';
 import 'swiper/css';
