@@ -8,7 +8,10 @@ import Radio from '../../components/Radio';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
+// data
 import { getHotelById } from '../../firebase/search';
+import useAppDataStore from '../../store/appDataStore';
 
 const payment = [
   { value: '신용카드', disabled: true },
@@ -23,10 +26,8 @@ const CheckoutPage = () => {
   const [email, setEmail] = useState('');
   // 전화번호
   const [tel, setTel] = useState('');
-
   // 전체 동의
   const [agree, setAgree] = useState(false);
-
   // 포인트 사용
   const [point, setPoint] = useState(0);
   const [usePoint, setUsePoint] = useState(false);
@@ -38,6 +39,9 @@ const CheckoutPage = () => {
   const [selectedIndex, setSelectedIndex] = useState(
     payment.findIndex(option => option.checked),
   );
+
+  // 사용자 정보
+  const { dates, guests } = useAppDataStore();
 
   // 호텔 ID
   const { hotelId, index } = useParams();
@@ -51,7 +55,6 @@ const CheckoutPage = () => {
         const hotelData = await getHotelById(`${decodedHotelId}`);
 
         if (hotelData) {
-          console.log('호텔 정보:', hotelData);
           // 사용할 data에 가져온 hotelData로 세팅
           setData(hotelData);
         } else {
@@ -121,14 +124,23 @@ const CheckoutPage = () => {
             <span className='ml-3 text-black'>{selectedData.title}</span>
           </li>
           <li>
-            일정
-            <span className='ml-3 text-black'>
-              {userData.checkIn}
-              <span> ~ </span>
-              {userData.checkOut}
-            </span>
+            <span>일정</span>
+            <div className='ml-3 flex gap-1 text-black'>
+              <span>{dates.startDate}</span>
+              <span>~</span>
+              <span>{dates.endDate}</span>
+              <span>({dates.duration}박)</span>
+            </div>
+          </li>
+          <li>
+            <span>인원</span>
+            <div className='ml-3 flex gap-1 text-black'>
+              <span>성인 {guests.adults}명</span>
+              {guests.children !== 0 && <span>성인 {guests.children}명</span>}
+            </div>
           </li>
         </ul>
+
         <hr className='my-4 border-gray-200' />
 
         <h3 className='mb-4 text-lg font-bold'>예약자 정보</h3>
