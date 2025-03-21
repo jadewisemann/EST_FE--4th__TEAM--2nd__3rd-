@@ -4,14 +4,19 @@ import Input from '../../components/Input';
 import HorizontalList from '../../components/HorizontalList';
 import Nav from '../../components/Nav';
 import Icon from '../../components/Icon';
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import { searchHotelsAdvanced } from '../../firebase/search';
 import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
   const [searchText, setSearchText] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [recommendedHotels, setRecommendedHotels] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    '3월 05일 (수) ~ 3월 06일 (목)',
+  );
+  const [selectedTotalGuests, setSelectedTotalGuests] =
+    useState('객실 1개 성인1명 아동 0명');
+
   const navigate = useNavigate();
 
   //추천호텔 데이터 가져오기
@@ -19,9 +24,9 @@ const MainPage = () => {
     const fetchRecommentedHotels = async () => {
       setIsLoading(true);
       try {
-        const result = await searchHotelsAdvanced('서울 호텔');
-        const filteredresult = result.filter(hotel => hotel._debug.score >= 4);
-        const formattedResult = filteredresult.slice(0, 5).map(hotel => ({
+        const result = await searchHotelsAdvanced('서울');
+        const formattedResult = result.slice(0, 5).map(hotel => ({
+          id: hotel.id,
           thumbnail: hotel.rooms?.[0]?.img || hotel.image?.[0] || '',
           discount: hotel.discount || 0, // 할인 정보가 있으면 반영 필요
           rate: hotel._debug?.score || 0,
@@ -38,9 +43,10 @@ const MainPage = () => {
     fetchRecommentedHotels();
   }, []);
 
-  //전체보기
+  //추천호텔 전체보기 버튼
   const recommendedHotelviewMore = () => {
-    navigate('/result', { state: { recommendedHotels: recommendedHotels } });
+    const hotelIds = recommendedHotels.map(hotel => hotel.id);
+    navigate('/result', { state: { hotelIds } });
   };
 
   //검색 데이터 가져오기
@@ -50,31 +56,79 @@ const MainPage = () => {
     setIsLoading(true);
     try {
       const result = await searchHotelsAdvanced(searchText);
-      setSearchResults(result);
       // console.log('검색 결과:', result);
-      navigate('/result', { state: { searchResults: result } });
+      const hotelIds = result.map(hotel => hotel.id);
+      navigate('/result', { state: { hotelIds } });
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
     }
     setIsLoading(false);
   };
 
+  // 카테고리별 검색 실행 함수
+  const navigateToCategory = async categoryLabel => {
+    if (!categoryLabel) return;
+    setIsLoading(true);
+
+    try {
+      // Firebase에서 사용할 검색 키워드 리스트
+      let searchKeywords = [];
+
+      if (categoryLabel === '호텔/리조트') {
+        searchKeywords = ['호텔', '리조트'];
+      } else if (categoryLabel === '펜션/풀빌라') {
+        searchKeywords = ['펜션', '풀빌라'];
+      } else if (categoryLabel === '모텔') {
+        searchKeywords = ['모텔'];
+      } else if (categoryLabel === '해외숙소') {
+        searchKeywords = ['해외'];
+      }
+
+      let combinedResults = [];
+
+      // 각 키워드별 개별 검색 후 결과 합침
+      for (let keyword of searchKeywords) {
+        const result = await searchHotelsAdvanced(keyword);
+        combinedResults = [...combinedResults, ...result];
+      }
+
+      // 중복 제거 (id 기준)
+      const uniqueResults = Array.from(
+        new Map(combinedResults.map(hotel => [hotel.id, hotel])).values(),
+      );
+
+      console.log(`${categoryLabel} 검색 결과:`, uniqueResults);
+
+      //  결과 페이지 이동
+      navigate('/result', {
+        state: {
+          hotelIds: uniqueResults.map(hotel => hotel.id),
+          selectedCategory: categoryLabel,
+        },
+      });
+    } catch (error) {
+      console.error('🔥 카테고리 이동 중 오류 발생:', error);
+    }
+
+    setIsLoading(false);
+  };
+
   //카테고리 필터 아이콘 데이터
   const categories = [
     {
-      src: 'https://media.discordapp.net/attachments/1308001170350149652/1347158726791921754/ico_____.png?ex=67d4b215&is=67d36095&hm=66d0d23e868171f884d22eadb113faf51dfc0b6a256110dabb4475fc71601966&=&format=webp&quality=lossless',
+      src: '/src/assets/ico/icon-hotel.png',
       label: '호텔/리조트',
     },
     {
-      src: 'https://media.discordapp.net/attachments/1308001170350149652/1347158725802197015/ico_____.png?ex=67d4b215&is=67d36095&hm=2a3003bfd01a17c6549ce34a836cba055ae1623668e0e8a2979f2fb4f7288600&=&format=webp&quality=lossless',
+      src: '/src/assets/ico/ico-pension.png',
       label: '펜션/풀빌라',
     },
     {
-      src: 'https://media.discordapp.net/attachments/1308001170350149652/1347158726070763580/ico____.png?ex=67d4b215&is=67d36095&hm=51b2e9f7d480a14e718f1cc4eb96120033cf3e1c77e4199c7887bede602747f2&=&format=webp&quality=lossless',
+      src: '/src/assets/ico/icon-motel.png',
       label: '모텔',
     },
     {
-      src: 'https://media.discordapp.net/attachments/1308001170350149652/1347158726351786086/ico_____.png?ex=67d4b215&is=67d36095&hm=b021e8c6fb88e2251affb4966e1afd14db6a5c445020e63733e95420f5301d57&=&format=webp&quality=lossless',
+      src: '/src/assets/ico/icon-overseas.png',
       label: '해외숙소',
     },
   ];
@@ -103,7 +157,7 @@ const MainPage = () => {
                 onClick={() => {}}
               >
                 <Icon name='calendar' />
-                3월 05일 (수) ~ 3월 06일 (목)
+                {selectedDate}
               </Button>
               <Button
                 color='line'
@@ -112,7 +166,7 @@ const MainPage = () => {
                 onClick={() => {}}
               >
                 <Icon name='user' />
-                객실 1개 성인1명 아동 0명
+                {selectedTotalGuests}
               </Button>
             </div>
             <Button
@@ -133,6 +187,9 @@ const MainPage = () => {
               <button
                 key={idx}
                 className='flex flex-1 cursor-pointer flex-col items-center'
+                onClick={() => {
+                  navigateToCategory(item.label);
+                }}
               >
                 <img className='h-18 object-contain' src={item.src} alt='' />
                 <span className='text-sm'>{item.label}</span>
@@ -148,6 +205,7 @@ const MainPage = () => {
               전체보기
             </button>
           </div>
+          {/* <HorizontalList products={recommendedHotels.map(hotel => hotel.id)} /> */}
           <HorizontalList products={recommendedHotels} />
         </div>
       </div>
