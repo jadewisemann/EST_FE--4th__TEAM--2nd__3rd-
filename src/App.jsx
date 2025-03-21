@@ -1,4 +1,7 @@
-// components
+// Library
+import { Routes, Route } from 'react-router-dom';
+
+// Components
 import {
   DetailsPage,
   CheckoutPage,
@@ -17,21 +20,26 @@ import {
   SearchPasswordPage,
 } from './pages';
 
+// Provider
+import Toast from './components/Toast';
+import ModalProvider from './components/modal/ModalProvider';
+
+// @test pages
+import ModalTestPage from './pages/@test/ModalTestPage';
 import SearchTestPage from './pages/@test/SearchTestPage';
 
+// Routes
 import ProtectedRoute from './routes/ProtectedRoute';
-import Toast from './components/Toast';
-// css
+
+// CSS
 import './App.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-// library
-import { Routes, Route } from 'react-router-dom';
-
 const App = () => (
   <>
     <Toast />
+    <ModalProvider />
     <Routes>
       <Route path='/' element={<MainPage />} />
       <Route path='/details' element={<DetailsPage />} />
@@ -51,7 +59,9 @@ const App = () => (
       <Route element={<ProtectedRoute />}>
         {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
       </Route>
+      {/* test pages */}
       <Route path='/test/search' element={<SearchTestPage />} />
+      <Route path='/test/modal' element={<ModalTestPage />} />
     </Routes>
   </>
 );
