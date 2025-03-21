@@ -16,7 +16,7 @@ const SubHeader = ({
   const Close = <Icon name='close' color='black' />;
 
   const LeftButton = (
-    <button onClick={callback}>
+    <button onClick={callback} className='cursor-pointer p-4'>
       {leftButton === 'close'
         ? Close
         : leftButton === 'arrow'
@@ -30,7 +30,7 @@ const SubHeader = ({
   // TODO: 홈으로 가는 핸들러 추가 필요
   const homeButtonHandler = () => {};
   const defaultStyle =
-    'flex h-18 items-center justify-between p-4 gap-3 w-full bg-white top-0 left-0';
+    'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white top-0 left-0';
   const style =
     defaultStyle +
     (hasShadow ? ' shadow-bottom' : '') +
@@ -40,7 +40,11 @@ const SubHeader = ({
       <div className={style}>
         {LeftButton}
         {title && SubHeader}
-        {rightButton && <button onClick={homeButtonHandler}>{Home}</button>}
+        {rightButton && (
+          <button onClick={homeButtonHandler} className='cursor-pointer p-4'>
+            {Home}
+          </button>
+        )}
       </div>
     </>
   );
