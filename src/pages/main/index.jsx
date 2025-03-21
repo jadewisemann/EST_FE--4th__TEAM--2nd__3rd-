@@ -32,7 +32,12 @@ const MainPage = () => {
           rate: hotel._debug?.score || 0,
           name: hotel.title || '이름 없음',
           location: hotel.location?.[0] || '위치 정보 없음',
-          price: Number(hotel.rooms?.[0]?.price?.replace(/,/g, '')) || 0,
+          price:
+            Number(
+              typeof hotel.rooms?.[0].price === 'string'
+                ? hotel.rooms?.[0]?.price?.replace(/,/g, '')
+                : hotel.rooms?.[0]?.price,
+            ) || 0,
         }));
         setRecommendedHotels(formattedResult);
       } catch (error) {
