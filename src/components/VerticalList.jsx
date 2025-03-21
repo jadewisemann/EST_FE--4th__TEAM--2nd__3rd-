@@ -25,8 +25,8 @@ const VerticalList = ({ products }) => (
               <div className=''>
                 <h2 className='mb-1.5 text-left text-sm'>{product.title}</h2>
               </div>
-              <address className='flex items-center text-[11px] text-neutral-500 not-italic'>
-                <Icon name='location' className='text-neutral-500' size={20} />
+              <address className='flex text-left text-[11px] text-neutral-500 not-italic'>
+                {/* <Icon name='location' className='text-neutral-500' size={20} /> */}
                 {product.location?.[0] || '작성 된 주소가 없습니다.'}
               </address>
               <div className='mt-1 mt-auto flex items-end gap-1'>
