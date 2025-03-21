@@ -10,6 +10,7 @@ const typeConfig = {
     validation: value =>
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
     errorMessage: '올바른 이메일을 입력해주세요',
+    autoComplete: 'email',
   },
   password: {
     icon: 'lock',
@@ -18,6 +19,7 @@ const typeConfig = {
     label: '비밀번호',
     validation: value => (value || '').length > 5,
     errorMessage: '비밀번호는 6자리 이상 입력해주세요',
+    autoComplete: 'current-password',
   },
   confirmPassword: {
     icon: 'lock',
@@ -26,6 +28,7 @@ const typeConfig = {
     label: '비밀번호 확인',
     validation: (value, compareValue) => value === compareValue,
     errorMessage: '비밀번호가 동일하지 않습니다.',
+    autoComplete: 'new-password',
   },
   name: {
     icon: 'user',
@@ -33,6 +36,7 @@ const typeConfig = {
     label: '이름',
     validation: value => (value || '').length > 1,
     errorMessage: '이름은 2자 이상 입력해주세요',
+    autoComplete: 'name',
   },
   tel: {
     icon: 'lock',
@@ -59,6 +63,7 @@ const Input = ({
   compareValue = '',
   placeholder = '',
   errorMessage = '',
+  autoComplete = '',
   onChange = () => {},
   onValidChange = () => {},
 }) => {
@@ -119,6 +124,7 @@ const Input = ({
           placeholder={placeholder || config.placeholder}
           value={value}
           onChange={handleChange}
+          autoComplete={autoComplete || config.autoComplete}
         />
 
         {/* 닫기 버튼 */}
@@ -161,3 +167,4 @@ export default Input;
 
 // 최상단에 classname으로 스타일 적용 할 수 있도록 하였습니다 className=""
 // type을 지정 할 수 있도록 하였습니다
+// email , password 인풋 사용시 form 태그를 사용해 주세요

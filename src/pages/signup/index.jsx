@@ -59,17 +59,22 @@ const SignupPage = () => {
         </div>
 
         {/* 인풋 */}
-        <div className='mb-6 flex flex-col gap-5'>
+        <form className='mb-6 flex flex-col gap-5'>
           <Input inputType='email' value={email} onChange={setEmail} />
           <Input inputType='name' value={name} onChange={setName} />
-          <Input inputType='password' value={password} onChange={setPassword} />
+          <Input
+            inputType='password'
+            value={password}
+            onChange={setPassword}
+            autoComplete='new-password'
+          />
           <Input
             inputType='confirmPassword'
             value={confirmpassword}
             compareValue={password}
             onChange={setConfirmpassword}
           />
-        </div>
+        </form>
 
         {/*버튼*/}
         <Button

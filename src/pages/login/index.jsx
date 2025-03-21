@@ -76,11 +76,11 @@ const LoginPage = () => {
             받아 보세요!
           </p>
         </div>
-        <div className='mb-6 flex flex-col gap-5'>
+        <form className='mb-6 flex flex-col gap-5'>
           {/* 인풋 */}
           <Input inputType='email' value={email} onChange={setEmail} />
           <Input inputType='password' value={password} onChange={setPassword} />
-        </div>
+        </form>
 
         {/* 앵커 */}
         <div className='mb-3'>
