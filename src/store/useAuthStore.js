@@ -32,7 +32,7 @@ const useAuthStore = create(set => {
         const userCredential = await login(email, password);
         set({ user: userCredential.user, error: null });
       } catch (error) {
-        set({ error: error });
+        set({ error: error.message });
         throw error;
       }
     },
