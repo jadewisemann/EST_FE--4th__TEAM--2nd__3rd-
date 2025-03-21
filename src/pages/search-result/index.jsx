@@ -5,10 +5,33 @@ import Icon from '../../components/Icon';
 import Button from '../../components/Button';
 import VerticalList from '../../components/VerticalList';
 import tempHotel1 from '../../assets/temp/temp_hotel1.jpg';
+import { useLocation } from 'react-router-dom';
+import { getHotelById } from '../../firebase/search';
 
 const StayListpage = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState(0);
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
+  const { hotelIds = [] } = location.state || [];
+  const [hotelList, setHotelList] = useState([]);
+  console.log(hotelIds);
+
+  useEffect(() => {
+    const getStayList = async () => {
+      try {
+        const result = await Promise.all(hotelIds.map(id => getHotelById(id)));
+        const resultList = result.filter(Boolean); // null 제거
+        setHotelList(resultList);
+        console.log('가져온호텔정보:', resultList);
+      } catch (error) {
+        console.error('목록을 가져오지 못했습니다', error);
+      }
+    };
+    if (hotelIds.length > 0) {
+      getStayList();
+    }
+  }, [hotelIds]);
+
   const headerInfoText = {
     name: '리츠칼튼 호텔',
     fromToDate: '3월 05일 ~ 3월 06일',
@@ -16,179 +39,6 @@ const StayListpage = () => {
     numOfPeople: '성인 1명',
   };
   const [headerInfo, setHeaderInfo] = useState(headerInfoText);
-  const products = [
-    {
-      thumbnail: tempHotel1,
-      rate: 4.8,
-      name: '갤럭시 호텔',
-      location: '서울특별시, 성동구',
-      price: 120000,
-      discount: 10,
-      category: '호텔/리조트',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '해외숙소',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '호텔/리조트',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '해외숙소',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '팬션/풀빌라',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '해외숙소',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '팬션/풀빌라',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '모텔',
-    },
-    {
-      thumbnail: tempHotel1,
-      rate: 3,
-      name: '원하는 호텔',
-      location: '서울특별시, 중구',
-      price: 80000,
-      discount: 15,
-      category: '팬션/풀빌라',
-    },
-  ];
   const initialView = 7; //처음 보여줄 갯수
   const incrementView = 7; //더보기 클릭시 추가 될 갯수
   const [viewMore, setViewMore] = useState(initialView);
@@ -199,7 +49,7 @@ const StayListpage = () => {
   }, [activeTab]);
 
   //현재 선택된 탭에 맞는 데이터 필터링
-  const filteredProducts = products.filter(
+  const filteredProducts = hotelList.filter(
     product => activeTab === 0 || product.category === categories[activeTab],
   );
 
@@ -245,7 +95,7 @@ const StayListpage = () => {
             className='boder-violet-600 mt-4 rounded-xl border-2'
             onClick={handleViewMore}
           >
-            더보기 ({Math.min(incrementView, products.length - viewMore)}개)
+            더보기 ({Math.min(incrementView, hotelList.length - viewMore)}개)
           </Button>
         )}
       </Tab>
