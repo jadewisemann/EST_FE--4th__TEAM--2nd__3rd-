@@ -38,7 +38,7 @@ const Button = ({
   };
 
   const sizes = {
-    full: 'rounded-2xl w-full h-12.5 py-3 px-4 text-base ',
+    full: 'rounded-xl w-full h-12.5 py-3 px-4 text-base ',
     square: 'rounded-sm w-12 h-12 flex items-center justify-center',
     small: 'rounded-md py-2 px-4 w-fit text-sm',
     xSmall: 'rounded-md py-1.5 px-4 w-fit text-sm',
@@ -65,14 +65,14 @@ const Button = ({
       onClick={onClick}
       {...props}
     >
-      <div className='flex items-center gap-2'>
+      <span className='flex items-center gap-2'>
         {hasIcon && <Icon name={icon} size={iconSize} />}
-        <div
+        <span
           className={`flex grow items-center gap-1 ${childrenStyle} ${childrenClassName ? childrenClassName : ''}`}
         >
           {!children && content ? content : children}
-        </div>
-      </div>
+        </span>
+      </span>
     </button>
   );
 };
