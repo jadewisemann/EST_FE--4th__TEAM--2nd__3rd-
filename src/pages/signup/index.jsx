@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/useAuthStore';
+import useAuthStore from '../../store/authStore';
+import useToastStore from '../../store/toastStore';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import useToastStore from '../../store/useToastStore';
 
 const SignupPage = () => {
   const navigate = useNavigate();

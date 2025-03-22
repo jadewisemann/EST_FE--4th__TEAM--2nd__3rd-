@@ -1,12 +1,12 @@
 import { useState } from 'react';
+import useAuthStore from '../../store/authStore';
+import useToastStore from '../../store/toastStore';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/useAuthStore';
 import googleico from './../../assets/ico/ico_24_google.svg';
-import useToastStore from '../../store/useToastStore';
 
 const LoginPage = () => {
   const navigate = useNavigate();

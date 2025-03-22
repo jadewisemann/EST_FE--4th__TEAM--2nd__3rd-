@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import useAuthStore from '../../store/useAuthStore';
+import useAuthStore from '../../store/authStore';
 
 const SearchPasswordPage = () => {
   const navigate = useNavigate();
