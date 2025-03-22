@@ -1,12 +1,12 @@
 import js from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
+import importPlugin from 'eslint-plugin-import'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+import prettier from 'eslint-plugin-prettier'
+import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
-import prettier from 'eslint-plugin-prettier'
-import react from 'eslint-plugin-react'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
-import importPlugin from 'eslint-plugin-import'
-import stylisticJs from '@stylistic/eslint-plugin-js'
 // import tailwindcss from 'eslint-plugin-tailwindcss'
 
 export default {
@@ -72,9 +72,92 @@ export default {
       'ImportDeclaration': { 'multiline': true, 'consistent': true },
       'ExportDeclaration': { 'multiline': true, 'consistent': true }
     }],
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
     // "comma-dangle": ["error", "never"]
     // 'tailwindcss/classnames-order': 'warn',    
     // 'tailwindcss/no-custom-classname': 'off'
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',  
+          'external', 
+          'internal', 
+          'parent',   
+          'sibling',  
+          'index',    
+          'object',   
+          'type',     
+        ],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '{react-*,react-*/**, react/*}',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: './routes/**',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './pages{,/**}',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './store/**',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './contexts/**',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './**/*Provider, ./*Provider',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './components/**',
+            group: 'internal',
+            position: 'before',
+          },
+          // Hooks
+          {
+            pattern: './hooks/**',
+            group: 'internal',
+            position: 'before',
+          },
+          // Utils
+          {
+            pattern: './utils/**',
+            group: 'internal',
+            position: 'before',
+          },
+          // Style
+          {
+            pattern: './**/*.css',
+            group: 'sibling',
+            position: 'after',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['react'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        // "consolidateIslands": 'inside-groups',
+        'newlines-between': 'always',
+        "distinctGroup": true,
+      },
+    ],
   }
 }
