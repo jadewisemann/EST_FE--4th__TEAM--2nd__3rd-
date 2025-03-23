@@ -69,7 +69,7 @@ const LoginPage = () => {
         </button>
 
         {/* 페이지 정보 */}
-        <div className='mb mb-7 flex flex-col gap-5'>
+        <div className='mb-7 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
           <p>
             지금 로그인하여 추가 할인 정보를 <br />

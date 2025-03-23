@@ -57,6 +57,7 @@ const useAuthStore = create(set => {
         await resetPassword(email);
       } catch (error) {
         set({ error: error.message });
+        throw error;
       }
     },
   };
