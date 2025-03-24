@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -17,12 +17,19 @@ const MainPage = () => {
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
+  const [nightCount, setNightCount] = useState('');
   const weekday = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedTotalGuests, setSelectedTotalGuests] =
     useState('객실 1개 성인1명 아동 0명');
 
   const navigate = useNavigate();
 
+  //몇박인지 계산
+  const getNights = (start, end) => {
+    const diff = new Date(end) - new Date(start);
+    const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return `${nights}박`;
+  };
   const getFormattedDateRange = () => {
     const today = new Date();
     const tomorrow = new Date();
@@ -33,6 +40,7 @@ const MainPage = () => {
       const dayOfWeek = weekday[date.getDay()];
       return `${month}월 ${day}일 (${dayOfWeek})`;
     };
+    setNightCount(getNights(today, tomorrow));
     return `${formet(today)} ~ ${formet(tomorrow)}`;
   };
 
@@ -79,7 +87,7 @@ const MainPage = () => {
         hotelIds,
         name: '추천호텔',
         fromToDate: selectedDate,
-        totalNights: '1박',
+        totalNights: nightCount,
         numOfPeople: selectedTotalGuests,
       },
     });
@@ -99,7 +107,7 @@ const MainPage = () => {
           hotelIds,
           name: searchText,
           fromToDate: selectedDate,
-          totalNights: '1박',
+          totalNights: nightCount,
           numOfPeople: selectedTotalGuests,
         },
       });
@@ -150,7 +158,7 @@ const MainPage = () => {
           selectedCategory: categoryLabel,
           name: categoryLabel,
           fromToDate: selectedDate,
-          totalNights: '1박',
+          totalNights: nightCount,
           numOfPeople: selectedTotalGuests,
         },
       });
@@ -234,7 +242,7 @@ const MainPage = () => {
               onClick={handleSearch}
               type='submit'
             >
-              {isLoading ? '검색 중' : '확인 (1박)'}
+              {isLoading ? '검색 중' : `확인 (${nightCount})`}
             </Button>
           </form>
         </div>
