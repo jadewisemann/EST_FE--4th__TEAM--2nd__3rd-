@@ -13,13 +13,21 @@ const StayListpage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
   const [headerInfo, setHeaderInfo] = useState({
-    name: '리츠칼튼 호텔',
-    fromToDate: '3월 05일 ~ 3월 06일',
+    name: '',
+    fromToDate: '',
     totalNights: '1박',
     numOfPeople: '성인 1명',
   });
 
-  const { hotelIds = [] } = location.state || [];
+  const state = location.state || {};
+  const {
+    hotelIds = [],
+    name = '',
+    selectedCategory = '',
+    fromToDate = '',
+    totalNights = '',
+    numOfPeople = '',
+  } = state;
 
   const [hotelList, setHotelList] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState([]);
@@ -27,6 +35,41 @@ const StayListpage = () => {
   const [incrementView] = useState(7);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+
+  // 헤더 정보 초기 세팅
+  useEffect(() => {
+    // 이미 세팅된 상태거나 빈값이면 처리하지 않음
+    if (!hotelIds.length && !name && !selectedCategory) {
+      console.warn('전달된 state가 없음');
+      return;
+    }
+
+    const hotelCount = hotelIds.length;
+    const nameText = name?.trim()
+      ? name
+      : selectedCategory ||
+        (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : '검색 결과 없음');
+
+    // setState 단 한 번만 실행되게!
+    setHeaderInfo(prev => {
+      // 이미 동일한 값이면 갱신 안 함
+      if (
+        prev.name === nameText &&
+        prev.fromToDate === fromToDate &&
+        prev.totalNights === totalNights &&
+        prev.numOfPeople === numOfPeople
+      ) {
+        return prev;
+      }
+
+      return {
+        name: nameText,
+        fromToDate,
+        totalNights,
+        numOfPeople,
+      };
+    });
+  }, []);
 
   useEffect(() => {
     fetchInitialData();
@@ -116,7 +159,7 @@ const StayListpage = () => {
             <strong className='text-sm'>{headerInfo.name}</strong>
             <span className='text-xs'>
               {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights})&nbsp;
-              {headerInfo.numOfPeople}
+              {/* {headerInfo.numOfPeople} */}
             </span>
           </div>
           <Icon className='text-neutral-600' name='close' />
