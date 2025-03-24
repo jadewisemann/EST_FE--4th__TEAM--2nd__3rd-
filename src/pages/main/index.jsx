@@ -1,24 +1,45 @@
 import React, { useEffect, useState } from 'react';
+
+import { useNavigate, Link } from 'react-router-dom';
+
 import Button from '../../components/Button';
-import Input from '../../components/Input';
 import HorizontalList from '../../components/HorizontalList';
-import Nav from '../../components/Nav';
 import Icon from '../../components/Icon';
+import Input from '../../components/Input';
+import Nav from '../../components/Nav';
 import { searchHotelsAdvanced } from '../../firebase/search';
-import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../../store/authStore';
 
 const MainPage = () => {
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuthStore();
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(
-    '3월 05일 (수) ~ 3월 06일 (목)',
-  );
+  const [selectedDate, setSelectedDate] = useState('');
+  const weekday = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedTotalGuests, setSelectedTotalGuests] =
     useState('객실 1개 성인1명 아동 0명');
 
   const navigate = useNavigate();
+
+  const getFormattedDateRange = () => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const formet = date => {
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const dayOfWeek = weekday[date.getDay()];
+      return `${month}월 ${day}일 (${dayOfWeek})`;
+    };
+    return `${formet(today)} ~ ${formet(tomorrow)}`;
+  };
+
+  useEffect(() => {
+    const dateRange = getFormattedDateRange();
+    setSelectedDate(dateRange);
+  });
 
   //추천호텔 데이터 가져오기
   useEffect(() => {
@@ -165,7 +186,15 @@ const MainPage = () => {
       <div className='flex h-screen flex-col justify-between bg-[url(https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)]'>
         <div className='flex flex-col px-5 pt-16 pb-10'>
           <div className='flex flex-col items-center text-xl text-white'>
-            <strong>누구누구 님</strong>
+            <Link to={user ? '/profile' : '/login'}>
+              <strong className='underline'>
+                {user
+                  ? `${user.displayName || user.email?.split('@')[0]}`
+                  : '로그인'}
+                {''}
+              </strong>
+              님
+            </Link>
             <strong>환영합니다.</strong>
           </div>
           <form action='' method='get'>
@@ -180,7 +209,8 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-neutral-300 px-5 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
+                childrenClassName='grow-0 gap-3'
                 onClick={() => {}}
               >
                 <Icon name='calendar' />
@@ -189,7 +219,8 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-neutral-300 px-5 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
+                childrenClassName='grow-0 gap-3'
                 onClick={() => {}}
               >
                 <Icon name='user' />
@@ -209,7 +240,7 @@ const MainPage = () => {
         </div>
 
         <div className='rounded-t-md bg-white p-5 pb-[80px]'>
-          <div className='mt-1 flex items-center justify-between gap-5'>
+          <div className='mt-1 flex items-start justify-between gap-5'>
             {categories.map((item, idx) => (
               <button
                 key={idx}
@@ -223,7 +254,7 @@ const MainPage = () => {
               </button>
             ))}
           </div>
-          <div className='mt-10 mb-5 flex items-center justify-between'>
+          <div className='mt-7 mb-4 flex items-center justify-between'>
             <h4 className='text-base font-bold'>추천호텔</h4>
             <button
               className='cursor-pointer text-sm text-violet-600'
