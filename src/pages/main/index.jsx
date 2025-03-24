@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -9,37 +9,52 @@ import Input from '../../components/Input';
 import Nav from '../../components/Nav';
 import { searchHotelsAdvanced } from '../../firebase/search';
 import useAuthStore from '../../store/authStore';
+import useDateStore from '../../store/dateStore';
+import useSearchStore from '../../store/searchStore';
 
 const MainPage = () => {
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuthStore();
+  const { date, updateDates } = useDateStore();
+  const { setSearchState } = useSearchStore();
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
+  // const [selectedDate, setSelectedDate] = useState('');
+  // const [nightCount, setNightCount] = useState('');
+  const fromToDate = `${date.startDate} ~ ${date.endDate}`;
+  const totalNights = `${date.duration}박`;
+
   const weekday = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedTotalGuests, setSelectedTotalGuests] =
     useState('객실 1개 성인1명 아동 0명');
 
   const navigate = useNavigate();
 
-  const getFormattedDateRange = () => {
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
-    const formet = date => {
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const dayOfWeek = weekday[date.getDay()];
-      return `${month}월 ${day}일 (${dayOfWeek})`;
-    };
-    return `${formet(today)} ~ ${formet(tomorrow)}`;
-  };
+  //몇박인지 계산
+  // const getNights = (start, end) => {
+  //   const diff = new Date(end) - new Date(start);
+  //   const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  //   return `${nights}박`;
+  // };
+  // const getFormattedDateRange = () => {
+  //   const today = new Date();
+  //   const tomorrow = new Date();
+  //   tomorrow.setDate(today.getDate() + 1);
+  //   const formet = date => {
+  //     const month = date.getMonth() + 1;
+  //     const day = date.getDate();
+  //     const dayOfWeek = weekday[date.getDay()];
+  //     return `${month}월 ${day}일 (${dayOfWeek})`;
+  //   };
+  //   // setNightCount(getNights(today, tomorrow));
+  //   return `${formet(today)} ~ ${formet(tomorrow)}`;
+  // };
 
-  useEffect(() => {
-    const dateRange = getFormattedDateRange();
-    setSelectedDate(dateRange);
-  });
+  // useEffect(() => {
+  //   const dateRange = getFormattedDateRange();
+  //   // setSelectedDate(dateRange);
+  // });
 
   //추천호텔 데이터 가져오기
   useEffect(() => {
@@ -74,15 +89,14 @@ const MainPage = () => {
   //추천호텔 전체보기 버튼
   const recommendedHotelviewMore = () => {
     const hotelIds = allRecommendedHotels.map(hotel => hotel.id);
-    navigate('/result', {
-      state: {
-        hotelIds,
-        name: '추천호텔',
-        fromToDate: selectedDate,
-        totalNights: '1박',
-        numOfPeople: selectedTotalGuests,
-      },
+    setSearchState({
+      hotelIds,
+      name: '추천호텔',
+      fromToDate: fromToDate,
+      totalNights: totalNights,
+      numOfPeople: selectedTotalGuests,
     });
+    navigate('/result');
   };
 
   //검색 데이터 가져오기
@@ -94,15 +108,15 @@ const MainPage = () => {
       const result = await searchHotelsAdvanced(searchText);
       // console.log('검색 결과:', result);
       const hotelIds = result.map(hotel => hotel.id);
-      navigate('/result', {
-        state: {
-          hotelIds,
-          name: searchText,
-          fromToDate: selectedDate,
-          totalNights: '1박',
-          numOfPeople: selectedTotalGuests,
-        },
+      setSearchState({
+        hotelIds,
+        name: searchText,
+        // selectedCategory: categoryLabel,
+        fromToDate: fromToDate,
+        totalNights: totalNights,
+        numOfPeople: selectedTotalGuests,
       });
+      navigate('/result');
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
     }
@@ -144,16 +158,15 @@ const MainPage = () => {
       console.log(`${categoryLabel} 검색 결과:`, uniqueResults);
 
       //  결과 페이지 이동
-      navigate('/result', {
-        state: {
-          hotelIds: uniqueResults.map(hotel => hotel.id),
-          selectedCategory: categoryLabel,
-          name: categoryLabel,
-          fromToDate: selectedDate,
-          totalNights: '1박',
-          numOfPeople: selectedTotalGuests,
-        },
+      setSearchState({
+        hotelIds: uniqueResults.map(hotel => hotel.id),
+        name: searchText,
+        // selectedCategory: categoryLabel,
+        fromToDate: fromToDate,
+        totalNights: totalNights,
+        numOfPeople: selectedTotalGuests,
       });
+      navigate('/result');
     } catch (error) {
       console.error('🔥 카테고리 이동 중 오류 발생:', error);
     }
@@ -214,7 +227,7 @@ const MainPage = () => {
                 onClick={() => {}}
               >
                 <Icon name='calendar' />
-                {selectedDate}
+                {fromToDate}
               </Button>
               <Button
                 color='line'
@@ -234,7 +247,7 @@ const MainPage = () => {
               onClick={handleSearch}
               type='submit'
             >
-              {isLoading ? '검색 중' : '확인 (1박)'}
+              {isLoading ? '검색 중' : `확인 (${totalNights})`}
             </Button>
           </form>
         </div>
