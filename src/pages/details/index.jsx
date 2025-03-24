@@ -1,40 +1,51 @@
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { useEffect, useState } from 'react';
-
-// component
-import SubHeader from '../../components/SubHeader';
-import Icon from '../../components/Icon';
-import Nav from '../../components/Nav';
-import DetailSection from '../../components/DetailSection';
-import DetailProduct from '../../components/DetailProduct';
-import Button from '../../components/Button';
-
-// data
-import { getHotelById } from '../../firebase/search';
-import useAppDataStore from '../../store/appDataStore';
 
 import { useParams } from 'react-router-dom';
 
+import { Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// store
+import useAppDataStore from '../../store/appDataStore';
+
+// pageComponent
 import ShareBtn from './components/ShareBtn';
 
+// component
+import Button from '../../components/Button';
+import DetailProduct from '../../components/DetailProduct';
+import DetailSection from '../../components/DetailSection';
+import Icon from '../../components/Icon';
+import Nav from '../../components/Nav';
+import Rating from '../../components/Rating';
+import SubHeader from '../../components/SubHeader';
+// data
+import { getHotelById } from '../../firebase/search';
+
 const DetailsPage = () => {
+  // page 사용 데이터(호텔 데이터)
   const [data, setData] = useState(null);
+
+  // 보여질 방의 갯수(초기 값 2)
   const [visibleRooms, setVisibleRooms] = useState(2);
 
   // 호텔 ID
   const { hotelId } = useParams();
+  // 한글, 공백, 특수문자 예외처리하기 위한 decoding
   const decodedHotelId = decodeURIComponent(hotelId);
 
   // 사용자 정보
   const { dates, guests } = useAppDataStore();
 
+  // 페이지 로딩 직후 실행
   useEffect(() => {
     const fetchHotel = async () => {
       try {
+        // hotel정보 담기
         const hotelData = await getHotelById(`${decodedHotelId}`);
 
         if (hotelData) {
+          // 페이지 사용 data에 hotel 정보 담기
           setData(hotelData);
         } else {
           console.log('해당 ID의 호텔이 존재하지 않습니다.');
@@ -46,11 +57,13 @@ const DetailsPage = () => {
 
     fetchHotel();
 
+    // data가 있는경우 room의 길이가 1개인 경우 처리
     if (data) {
       setVisibleRooms(Math.min(2, data.rooms.length));
     }
   }, []);
 
+  // 데이터 로딩 처리
   if (!data) {
     return <div>로딩 중</div>;
   }
@@ -70,12 +83,6 @@ const DetailsPage = () => {
 
   // 남아있는 방 개수
   const remainingRooms = data.rooms.length - visibleRooms;
-
-  const openMap = () => {
-    const query = encodeURIComponent(data.location[0]);
-    // 카카오 맵
-    window.open(`https://map.kakao.com/link/search/${query}`, '_blank');
-  };
 
   return (
     <>
@@ -111,21 +118,24 @@ const DetailsPage = () => {
         </Swiper>
 
         <div className='mt-5'>
-          <h2 className='flex flex-col gap-1 font-medium tracking-tight'>
-            <span className='text-xl'>{data.title}</span>
-          </h2>
-          <div className='mt-2 flex items-center justify-between'>
-            {/* <ReviewRating rate={data.hotelStar} /> */}
-            {/* <Rating rate={data.rate} /> */}
+          <div className='mb-2 flex items-center justify-between'>
+            <h2 className='flex flex-col gap-1 font-medium tracking-tight'>
+              <span className='text-xl'>{data.title}</span>
+            </h2>
+            <Rating rate={data.rating} />
           </div>
-          <button
-            type='button'
-            className='flex items-center gap-1 text-xs text-neutral-400'
-            onClick={openMap}
+          <a
+            href={
+              'https://map.kakao.com/link/search/' +
+              encodeURIComponent(data.location[0])
+            }
+            target='_blank'
+            className='flex cursor-pointer items-center gap-1 text-xs text-neutral-400'
+            title={data.title + ' 카카오맵 열기'}
           >
             <Icon name='location' size={16} className='text-neutral-600' />
             {data.location[0]}
-          </button>
+          </a>
         </div>
 
         <hr className='my-4 border-gray-200' />
@@ -150,7 +160,10 @@ const DetailsPage = () => {
           <div className='flex flex-col gap-1'>
             <span className='text-xs text-neutral-600'>체크인 & 체크아웃</span>
             <span className='text-lg font-bold'>
-              {dates.startDate} ~ {dates.endDate}({dates.duration}박)
+              <span>{dates.startDate} ~ </span>
+              <span className='whitespace-nowrap'>
+                {dates.endDate} ({dates.duration}박)
+              </span>
             </span>
           </div>
           <div className='flex flex-col gap-1'>
@@ -168,7 +181,10 @@ const DetailsPage = () => {
           </div>
         </div>
 
-        <DetailProduct detailProducts={data.rooms.slice(0, visibleRooms)} />
+        <DetailProduct
+          detailProducts={data.rooms.slice(0, visibleRooms)}
+          rooms={data.rooms}
+        />
 
         {remainingRooms > 0 && (
           <Button
@@ -216,7 +232,7 @@ const DetailsPage = () => {
           size='text-xs'
           weight='font-normal'
           contents={[
-            '연락처 : 010-1234-5678',
+            `연락처 : ${data.phoneNumber}`,
             `주소 : ${data.location[0]}`,
             '고객센터 : 080 - 2465 - 6585',
           ]}
