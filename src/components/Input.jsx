@@ -52,6 +52,11 @@ const typeConfig = {
     placeholder: '숙박명 검색',
     label: '',
   },
+  number: {
+    type: 'number',
+    placeholder: '사용할 포인트를 입력해주세요',
+    label: '',
+  },
 };
 
 const Input = ({
@@ -59,7 +64,7 @@ const Input = ({
   type,
   value = '',
   label = '',
-  className,
+  className = '',
   compareValue = '',
   placeholder = '',
   errorMessage = '',
@@ -100,15 +105,10 @@ const Input = ({
       <label className='mb-1 text-base tracking-tight' htmlFor={inputId}>
         {label || config.label}
       </label>
+
       {/* 값에 따른 보더색상 변경 */}
       <div
-        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none ${
-          value === ''
-            ? 'border-neutral-300'
-            : isValid
-              ? 'border-violet-600'
-              : 'border-red-500'
-        }`}
+        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none focus-within:border-violet-600 ${value === '' ? 'border-neutral-300' : isValid ? 'border-violet-600' : 'border-red-500!'} `}
       >
         {/* 아이콘 */}
         <div className='absolute left-5 min-w-[20px]'>
@@ -120,15 +120,15 @@ const Input = ({
         <input
           id={inputId}
           type={type || config.type}
-          className='w-full rounded-full border-none px-14 py-4 outline-none'
+          className={`w-full rounded-full border-none px-14 py-4 outline-none`}
           placeholder={placeholder || config.placeholder}
           value={value}
           onChange={handleChange}
-          autoComplete={autoComplete || config.autoComplete}
+          autoComplete={autoComplete || config.autoComplete || 'off'}
         />
 
         {/* 닫기 버튼 */}
-        {value && (
+        {value !== 0 && value && (
           <button className='absolute right-5' onClick={() => onChange('')}>
             <Icon name='close' color='black' />
           </button>
