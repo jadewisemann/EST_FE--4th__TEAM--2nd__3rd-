@@ -1,17 +1,38 @@
 import { useState, useEffect } from 'react';
-import Tab from '../../components/Tab';
-import Nav from '../../components/Nav';
-import Icon from '../../components/Icon';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Button from '../../components/Button';
+import Icon from '../../components/Icon';
+import Nav from '../../components/Nav';
+import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
-import { useLocation } from 'react-router-dom';
 import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import useDateStore from '../../store/dateStore';
+import useSearchStore from '../../store/searchStore';
 
 const StayListpage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
+
+  // 전역 상태 가져오기
+  const { hotelIds, name, selectedCategory, numOfPeople, setSearchState } =
+    useSearchStore();
+
+  const { date } = useDateStore();
+  const fromToDate = `${date.startDate} ~ ${date.endDate}`;
+  const totalNights = `${date.duration}박`;
+
+  // location.state 있을 경우 전역 스토어에 저장 (최초 접근 시)
+  useEffect(() => {
+    if (location.state) {
+      setSearchState(location.state);
+    }
+  }, [location.state, setSearchState]);
+
   const [headerInfo, setHeaderInfo] = useState({
     name: '',
     fromToDate: '',
@@ -19,15 +40,8 @@ const StayListpage = () => {
     numOfPeople: '성인 1명',
   });
 
-  const state = location.state || {};
-  const {
-    hotelIds = [],
-    name = '',
-    selectedCategory = '',
-    fromToDate = '',
-    totalNights = '',
-    numOfPeople = '',
-  } = state;
+  const fallbackSearch = '서울';
+  const searchKeyword = name || selectedCategory || fallbackSearch;
 
   const [hotelList, setHotelList] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState([]);
@@ -36,40 +50,20 @@ const StayListpage = () => {
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
-  // 헤더 정보 초기 세팅
   useEffect(() => {
-    // 이미 세팅된 상태거나 빈값이면 처리하지 않음
-    if (!hotelIds.length && !name && !selectedCategory) {
-      console.warn('전달된 state가 없음');
-      return;
-    }
-
     const hotelCount = hotelIds.length;
     const nameText = name?.trim()
       ? name
       : selectedCategory ||
-        (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : '검색 결과 없음');
+        (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
 
-    // setState 단 한 번만 실행되게!
-    setHeaderInfo(prev => {
-      // 이미 동일한 값이면 갱신 안 함
-      if (
-        prev.name === nameText &&
-        prev.fromToDate === fromToDate &&
-        prev.totalNights === totalNights &&
-        prev.numOfPeople === numOfPeople
-      ) {
-        return prev;
-      }
-
-      return {
-        name: nameText,
-        fromToDate,
-        totalNights,
-        numOfPeople,
-      };
+    setHeaderInfo({
+      name: nameText,
+      fromToDate,
+      totalNights,
+      numOfPeople: numOfPeople || '성인 1명',
     });
-  }, []);
+  }, [hotelIds, name, selectedCategory, fromToDate, totalNights, numOfPeople]);
 
   useEffect(() => {
     fetchInitialData();
@@ -82,18 +76,27 @@ const StayListpage = () => {
       let last = null;
 
       if (activeTab === 0) {
-        result = await Promise.all(hotelIds.map(id => getHotelById(id)));
-        result = result.filter(Boolean);
-        setHasMore(false); // 전체 탭은 페이징 안 함
+        if (hotelIds.length > 0) {
+          result = await Promise.all(hotelIds.map(id => getHotelById(id)));
+          result = result.filter(Boolean);
+        } else {
+          const searchResult = await searchHotelsAdvanced(searchKeyword);
+          result = searchResult || [];
+        }
+
+        setHasMore(false);
       } else {
-        const categoryKeyword = categories[activeTab].replace(/[\/~*[\]]/g, '');
+        const categoryKeyword = categories[activeTab].replace(
+          /[\/\~*\[\]]/g,
+          '',
+        );
         const res = await searchHotelsAdvanced(
           categoryKeyword,
-          null, // region
-          20, // limit
-          20, // pageSize
-          null, // lastDoc
-          true, // pagination
+          null,
+          20,
+          20,
+          null,
+          true,
         );
         result = res.hotels;
         last = res.lastDoc;
@@ -120,7 +123,10 @@ const StayListpage = () => {
     } else if (hasMore && activeTab !== 0) {
       setIsLoading(true);
       try {
-        const categoryKeyword = categories[activeTab].replace(/[\/~*[\]]/g, '');
+        const categoryKeyword = categories[activeTab].replace(
+          /[\/\~*\[\]]/g,
+          '',
+        );
         const res = await searchHotelsAdvanced(
           categoryKeyword,
           null,
@@ -147,6 +153,10 @@ const StayListpage = () => {
     }
   };
 
+  const handleItemClick = hotel => {
+    navigate(`/detail/${encodeURIComponent(hotel.id)}`);
+  };
+
   return (
     <>
       <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.1)]'>
@@ -158,8 +168,7 @@ const StayListpage = () => {
           <div className='flex flex-1 flex-col items-start'>
             <strong className='text-sm'>{headerInfo.name}</strong>
             <span className='text-xs'>
-              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights})&nbsp;
-              {/* {headerInfo.numOfPeople} */}
+              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights})
             </span>
           </div>
           <Icon className='text-neutral-600' name='close' />
@@ -173,7 +182,10 @@ const StayListpage = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       >
-        <VerticalList products={visibleProducts} />
+        <VerticalList
+          products={visibleProducts}
+          onItemClick={handleItemClick}
+        />
 
         {(visibleProducts.length < hotelList.length || hasMore) && (
           <Button

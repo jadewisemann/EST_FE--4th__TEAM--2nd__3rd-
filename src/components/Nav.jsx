@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Icon from './Icon';
-import { Link, useLocation } from 'react-router-dom';
 
 const Nav = () => {
   const [navMenus] = useState([
@@ -12,7 +14,39 @@ const Nav = () => {
   const [activeNavMenu, setActiveNavMenu] = useState(0); //선택된 메뉴
   const [show, setShow] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const [selectedDate, setSelectedDate] = useState('');
+  const [nightCount, setNightCount] = useState('');
+
+  //몇박인지 계산
+  const getNights = (start, end) => {
+    const diff = new Date(end) - new Date(start);
+    const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return `${nights}박`;
+  };
+  //오늘 ~ 내일 날짜 셋팅
+  const weekday = ['일', '월', '화', '수', '목', '금', '토'];
+  const getFormattedDateRange = () => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const formet = date => {
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const dayOfWeek = weekday[date.getDay()];
+      return `${month}월 ${day}일 (${dayOfWeek})`;
+    };
+    setNightCount(getNights(today, tomorrow));
+    return `${formet(today)} ~ ${formet(tomorrow)}`;
+  };
+
+  useEffect(() => {
+    const dateRange = getFormattedDateRange();
+    setSelectedDate(dateRange);
+  }, []);
+
+  //스크롤이벤트
   const handleScroll = () => {
     const scrollTop = window.scrollY;
     const viewportHeight = window.innerHeight;
@@ -57,24 +91,23 @@ const Nav = () => {
   return (
     <>
       <div
-        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'opacity-100" translate-y-0' : 'translate-y-full opacity-0'} `}
+        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} `}
       >
         {navMenus.map((item, idx) => (
-          <Link to={item.path} key={idx} className='flex-1'>
-            <button
-              key={idx}
-              onClick={() => {
-                setActiveNavMenu(idx);
-              }}
-              className='flex w-full flex-col items-center py-5'
-            >
-              <Icon
-                name={item.name}
-                size={item.size}
-                color={`${activeNavMenu === idx ? '#8E51FF' : '#AEACAC'}`}
-              />
-            </button>
-          </Link>
+          <button
+            key={idx}
+            className='flex w-full flex-col items-center py-5'
+            onClick={() => {
+              setActiveNavMenu(idx);
+              navigate(item.path);
+            }}
+          >
+            <Icon
+              name={item.name}
+              size={item.size}
+              color={`${activeNavMenu === idx ? '#8E51FF' : '#AEACAC'}`}
+            />
+          </button>
         ))}
       </div>
     </>
