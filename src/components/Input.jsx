@@ -129,7 +129,11 @@ const Input = ({
 
         {/* 닫기 버튼 */}
         {value !== 0 && value && (
-          <button className='absolute right-5' onClick={() => onChange('')}>
+          <button
+            type='button'
+            className='absolute right-5'
+            onClick={() => onChange('')}
+          >
             <Icon name='close' color='black' />
           </button>
         )}
