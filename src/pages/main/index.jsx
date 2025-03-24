@@ -11,6 +11,7 @@ const MainPage = () => {
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [recommendedHotels, setRecommendedHotels] = useState([]);
+  const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     '3월 05일 (수) ~ 3월 06일 (목)',
   );
@@ -25,6 +26,7 @@ const MainPage = () => {
       setIsLoading(true);
       try {
         const result = await searchHotelsAdvanced('서울');
+        setAllRecommendedHotels(result); //추천호텔 데이터 전체저장
         const formattedResult = result.slice(0, 5).map(hotel => ({
           id: hotel.id,
           thumbnail: hotel.rooms?.[0]?.img || hotel.image?.[0] || '',
@@ -50,8 +52,16 @@ const MainPage = () => {
 
   //추천호텔 전체보기 버튼
   const recommendedHotelviewMore = () => {
-    const hotelIds = recommendedHotels.map(hotel => hotel.id);
-    navigate('/result', { state: { hotelIds } });
+    const hotelIds = allRecommendedHotels.map(hotel => hotel.id);
+    navigate('/result', {
+      state: {
+        hotelIds,
+        name: '추천호텔',
+        fromToDate: selectedDate,
+        totalNights: '1박',
+        numOfPeople: selectedTotalGuests,
+      },
+    });
   };
 
   //검색 데이터 가져오기
@@ -63,7 +73,15 @@ const MainPage = () => {
       const result = await searchHotelsAdvanced(searchText);
       // console.log('검색 결과:', result);
       const hotelIds = result.map(hotel => hotel.id);
-      navigate('/result', { state: { hotelIds } });
+      navigate('/result', {
+        state: {
+          hotelIds,
+          name: searchText,
+          fromToDate: selectedDate,
+          totalNights: '1박',
+          numOfPeople: selectedTotalGuests,
+        },
+      });
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
     }
@@ -109,6 +127,10 @@ const MainPage = () => {
         state: {
           hotelIds: uniqueResults.map(hotel => hotel.id),
           selectedCategory: categoryLabel,
+          name: categoryLabel,
+          fromToDate: selectedDate,
+          totalNights: '1박',
+          numOfPeople: selectedTotalGuests,
         },
       });
     } catch (error) {
