@@ -73,6 +73,7 @@ export default {
       'ExportDeclaration': { 'multiline': true, 'consistent': true }
     }],
     "react/jsx-uses-vars": "error",
+    "multiline-ternary": ["error", "always-multiline"],
     // "comma-dangle": ["error", "never"]
     // 'tailwindcss/classnames-order': 'warn',    
     // 'tailwindcss/no-custom-classname': 'off'
