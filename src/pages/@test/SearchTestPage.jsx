@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import Input from '../../components/Input';
+
 import Button from '../../components/Button';
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import Input from '../../components/Input';
+import {
+  getHotelById,
+  getRoomById,
+  searchHotelsAdvanced,
+} from '../../firebase/search';
 
 const DEBOUNCE_TIMEOUT = 300; //ms
 
@@ -10,6 +15,7 @@ const SearchTestPage = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [debounceTimer, setDebounceTimer] = useState(null);
+  const [expandedHotel, setExpandedHotel] = useState(null);
 
   useEffect(() => {
     if (query.trim() === '') {
@@ -19,7 +25,6 @@ const SearchTestPage = () => {
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
-
     const timer = setTimeout(async () => {
       try {
         setLoading(true);
@@ -32,9 +37,7 @@ const SearchTestPage = () => {
         setLoading(false);
       }
     }, DEBOUNCE_TIMEOUT);
-
     setDebounceTimer(timer);
-
     return () => {
       if (timer) {
         clearTimeout(timer);
@@ -50,50 +53,78 @@ const SearchTestPage = () => {
     try {
       const hotel = await getHotelById(hotelId);
       console.log(hotel);
+      setExpandedHotel(hotel);
     } catch (error) {
       console.error('ID로 호텔 검색 중 오류 발생:', error);
     }
   };
 
+  const handleGetRoomById = async roomId => {
+    try {
+      const room = await getRoomById(roomId);
+      console.log('방 정보:', room);
+    } catch (error) {
+      console.error('ID로 방 검색 중 오류 발생:', error);
+    }
+  };
+
   return (
     <>
-      <div className='search-container' style={{ padding: '20px' }}>
-        <div className='search-input' style={{ marginBottom: '20px' }}>
+      <div className='search-container p-5'>
+        <div className='search-input mb-5'>
           <Input
             inputType='search'
             onChange={handleInputChange}
             value={query}
             placeholder='호텔 이름을 입력하세요'
-            style={{ marginRight: '10px' }}
+            className='mr-5'
           />
           {loading && <span>검색 중...</span>}
         </div>
-
         <div className='search-results'>
           {loading ? (
             <p>검색 중입니다...</p>
           ) : results.length > 0 ? (
             <div>
               <h3>검색 결과: {results.length}개</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
+              <ul className='list-none p-0'>
                 {results.map(hotel => (
                   <li
                     key={hotel.id}
-                    style={{
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      padding: '15px',
-                      marginBottom: '10px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    }}
+                    className='mb-2.5 rounded-sm border-1 border-gray-200 p-4 shadow'
                   >
                     <h4>{hotel.title}</h4>
                     <div>ID: {hotel.id}</div>
                     <Button
-                      content='ID로 검색'
+                      content='호텔 상세 정보'
                       size='small'
                       onClick={() => handleGetHotelById(hotel.id)}
                     />
+
+                    {expandedHotel &&
+                      expandedHotel.id === hotel.id &&
+                      expandedHotel.rooms && (
+                        <div className='mt-2.5'>
+                          <h5>방 목록:</h5>
+                          <ul className='list-none p-0'>
+                            {expandedHotel.rooms.map(room => (
+                              <li
+                                key={room.room_uid}
+                                className='mb-1 rounded-sm border-1 border-black p-2'
+                              >
+                                <div>{room.title || '이름 없음'}</div>
+                                <Button
+                                  content='방 정보 보기'
+                                  size='small'
+                                  onClick={() =>
+                                    handleGetRoomById(room.room_uid)
+                                  }
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                   </li>
                 ))}
               </ul>
