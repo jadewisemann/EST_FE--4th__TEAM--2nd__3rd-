@@ -18,7 +18,6 @@ const StayListpage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
 
-  // 전역 상태 가져오기
   const { hotelIds, name, selectedCategory, numOfPeople, setSearchState } =
     useSearchStore();
 
@@ -26,7 +25,6 @@ const StayListpage = () => {
   const fromToDate = `${date.startDate} ~ ${date.endDate}`;
   const totalNights = `${date.duration}박`;
 
-  // location.state 있을 경우 전역 스토어에 저장 (최초 접근 시)
   useEffect(() => {
     if (location.state) {
       setSearchState(location.state);
@@ -52,10 +50,16 @@ const StayListpage = () => {
 
   useEffect(() => {
     const hotelCount = hotelIds.length;
-    const nameText = name?.trim()
-      ? name
-      : selectedCategory ||
+
+    let nameText = '';
+    if (activeTab === 0) {
+      nameText =
+        selectedCategory ||
+        name ||
         (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
+    } else {
+      nameText = categories[activeTab];
+    }
 
     setHeaderInfo({
       name: nameText,
@@ -63,7 +67,15 @@ const StayListpage = () => {
       totalNights,
       numOfPeople: numOfPeople || '성인 1명',
     });
-  }, [hotelIds, name, selectedCategory, fromToDate, totalNights, numOfPeople]);
+  }, [
+    hotelIds,
+    name,
+    selectedCategory,
+    fromToDate,
+    totalNights,
+    numOfPeople,
+    activeTab,
+  ]);
 
   useEffect(() => {
     fetchInitialData();
