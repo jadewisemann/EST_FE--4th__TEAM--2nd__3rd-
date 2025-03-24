@@ -127,14 +127,15 @@ const Input = ({
           autoComplete={autoComplete || config.autoComplete || 'off'}
         />
 
-        {/* 닫기 버튼 */}
+        {/* 지우기 버튼 */}
         {value !== 0 && value && (
           <button
             type='button'
             className='absolute right-5'
-            onClick={() => onChange('')}
+            onClick={(() => onChange(''), onValidChange(false))}
           >
             <Icon name='close' color='black' />
+            <span className='sr-only'>지우기 버튼</span>
           </button>
         )}
       </div>
