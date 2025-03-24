@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 
 import Icon from './Icon';
 
-const Heart = ({ roomId, className }) => {
+const Heart = ({ hotelId, className }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // 처음에 로컬 스토리지에서 값 가져오기
   useEffect(() => {
     const storedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    setIsChecked(storedWishlist.includes(roomId));
-  }, [roomId]);
+    setIsChecked(storedWishlist.includes(hotelId));
+  }, [hotelId]);
 
   //핸들러
   const heartHandler = event => {
@@ -21,12 +21,12 @@ const Heart = ({ roomId, className }) => {
     let updatedliked;
 
     // room아이디가 로컬에 있는지 확인
-    if (storedWishlist.includes(roomId)) {
+    if (storedWishlist.includes(hotelId)) {
       // 있으면 삭제
-      updatedliked = storedWishlist.filter(id => id !== roomId);
+      updatedliked = storedWishlist.filter(id => id !== hotelId);
     } else {
       // 아니면 추가
-      updatedliked = [...storedWishlist, roomId];
+      updatedliked = [...storedWishlist, hotelId];
     }
 
     // 로컬 스토리지 업데이트
@@ -37,13 +37,13 @@ const Heart = ({ roomId, className }) => {
     }
 
     // 체크상태
-    setIsChecked(updatedliked.includes(roomId));
+    setIsChecked(updatedliked.includes(hotelId));
   };
 
   return (
     <button
       onClick={heartHandler}
-      className={`rounded-4xl border-1 border-neutral-300 bg-white p-1.5 ${className}`}
+      className={`cursor-pointer rounded-4xl border-1 border-neutral-300 bg-white p-1.5 ${className}`}
     >
       <Icon
         name={isChecked ? 'heart_fill' : 'heart'}
@@ -57,5 +57,5 @@ const Heart = ({ roomId, className }) => {
 export default Heart;
 
 // 사용법
-// <heart roomId={product.id} className={테일윈드css}/>
+// <heart hotelId={product.id} className={테일윈드css}/>
 // roomId로 숙소 id 넘겨주시면 됩니다.
