@@ -8,7 +8,8 @@ import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
-import useSearchStore from '../../store/useSearchStore';
+import useDateStore from '../../store/dateStore';
+import useSearchStore from '../../store/searchStore';
 
 const StayListpage = () => {
   const location = useLocation();
@@ -18,15 +19,12 @@ const StayListpage = () => {
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
 
   // 전역 상태 가져오기
-  const {
-    hotelIds,
-    name,
-    selectedCategory,
-    fromToDate,
-    totalNights,
-    numOfPeople,
-    setSearchState,
-  } = useSearchStore();
+  const { hotelIds, name, selectedCategory, numOfPeople, setSearchState } =
+    useSearchStore();
+
+  const { date } = useDateStore();
+  const fromToDate = `${date.startDate} ~ ${date.endDate}`;
+  const totalNights = `${date.duration}박`;
 
   // location.state 있을 경우 전역 스토어에 저장 (최초 접근 시)
   useEffect(() => {
@@ -52,13 +50,6 @@ const StayListpage = () => {
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
-  // 몇박인지 계산
-  const getNights = (start, end) => {
-    const diff = new Date(end) - new Date(start);
-    const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return `${nights}박`;
-  };
-
   useEffect(() => {
     const hotelCount = hotelIds.length;
     const nameText = name?.trim()
@@ -68,8 +59,8 @@ const StayListpage = () => {
 
     setHeaderInfo({
       name: nameText,
-      fromToDate: fromToDate || '',
-      totalNights: totalNights || '1박',
+      fromToDate,
+      totalNights,
       numOfPeople: numOfPeople || '성인 1명',
     });
   }, [hotelIds, name, selectedCategory, fromToDate, totalNights, numOfPeople]);
