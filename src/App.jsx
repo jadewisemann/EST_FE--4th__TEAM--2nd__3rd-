@@ -1,7 +1,7 @@
-// Library
 import { Routes, Route } from 'react-router-dom';
 
-// Components
+import ProtectedRoute from './routes/ProtectedRoute';
+
 import {
   DetailsPage,
   CheckoutPage,
@@ -19,17 +19,13 @@ import {
   TestPage,
   SearchPasswordPage,
 } from './pages';
-
-// Provider
-import ModalProvider from './components/modal/ModalProvider';
-import ToastProvider from './components/ToastProvider';
-
-// @test pages
+// @Testpage
 import ModalTestPage from './pages/@test/ModalTestPage';
+import ReservationTestPage from './pages/@test/ReservationTestPage';
 import SearchTestPage from './pages/@test/SearchTestPage';
 
-// Routes
-import ProtectedRoute from './routes/ProtectedRoute';
+import ModalProvider from './components/modal/ModalProvider';
+import ToastProvider from './components/ToastProvider';
 
 // CSS
 import './App.css';
@@ -62,6 +58,7 @@ const App = () => (
       {/* test pages */}
       <Route path='/test/search' element={<SearchTestPage />} />
       <Route path='/test/modal' element={<ModalTestPage />} />
+      <Route path='/test/reservation' element={<ReservationTestPage />} />
     </Routes>
   </>
 );
