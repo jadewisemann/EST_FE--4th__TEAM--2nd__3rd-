@@ -132,7 +132,10 @@ const Input = ({
           <button
             type='button'
             className='absolute right-5'
-            onClick={(() => onChange(''), onValidChange(false))}
+            onClick={() => {
+              onChange('');
+              onValidChange(false);
+            }}
           >
             <Icon name='close' color='black' />
             <span className='sr-only'>지우기 버튼</span>
