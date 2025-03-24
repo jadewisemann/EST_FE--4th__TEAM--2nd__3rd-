@@ -6,72 +6,40 @@ import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import DateModal from '../../components/modal/DateModal';
+import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
 import { searchHotelsAdvanced } from '../../firebase/search';
+import useAppDataStore from '../../store/appDataStore';
 import useAuthStore from '../../store/authStore';
 import useDateStore from '../../store/dateStore';
+import useModalStore from '../../store/modalStore';
 import useSearchStore from '../../store/searchStore';
 
 const MainPage = () => {
   const { user } = useAuthStore();
   const { date, updateDates } = useDateStore();
   const { setSearchState } = useSearchStore();
+  const { modals, openDateModal, openGuestModal } = useModalStore();
+  const { guests } = useAppDataStore();
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
+  const [selectedTotalGuests, setSelectedTotalGuests] = useState('');
+  const navigate = useNavigate();
   const fromToDate = `${date.startDate} ~ ${date.endDate}`;
   const totalNights = `${date.duration}박`;
-  const navigate = useNavigate();
+  const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
 
-  const weekday = ['일', '월', '화', '수', '목', '금', '토'];
-  const [selectedTotalGuests, setSelectedTotalGuests] =
-    useState('객실 1개 성인1명 아동 0명');
-
-  //추천호텔 데이터 가져오기
   useEffect(() => {
-    const fetchRecommentedHotels = async () => {
-      setIsLoading(true);
-      try {
-        const result = await searchHotelsAdvanced('서울');
-        setAllRecommendedHotels(result); //추천호텔 데이터 전체저장
-        const formattedResult = result.slice(0, 5).map(hotel => ({
-          id: hotel.id,
-          thumbnail: hotel.rooms?.[0]?.img || hotel.image?.[0] || '',
-          discount: hotel.discount || 0, // 할인 정보가 있으면 반영 필요
-          rate: hotel._debug?.score || 0,
-          name: hotel.title || '이름 없음',
-          location: hotel.location?.[0] || '위치 정보 없음',
-          price:
-            Number(
-              typeof hotel.rooms?.[0].price === 'string'
-                ? hotel.rooms?.[0]?.price?.replace(/,/g, '')
-                : hotel.rooms?.[0]?.price,
-            ) || 0,
-        }));
-        setRecommendedHotels(formattedResult);
-      } catch (error) {
-        console.error('추천 호텔 가져오기 실패:', error);
-      }
-      setIsLoading(false);
-    };
-    fetchRecommentedHotels();
-  }, []);
-
-  //추천호텔 전체보기 버튼
-  const recommendedHotelviewMore = () => {
-    const hotelIds = allRecommendedHotels.map(hotel => hotel.id);
-    const categoryLabel = '추천호텔';
-    setSearchState({
-      hotelIds,
-      name: categoryLabel,
-      selectedCategory: categoryLabel,
-      fromToDate: fromToDate,
-      totalNights: totalNights,
-      numOfPeople: selectedTotalGuests,
-    });
-    navigate('/result');
-  };
+    if (!selectedTotalGuests) {
+      const { rooms, adults, children, infants } = guests;
+      setSelectedTotalGuests(
+        `객실 ${rooms}개 성인${adults}명 아동 ${children}명 유아${infants}명`,
+      );
+    }
+  }, [guests, selectedTotalGuests]);
 
   //검색 데이터 가져오기
   const handleSearch = async e => {
@@ -168,6 +136,51 @@ const MainPage = () => {
     },
   ];
 
+  //추천호텔 데이터 가져오기
+  useEffect(() => {
+    const fetchRecommentedHotels = async () => {
+      setIsLoading(true);
+      try {
+        const result = await searchHotelsAdvanced('서울');
+        setAllRecommendedHotels(result); //추천호텔 데이터 전체저장
+        const formattedResult = result.slice(0, 5).map(hotel => ({
+          id: hotel.id,
+          thumbnail: hotel.rooms?.[0]?.img || hotel.image?.[0] || '',
+          discount: hotel.discount || 0, // 할인 정보가 있으면 반영 필요
+          rate: hotel._debug?.score || 0,
+          name: hotel.title || '이름 없음',
+          location: hotel.location?.[0] || '위치 정보 없음',
+          price:
+            Number(
+              typeof hotel.rooms?.[0].price === 'string'
+                ? hotel.rooms?.[0]?.price?.replace(/,/g, '')
+                : hotel.rooms?.[0]?.price,
+            ) || 0,
+        }));
+        setRecommendedHotels(formattedResult);
+      } catch (error) {
+        console.error('추천 호텔 가져오기 실패:', error);
+      }
+      setIsLoading(false);
+    };
+    fetchRecommentedHotels();
+  }, []);
+
+  //추천호텔 전체보기 버튼
+  const recommendedHotelviewMore = () => {
+    const hotelIds = allRecommendedHotels.map(hotel => hotel.id);
+    const categoryLabel = '추천호텔';
+    setSearchState({
+      hotelIds,
+      name: categoryLabel,
+      selectedCategory: categoryLabel,
+      fromToDate: fromToDate,
+      totalNights: totalNights,
+      numOfPeople: selectedTotalGuests,
+    });
+    navigate('/result');
+  };
+
   return (
     <>
       <div className='flex h-screen flex-col justify-between bg-[url(https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)]'>
@@ -199,7 +212,12 @@ const MainPage = () => {
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
-                onClick={() => {}}
+                onClick={() =>
+                  openDateModal(selected => {
+                    console.log('선택된 날짜: ', selected);
+                    updateDates(selected);
+                  })
+                }
               >
                 <Icon name='calendar' />
                 {fromToDate}
@@ -210,7 +228,15 @@ const MainPage = () => {
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
-                onClick={() => {}}
+                onClick={() => {
+                  openGuestModal(selected => {
+                    console.log(selected);
+                    const { rooms, adults, children, infants } = selected;
+                    setSelectedTotalGuests(
+                      `객실 ${rooms}개 성인${adults}명 아동 ${children}명 유아${infants}명`,
+                    );
+                  });
+                }}
               >
                 <Icon name='user' />
                 {selectedTotalGuests}
@@ -254,7 +280,9 @@ const MainPage = () => {
           <HorizontalList products={recommendedHotels} />
         </div>
       </div>
-      <Nav />
+      {!isAnyModalOpen && <Nav />}
+      <DateModal />
+      <GuestModal />
     </>
   );
 };
