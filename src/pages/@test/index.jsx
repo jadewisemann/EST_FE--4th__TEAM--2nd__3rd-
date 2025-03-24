@@ -1,5 +1,10 @@
-// react
+// React
 import { useState } from 'react';
+
+// Store
+import useToastStore from '../../store/toastStore';
+
+// Component
 import Tab from '../../components/Tab';
 import Calendar from '../../components/Calendar';
 import Icon from '../../components/Icon';
@@ -20,12 +25,10 @@ import SubHeader from '../../components/SubHeader';
 import DetailProduct from '../../components/DetailProduct';
 import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
-import useToastStore from '../../store/useToastStore';
 
-// 수평 리스트 임시 이미지
+// @수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
 
-// components
 const TestPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [email, setEmail] = useState('');

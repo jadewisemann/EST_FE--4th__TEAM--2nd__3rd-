@@ -1,4 +1,4 @@
-import useToastStore from '../store/useToastStore';
+import useToastStore from '../store/toastStore';
 
 const ToastProvider = () => {
   const { message } = useToastStore();

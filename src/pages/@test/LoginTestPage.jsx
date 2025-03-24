@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
-import useAuthStore from '../../store/useAuthStore';
+import useAuthStore from '../../store/authStore';
 
 const LoginTestPage = () => {
   const { googleLogin, error, user, logout } = useAuthStore();

@@ -1,12 +1,18 @@
+// React
 import { useState } from 'react';
+
+// Library
+import { useNavigate } from 'react-router-dom';
+
+// Store
+import useAuthStore from '../../store/authStore';
+import useToastStore from '../../store/toastStore';
+
+// Component
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
-import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../../store/useAuthStore';
-import googleico from './../../assets/ico/ico_24_google.svg';
-import useToastStore from '../../store/useToastStore';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -102,10 +108,10 @@ const LoginPage = () => {
           <Button
             color='line'
             size='full'
-            className='mb-7'
+            className='mb-7 inline-flex items-center justify-center gap-2'
             onClick={handleGoogleLogin}
           >
-            <img src={googleico} className='mr-2 inline' alt='' />
+            <Icon name='google_colored' />
             <span className='font-bold'>Google로 로그인</span>
           </Button>
         </div>
