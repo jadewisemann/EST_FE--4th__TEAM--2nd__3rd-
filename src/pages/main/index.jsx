@@ -16,13 +16,30 @@ const MainPage = () => {
   const { user } = useAuthStore();
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(
-    '3월 05일 (수) ~ 3월 06일 (목)',
-  );
+  const [selectedDate, setSelectedDate] = useState('');
+  const weekday = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedTotalGuests, setSelectedTotalGuests] =
     useState('객실 1개 성인1명 아동 0명');
 
   const navigate = useNavigate();
+
+  const getFormattedDateRange = () => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const formet = date => {
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const dayOfWeek = weekday[date.getDay()];
+      return `${month}월 ${day}일 (${dayOfWeek})`;
+    };
+    return `${formet(today)} ~ ${formet(tomorrow)}`;
+  };
+
+  useEffect(() => {
+    const dateRange = getFormattedDateRange();
+    setSelectedDate(dateRange);
+  });
 
   //추천호텔 데이터 가져오기
   useEffect(() => {
@@ -223,7 +240,7 @@ const MainPage = () => {
         </div>
 
         <div className='rounded-t-md bg-white p-5 pb-[80px]'>
-          <div className='mt-1 flex items-center justify-between gap-5'>
+          <div className='mt-1 flex items-start justify-between gap-5'>
             {categories.map((item, idx) => (
               <button
                 key={idx}
@@ -237,7 +254,7 @@ const MainPage = () => {
               </button>
             ))}
           </div>
-          <div className='mt-10 mb-5 flex items-center justify-between'>
+          <div className='mt-7 mb-4 flex items-center justify-between'>
             <h4 className='text-base font-bold'>추천호텔</h4>
             <button
               className='cursor-pointer text-sm text-violet-600'
