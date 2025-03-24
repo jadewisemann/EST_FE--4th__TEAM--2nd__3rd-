@@ -13,48 +13,20 @@ import useDateStore from '../../store/dateStore';
 import useSearchStore from '../../store/searchStore';
 
 const MainPage = () => {
-  const [searchText, setSearchText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuthStore();
   const { date, updateDates } = useDateStore();
   const { setSearchState } = useSearchStore();
+  const [searchText, setSearchText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
-  // const [selectedDate, setSelectedDate] = useState('');
-  // const [nightCount, setNightCount] = useState('');
   const fromToDate = `${date.startDate} ~ ${date.endDate}`;
   const totalNights = `${date.duration}박`;
+  const navigate = useNavigate();
 
   const weekday = ['일', '월', '화', '수', '목', '금', '토'];
   const [selectedTotalGuests, setSelectedTotalGuests] =
     useState('객실 1개 성인1명 아동 0명');
-
-  const navigate = useNavigate();
-
-  //몇박인지 계산
-  // const getNights = (start, end) => {
-  //   const diff = new Date(end) - new Date(start);
-  //   const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  //   return `${nights}박`;
-  // };
-  // const getFormattedDateRange = () => {
-  //   const today = new Date();
-  //   const tomorrow = new Date();
-  //   tomorrow.setDate(today.getDate() + 1);
-  //   const formet = date => {
-  //     const month = date.getMonth() + 1;
-  //     const day = date.getDate();
-  //     const dayOfWeek = weekday[date.getDay()];
-  //     return `${month}월 ${day}일 (${dayOfWeek})`;
-  //   };
-  //   // setNightCount(getNights(today, tomorrow));
-  //   return `${formet(today)} ~ ${formet(tomorrow)}`;
-  // };
-
-  // useEffect(() => {
-  //   const dateRange = getFormattedDateRange();
-  //   // setSelectedDate(dateRange);
-  // });
 
   //추천호텔 데이터 가져오기
   useEffect(() => {
@@ -89,9 +61,11 @@ const MainPage = () => {
   //추천호텔 전체보기 버튼
   const recommendedHotelviewMore = () => {
     const hotelIds = allRecommendedHotels.map(hotel => hotel.id);
+    const categoryLabel = '추천호텔';
     setSearchState({
       hotelIds,
-      name: '추천호텔',
+      name: categoryLabel,
+      selectedCategory: categoryLabel,
       fromToDate: fromToDate,
       totalNights: totalNights,
       numOfPeople: selectedTotalGuests,
@@ -111,7 +85,7 @@ const MainPage = () => {
       setSearchState({
         hotelIds,
         name: searchText,
-        // selectedCategory: categoryLabel,
+        selectedCategory: searchText,
         fromToDate: fromToDate,
         totalNights: totalNights,
         numOfPeople: selectedTotalGuests,
@@ -155,13 +129,13 @@ const MainPage = () => {
         new Map(combinedResults.map(hotel => [hotel.id, hotel])).values(),
       );
 
-      console.log(`${categoryLabel} 검색 결과:`, uniqueResults);
+      // console.log(`${categoryLabel} 검색 결과:`, uniqueResults);
 
       //  결과 페이지 이동
       setSearchState({
         hotelIds: uniqueResults.map(hotel => hotel.id),
         name: searchText,
-        // selectedCategory: categoryLabel,
+        selectedCategory: categoryLabel,
         fromToDate: fromToDate,
         totalNights: totalNights,
         numOfPeople: selectedTotalGuests,
@@ -210,7 +184,7 @@ const MainPage = () => {
             </Link>
             <strong>환영합니다.</strong>
           </div>
-          <form action='' method='get'>
+          <form action='' method='get' onSubmit={handleSearch}>
             <div className='flex flex-col gap-3'>
               <Input
                 inputType='search'
@@ -224,6 +198,7 @@ const MainPage = () => {
                 size='full'
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
+                type='button'
                 onClick={() => {}}
               >
                 <Icon name='calendar' />
@@ -234,6 +209,7 @@ const MainPage = () => {
                 size='full'
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
+                type='button'
                 onClick={() => {}}
               >
                 <Icon name='user' />
@@ -244,7 +220,6 @@ const MainPage = () => {
               color='prime'
               size='full'
               className='mt-5 rounded-2xl'
-              onClick={handleSearch}
               type='submit'
             >
               {isLoading ? '검색 중' : `확인 (${totalNights})`}
@@ -276,7 +251,6 @@ const MainPage = () => {
               전체보기
             </button>
           </div>
-          {/* <HorizontalList products={recommendedHotels.map(hotel => hotel.id)} /> */}
           <HorizontalList products={recommendedHotels} />
         </div>
       </div>

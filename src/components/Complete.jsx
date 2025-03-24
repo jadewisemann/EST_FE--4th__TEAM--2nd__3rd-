@@ -7,7 +7,11 @@ const Complete = ({ type, message, description, children }) => (
       <strong className='px-10 text-lg'>{message}</strong>
       <div>
         {type === 'done'
-          ? description.map(item => <p className='px-10 text-sm'>{item}</p>)
+          ? description.map((item, idx) => (
+              <p key={idx} className='px-10 text-sm'>
+                {item}
+              </p>
+            ))
           : null}
       </div>
       {type === 'notYet' ? (
