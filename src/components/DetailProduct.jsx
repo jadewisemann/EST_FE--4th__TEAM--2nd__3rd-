@@ -1,9 +1,9 @@
-import Button from './Button';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const DetailProduct = ({ detailProducts }) => {
+import Button from './Button';
+
+const DetailProduct = ({ detailProducts, rooms }) => {
   const navigate = useNavigate();
-  const { hotelId } = useParams();
 
   return (
     <ul>
@@ -68,7 +68,7 @@ const DetailProduct = ({ detailProducts }) => {
                 color='prime'
                 size='full'
                 onClick={() => {
-                  navigate(`/checkout/${hotelId}/${index}`);
+                  navigate(`/checkout/${rooms[index].room_uid}`);
                 }}
               >
                 예약

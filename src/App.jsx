@@ -39,7 +39,8 @@ const App = () => (
     <Routes>
       <Route path='/' element={<MainPage />} />
       <Route path='/details/:hotelId' element={<DetailsPage />} />
-      <Route path='/checkout/:hotelId/:index' element={<CheckoutPage />} />
+      <Route path='/checkout/:roomId' element={<CheckoutPage />} />
+      <Route path='/order-confirm' element={<OrderConfirm />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/payment' element={<PaymentPage />} />
       <Route path='/search' element={<SearchPage />} />
@@ -47,7 +48,6 @@ const App = () => (
       <Route path='/signup' element={<SignupPage />} />
       <Route path='/userinfo' element={<UserInfoPage />} />
       <Route path='/wishlist' element={<WishlistPage />} />
-      <Route path='/order-confirm' element={<OrderConfirm />} />
       <Route path='/reservationdetail' element={<ReservationDetailPage />} />
       <Route path='/*' element={<NotFoundPage />} />
       <Route path='/test' element={<TestPage />} />

@@ -15,6 +15,10 @@
   @apply bg-violet-600;
 }
 
+.bottom-fixed {
+  @apply shadow-top fixed bottom-0 left-0 w-full items-center justify-center bg-white p-6;
+}
+
 @layer utilities {
   .container {
     padding: 72px 20px 120px;
