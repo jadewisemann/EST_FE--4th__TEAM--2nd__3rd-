@@ -111,7 +111,7 @@ export default {
             position: 'before',
           },
           {
-            pattern: './store/**',
+            pattern: '{./store/**,../store/**,../../store/**}',
             group: 'internal',
             position: 'before',
           },
