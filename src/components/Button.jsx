@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import Icon from './Icon';
 
 const Button = ({
@@ -39,7 +40,7 @@ const Button = ({
   };
 
   const sizes = {
-    full: 'rounded-xl w-full h-12.5 py-3 px-4 text-base ',
+    full: `${color === 'invert' || color === 'line' ? 'rounded-3xl' : 'rounded-xl'} w-full h-12.5 py-3 px-4 text-base `,
     square: 'rounded-sm w-12 h-12 flex items-center justify-center',
     small: 'rounded-md py-2 px-4 w-fit text-sm',
     xSmall: 'rounded-md py-1.5 px-4 w-fit text-sm',
