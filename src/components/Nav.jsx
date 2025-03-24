@@ -96,7 +96,7 @@ const Nav = () => {
         {navMenus.map((item, idx) => (
           <button
             key={idx}
-            className='flex w-full flex-col items-center py-5'
+            className='flex w-full cursor-pointer flex-col items-center py-5'
             onClick={() => {
               setActiveNavMenu(idx);
               navigate(item.path);
