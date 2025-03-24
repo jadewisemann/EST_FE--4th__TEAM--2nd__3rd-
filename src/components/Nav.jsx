@@ -104,7 +104,7 @@ const Nav = () => {
                 navigate('/result', {
                   state: {
                     hotelIds: [],
-                    name: '',
+                    name: '모텔',
                     fromToDate: selectedDate,
                     totalNights: nightCount,
                   },
