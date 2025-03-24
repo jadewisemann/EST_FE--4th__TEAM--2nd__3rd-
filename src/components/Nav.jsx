@@ -99,19 +99,7 @@ const Nav = () => {
             className='flex w-full flex-col items-center py-5'
             onClick={() => {
               setActiveNavMenu(idx);
-
-              if (item.path === '/result') {
-                navigate('/result', {
-                  state: {
-                    hotelIds: [],
-                    name: '모텔',
-                    fromToDate: selectedDate,
-                    totalNights: nightCount,
-                  },
-                });
-              } else {
-                navigate(item.path);
-              }
+              navigate(item.path);
             }}
           >
             <Icon
