@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import useAuthStore from '../../store/authStore';
-import useToastStore from '../../store/useToastStore';
+import useToastStore from '../../store/toastStore';
 
 const SearchPasswordPage = () => {
   const navigate = useNavigate();
