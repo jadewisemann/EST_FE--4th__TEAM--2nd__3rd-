@@ -2,15 +2,17 @@ import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import useAuthStore from '../../store/authStore';
+import useToastStore from '../../store/toastStore';
+
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
-import useAuthStore from '../../store/authStore';
-import useToastStore from '../../store/toastStore';
 
 const SearchPasswordPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
   const { resetPassword } = useAuthStore();
   const { showToast } = useToastStore();
 
@@ -19,10 +21,9 @@ const SearchPasswordPage = () => {
       await resetPassword(email);
       showToast('비밀번호 재설정 메일이 전송되었습니다');
       setEmail('');
+      setIsEmailValid(false);
     } catch (error) {
-      if (!email) {
-        showToast('이메일을 입력해주세요');
-      } else if (error.message.includes('auth/user-not-found')) {
+      if (error.message.includes('auth/user-not-found')) {
         showToast('등록되지 않은 이메일입니다');
       } else if (error.message.includes('auth/invalid-email')) {
         showToast('올바른 이메일 형식이 아닙니다');
@@ -51,23 +52,32 @@ const SearchPasswordPage = () => {
           비밀번호를 잊어버리셨다면 <br />
           비밀번호를 복구하세요!
         </div>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            handleSearchPw();
+          }}
+        >
+          {/* 인풋 */}
+          <Input
+            className='mb-6'
+            inputType='email'
+            value={email}
+            onChange={setEmail}
+            onValidChange={setIsEmailValid}
+          />
 
-        {/* 인풋 */}
-        <Input
-          className='mb-6'
-          inputType='email'
-          value={email}
-          onChange={setEmail}
-        />
-
-        {/*  버튼 */}
-
-        <Button
-          color='prime'
-          size='full'
-          onClick={handleSearchPw}
-          content='확인'
-        />
+          {/*  버튼 */}
+          <Button
+            color='prime'
+            size='full'
+            type='submit'
+            onClick={handleSearchPw}
+            content='확인'
+            childrenClassName='font-bold'
+            disabled={!isEmailValid}
+          />
+        </form>
       </div>
     </div>
   );
