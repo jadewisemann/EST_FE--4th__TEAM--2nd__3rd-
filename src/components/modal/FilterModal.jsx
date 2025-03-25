@@ -1,7 +1,7 @@
 import Icon from '../Icon';
+import SubHeader from '../SubHeader';
 
 import Modal from './Modal';
-import SubHeader from './SubHeader';
 
 const filterList = ['낮은 요금순', '높은 요금순', '평점순'];
 
