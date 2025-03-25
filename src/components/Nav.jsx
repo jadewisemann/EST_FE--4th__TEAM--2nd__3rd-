@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+import useAuthStore from '../store/authStore';
+
 import Icon from './Icon';
 
 const Nav = () => {
-  const [navMenus] = useState([
+  const navMenus = [
     { name: 'home', size: '18', path: '/' },
     { name: 'search', size: '18', path: '/result' },
     { name: 'heart', size: '16', path: '/wishlist' },
     { name: 'user', size: '16', path: '/userinfo' },
-  ]);
+  ];
   const [show, setShow] = useState(true);
-
+  const { user } = useAuthStore();
   //스크롤이벤트
   const handleScroll = () => {
     const scrollTop = window.scrollY;
@@ -52,7 +54,13 @@ const Nav = () => {
       {navMenus.map(item => (
         <NavLink
           key={item.path}
-          to={item.path}
+          to={
+            item.path === '/userinfo'
+              ? user
+                ? '/profile'
+                : '/login'
+              : item.path
+          }
           className='flex w-full flex-col items-center py-5'
         >
           {({ isActive }) => (
