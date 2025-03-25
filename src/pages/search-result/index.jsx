@@ -10,6 +10,7 @@ import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
 
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
+import FilterModal from '../../components/modal/FilterModal';
 import SearchModal from '../../components/modal/SearchModal';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
@@ -45,6 +46,14 @@ const StayListpage = () => {
   const [incrementView] = useState(7);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  //필터관련
+  const [selectedFilter, setSelectedFilter] = useState('낮은 요금순');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const handleFilterConfirm = value => {
+    setSelectedFilter(value);
+    setIsFilterOpen(false);
+  };
 
   //navigate에서 받아온 state가 있으면 전역상태로 저장main, nav 등에서 넘김
   useEffect(() => {
@@ -209,6 +218,8 @@ const StayListpage = () => {
         categories={categories}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        setIsFilterOpen={setIsFilterOpen}
+        selectedFilter={selectedFilter}
       >
         <VerticalList
           products={visibleProducts}
@@ -229,9 +240,15 @@ const StayListpage = () => {
           </Button>
         )}
       </Tab>
-
       <Nav />
       <SearchModal />
+      <FilterModal
+        isOpen={isFilterOpen}
+        title='정렬 기준'
+        onClose={() => setIsFilterOpen(false)}
+        onConfirm={value => setSelectedFilter(value)}
+        selected={selectedFilter}
+      />
     </>
   );
 };
