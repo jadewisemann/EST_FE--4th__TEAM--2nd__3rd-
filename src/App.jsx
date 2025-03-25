@@ -19,7 +19,8 @@ import {
   TestPage,
   SearchPasswordPage,
 } from './pages';
-// @Testpage
+// @ test page
+import LoginTestPage from './pages/@test/LoginTestPage';
 import ModalTestPage from './pages/@test/ModalTestPage';
 import ReservationTestPage from './pages/@test/ReservationTestPage';
 import SearchTestPage from './pages/@test/SearchTestPage';
@@ -59,6 +60,7 @@ const App = () => (
       <Route path='/test/search' element={<SearchTestPage />} />
       <Route path='/test/modal' element={<ModalTestPage />} />
       <Route path='/test/reservation' element={<ReservationTestPage />} />
+      <Route path='/test/login' element={<LoginTestPage />} />
     </Routes>
   </>
 );
