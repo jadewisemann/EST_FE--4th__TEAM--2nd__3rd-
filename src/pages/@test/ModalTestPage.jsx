@@ -1,5 +1,6 @@
-import Button from '../../components/Button';
 import useModalStore from '../../store/modalStore';
+
+import Button from '../../components/Button';
 
 const ModalTestPage = () => {
   // 모달 상태

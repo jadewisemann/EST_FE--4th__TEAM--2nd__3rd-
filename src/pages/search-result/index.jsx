@@ -2,16 +2,18 @@ import { useState, useEffect } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import useAppDataStore from '../../store/appDataStore';
+import useModalStore from '../../store/modalStore';
+import useSearchStore from '../../store/searchStore';
+
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import SearchModal from '../../components/modal/SearchModal';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
-import useAppDataStore from '../../store/appDataStore';
-import useModalStore from '../../store/modalStore';
-import useSearchStore from '../../store/searchStore';
 
 const StayListpage = () => {
   const location = useLocation();

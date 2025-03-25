@@ -1,11 +1,12 @@
-// React
 import { useState } from 'react';
-// Component
-import Modal from './Modal';
-import SubHeader from '../SubHeader';
-import Input from '../Input';
-import Button from '../Button';
+
 import useModalStore from '../../store/modalStore';
+
+import Button from '../Button';
+import Input from '../Input';
+import SubHeader from '../SubHeader';
+
+import Modal from './Modal';
 
 const PasswordChangeModal = () => {
   // 전역 상태
