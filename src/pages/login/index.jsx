@@ -1,23 +1,26 @@
-// React
+// React import
 import { useState } from 'react';
 
-// Library
+// Library import
 import { useNavigate } from 'react-router-dom';
 
-// Store
+// Store import
 import useAuthStore from '../../store/authStore';
 import useToastStore from '../../store/toastStore';
 
-// Component
-import Icon from '../../components/Icon';
-import Input from '../../components/Input';
 import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
+import Icon from '../../components/Icon';
+import Input from '../../components/Input';
+
+// Component import
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const { googleLogin, login } = useAuthStore();
   const { showToast } = useToastStore();
 
@@ -30,6 +33,7 @@ const LoginPage = () => {
       handleAuthError(error);
     }
   };
+
   // 구글 로그인
   const handleGoogleLogin = async () => {
     try {
@@ -46,13 +50,14 @@ const LoginPage = () => {
       showToast('올바른 이메일을 입력해주세요');
       setEmail('');
       setPassword('');
+      setIsEmailValid(false);
+      setIsPasswordValid(false);
     } else if (error.message.includes('auth/popup-closed-by-user')) {
       showToast('');
-    } else if (password === '') {
-      showToast('비밀번호를 입력해주세요');
     } else if (error.message.includes('auth/invalid-credential')) {
       showToast('존재하지 않는 회원 정보입니다.');
       setPassword('');
+      setIsPasswordValid(false);
     } else if (error.message.includes('auth/too-many-requests')) {
       showToast('로그인 시도가 너무 많습니다. 나중에 다시 시도해주세요.');
     } else {
@@ -64,7 +69,6 @@ const LoginPage = () => {
     <div className='flex h-screen flex-col justify-between'>
       <div className='flex flex-col px-5 pt-16 pb-10'>
         {/* 뒤로가기 */}
-
         <button
           onClick={() => {
             navigate(-1);
@@ -82,27 +86,42 @@ const LoginPage = () => {
             받아 보세요!
           </p>
         </div>
-        <form className='mb-6 flex flex-col gap-5'>
+        <form
+          className='flex flex-col gap-5'
+          onSubmit={e => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           {/* 인풋 */}
-          <Input inputType='email' value={email} onChange={setEmail} />
-          <Input inputType='password' value={password} onChange={setPassword} />
-        </form>
+          <Input
+            inputType='email'
+            value={email}
+            onChange={setEmail}
+            onValidChange={setIsEmailValid}
+          />
+          <Input
+            inputType='password'
+            value={password}
+            onChange={setPassword}
+            onValidChange={setIsPasswordValid}
+          />
 
-        {/* 앵커 */}
-        <div className='mb-3'>
+          {/* 앵커 */}
           <Anchor type='searchpassword' />
-        </div>
 
-        {/* 로그인 버튼 */}
-
-        <Button
-          color='prime'
-          size='full'
-          className='mb-7'
-          onClick={handleLogin}
-          content='로그인'
-          childrenClassName='font-bold'
-        />
+          {/* 로그인 버튼 */}
+          <Button
+            color='prime'
+            size='full'
+            className='mb-7'
+            type='submit'
+            onClick={handleLogin}
+            content='로그인'
+            childrenClassName='font-bold'
+            disabled={!isEmailValid || !isPasswordValid}
+          />
+        </form>
         {/* 구글 로그인 */}
         <div className='border-t-1 border-neutral-300 pt-7'>
           <Button

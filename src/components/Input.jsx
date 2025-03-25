@@ -131,7 +131,7 @@ const Input = ({
         {value !== 0 && value && (
           <button
             type='button'
-            className='absolute right-5'
+            className='absolute right-5 cursor-pointer'
             onClick={() => {
               onChange('');
               onValidChange(false);
