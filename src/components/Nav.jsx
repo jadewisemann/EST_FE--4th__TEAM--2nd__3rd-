@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import Icon from './Icon';
 
@@ -8,43 +8,10 @@ const Nav = () => {
   const [navMenus] = useState([
     { name: 'home', size: '18', path: '/' },
     { name: 'search', size: '18', path: '/result' },
-    { name: 'heart', size: '16', path: '/heart' },
-    { name: 'user', size: '16', path: '/user' },
+    { name: 'heart', size: '16', path: '/wishlist' },
+    { name: 'user', size: '16', path: '/userinfo' },
   ]);
-  const [activeNavMenu, setActiveNavMenu] = useState(0); //선택된 메뉴
   const [show, setShow] = useState(true);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [selectedDate, setSelectedDate] = useState('');
-  const [nightCount, setNightCount] = useState('');
-
-  //몇박인지 계산
-  const getNights = (start, end) => {
-    const diff = new Date(end) - new Date(start);
-    const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return `${nights}박`;
-  };
-  //오늘 ~ 내일 날짜 셋팅
-  const weekday = ['일', '월', '화', '수', '목', '금', '토'];
-  const getFormattedDateRange = () => {
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
-    const formet = date => {
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const dayOfWeek = weekday[date.getDay()];
-      return `${month}월 ${day}일 (${dayOfWeek})`;
-    };
-    setNightCount(getNights(today, tomorrow));
-    return `${formet(today)} ~ ${formet(tomorrow)}`;
-  };
-
-  useEffect(() => {
-    const dateRange = getFormattedDateRange();
-    setSelectedDate(dateRange);
-  }, []);
 
   //스크롤이벤트
   const handleScroll = () => {
@@ -71,16 +38,6 @@ const Nav = () => {
   };
 
   useEffect(() => {
-    // 경로가 변경될 때 activeNavMenu 업데이트 (네비게이션 유지)
-    const currentIdx = navMenus.findIndex(
-      menu => menu.path === location.pathname,
-    );
-    if (currentIdx !== -1) {
-      setActiveNavMenu(currentIdx);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
     // handleScroll(); //페이지 로드 시에도 실행하여 스크롤이 없을 때 네비바를 보이게 처리
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -89,28 +46,25 @@ const Nav = () => {
   }, []);
 
   return (
-    <>
-      <div
-        className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} `}
-      >
-        {navMenus.map((item, idx) => (
-          <button
-            key={idx}
-            className='flex w-full cursor-pointer flex-col items-center py-5'
-            onClick={() => {
-              setActiveNavMenu(idx);
-              navigate(item.path);
-            }}
-          >
+    <div
+      className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${show ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} `}
+    >
+      {navMenus.map(item => (
+        <NavLink
+          key={item.path}
+          to={item.path}
+          className='flex w-full flex-col items-center py-5'
+        >
+          {({ isActive }) => (
             <Icon
               name={item.name}
               size={item.size}
-              color={`${activeNavMenu === idx ? '#8E51FF' : '#AEACAC'}`}
+              color={isActive ? '#8E51FF' : '#AEACAC'}
             />
-          </button>
-        ))}
-      </div>
-    </>
+          )}
+        </NavLink>
+      ))}
+    </div>
   );
 };
 
