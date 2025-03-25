@@ -53,7 +53,7 @@ const HorizontalList = ({ products }) => {
             </div>
           </button>
           <div className='absolute top-4 right-4'>
-            <Heart />
+            <Heart hotelId={product.id} />
           </div>
         </SwiperSlide>
       ))}
