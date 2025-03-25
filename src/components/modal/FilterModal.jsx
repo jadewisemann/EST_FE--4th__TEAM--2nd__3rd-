@@ -10,7 +10,7 @@ const FilterModal = ({ isOpen, title, onClose, onConfirm, selected }) => {
     if (onConfirm) onConfirm(value); // 부모에게 값 전달
     if (onClose) onClose(); // 모달 닫기
   };
-  console.log('필터 모달 열림 상태:', isOpen);
+
   return (
     <Modal isOpen={isOpen} isFull={false}>
       <SubHeader
