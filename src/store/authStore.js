@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import {
   listenAuthState,
   signUp,
@@ -18,7 +19,10 @@ const useAuthStore = create(set => {
     signUp: async (email, password) => {
       try {
         const userCredential = await signUp(email, password);
-        set({ user: userCredential.user, error: null });
+        set({
+          user: userCredential.user,
+          error: null,
+        });
       } catch (error) {
         set({ error: error.message });
         throw error;
@@ -28,7 +32,10 @@ const useAuthStore = create(set => {
     login: async (email, password) => {
       try {
         const userCredential = await login(email, password);
-        set({ user: userCredential.user, error: null });
+        set({
+          user: userCredential.user,
+          error: null,
+        });
       } catch (error) {
         set({ error: error });
         throw error;
