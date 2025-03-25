@@ -37,7 +37,7 @@ const useAuthStore = create(set => {
           error: null,
         });
       } catch (error) {
-        set({ error: error });
+        set({ error: error.message });
         throw error;
       }
     },

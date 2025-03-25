@@ -44,6 +44,7 @@ const SearchPasswordPage = () => {
           className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
         >
           <Icon name='arrow_left' color='black' />
+          <span className='sr-only'>뒤로가기</span>
         </button>
 
         {/* 페이지 정보 */}
