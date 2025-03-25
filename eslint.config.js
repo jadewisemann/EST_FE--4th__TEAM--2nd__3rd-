@@ -116,7 +116,7 @@ export default {
             position: 'before',
           },
           {
-            pattern: './contexts/**',
+            pattern: '{./context/**,../context/**,../../context/**}',
             group: 'internal',
             position: 'before',
           },
@@ -133,6 +133,12 @@ export default {
           // Hooks
           {
             pattern: './hooks/**',
+            group: 'internal',
+            position: 'before',
+          },
+          // Firebase
+          {
+            pattern: '{./firebase/**,../firebase/**,../../firebase/**}',
             group: 'internal',
             position: 'before',
           },
