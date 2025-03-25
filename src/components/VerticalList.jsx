@@ -24,7 +24,7 @@ const VerticalList = ({ products }) => {
               ? product.rooms?.[0].price.replace(/,/g, '')
               : product.rooms?.[0]?.price,
           ) || 0;
-        const rating = product.rating || product._debug?.score || 0;
+        const rating = product.rating || 0;
 
         return (
           <div
