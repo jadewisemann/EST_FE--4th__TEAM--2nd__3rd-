@@ -63,7 +63,7 @@ const VerticalList = ({ products }) => {
                 </div>
               </div>
             </Link>
-            <Heart className='absolute right-0 bottom-4 z-10' />
+            <Heart className='absolute right-0 bottom-4' />
           </div>
         );
       })}
