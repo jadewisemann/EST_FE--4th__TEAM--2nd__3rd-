@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
 
+import useAppDataStore from '../../store/appDataStore';
+import useAuthStore from '../../store/authStore';
+import useModalStore from '../../store/modalStore';
+import useSearchStore from '../../store/searchStore';
+
+import { searchHotelsAdvanced } from '../../firebase/search';
+
 import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
@@ -9,37 +16,23 @@ import Input from '../../components/Input';
 import DateModal from '../../components/modal/DateModal';
 import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
-import { searchHotelsAdvanced } from '../../firebase/search';
-import useAppDataStore from '../../store/appDataStore';
-import useAuthStore from '../../store/authStore';
-import useDateStore from '../../store/dateStore';
-import useModalStore from '../../store/modalStore';
-import useSearchStore from '../../store/searchStore';
 
 const MainPage = () => {
   const { user } = useAuthStore();
-  const { date, updateDates } = useDateStore();
   const { setSearchState } = useSearchStore();
+  const { dates, guests } = useAppDataStore();
   const { modals, openDateModal, openGuestModal } = useModalStore();
-  const { guests } = useAppDataStore();
+
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
-  const [selectedTotalGuests, setSelectedTotalGuests] = useState('');
-  const navigate = useNavigate();
-  const fromToDate = `${date.startDate} ~ ${date.endDate}`;
-  const totalNights = `${date.duration}박`;
-  const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
 
-  useEffect(() => {
-    if (!selectedTotalGuests) {
-      const { rooms, adults, children, infants } = guests;
-      setSelectedTotalGuests(
-        `객실 ${rooms}개 성인${adults}명 아동 ${children}명 유아${infants}명`,
-      );
-    }
-  }, [guests, selectedTotalGuests]);
+  const navigate = useNavigate();
+
+  const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
+  const totalNights = `${dates.duration}박`;
+  const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
 
   //검색 데이터 가져오기
   const handleSearch = async e => {
@@ -56,7 +49,7 @@ const MainPage = () => {
         selectedCategory: searchText,
         fromToDate: fromToDate,
         totalNights: totalNights,
-        numOfPeople: selectedTotalGuests,
+        numOfPeople: guests,
       });
       navigate('/result');
     } catch (error) {
@@ -106,7 +99,7 @@ const MainPage = () => {
         selectedCategory: categoryLabel,
         fromToDate: fromToDate,
         totalNights: totalNights,
-        numOfPeople: selectedTotalGuests,
+        numOfPeople: guests,
       });
       navigate('/result');
     } catch (error) {
@@ -176,7 +169,7 @@ const MainPage = () => {
       selectedCategory: categoryLabel,
       fromToDate: fromToDate,
       totalNights: totalNights,
-      numOfPeople: selectedTotalGuests,
+      numOfPeople: guests,
     });
     navigate('/result');
   };
@@ -212,12 +205,7 @@ const MainPage = () => {
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
-                onClick={() =>
-                  openDateModal(selected => {
-                    console.log('선택된 날짜: ', selected);
-                    updateDates(selected);
-                  })
-                }
+                onClick={openDateModal}
               >
                 <Icon name='calendar' />
                 {fromToDate}
@@ -228,18 +216,10 @@ const MainPage = () => {
                 className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
-                onClick={() => {
-                  openGuestModal(selected => {
-                    console.log(selected);
-                    const { rooms, adults, children, infants } = selected;
-                    setSelectedTotalGuests(
-                      `객실 ${rooms}개 성인${adults}명 아동 ${children}명 유아${infants}명`,
-                    );
-                  });
-                }}
+                onClick={openGuestModal}
               >
                 <Icon name='user' />
-                {selectedTotalGuests}
+                {`객실 ${guests.rooms}개 성인${guests.adults}명 아동 ${guests.children}명 유아${guests.infants}명`}
               </Button>
             </div>
             <Button
