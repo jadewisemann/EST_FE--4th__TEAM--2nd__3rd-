@@ -9,8 +9,8 @@ import useSearchStore from '../../store/searchStore';
 import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
 
 import Button from '../../components/Button';
-import FilterModal from '../../components/Filter';
 import Icon from '../../components/Icon';
+import FilterModal from '../../components/modal/FilterModal';
 import SearchModal from '../../components/modal/SearchModal';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
@@ -23,7 +23,7 @@ const StayListpage = () => {
     useSearchStore();
   //모달
   const { dates, guests } = useAppDataStore(); //  전역 날짜 & 스크롤 위치
-  const { openSearchModal, openFilterModal } = useModalStore();
+  const { openSearchModal } = useModalStore();
   const [isLoading, setIsLoading] = useState(false);
   //탭
   const [activeTab, setActiveTab] = useState(0);
