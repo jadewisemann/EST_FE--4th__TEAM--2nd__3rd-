@@ -1,24 +1,20 @@
-// React
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-// Store
-import useModalStore from '../../store/modalStore';
 import useAppDataStore from '../../store/appDataStore';
+import useModalStore from '../../store/modalStore';
 
-// Component
-import Modal from './Modal';
-import SubHeader from '../SubHeader';
 import Calendar from '../Calendar';
 import FooterButton from '../FooterButton';
+import SubHeader from '../SubHeader';
+
+import Modal from './Modal';
 
 const DateModal = () => {
   // 모달 상태
   const { modals, closeDateModal } = useModalStore();
   const { isOpen, onConfirm } = modals.date;
-
   //  전역 날짜 & 스크롤 위치
   const { dates, updateDates } = useAppDataStore();
-
   // 로컬 날짜 상태
   const [selectedDates, setSelectedDates] = useState({
     startDate: dates.startDate || null,
@@ -35,22 +31,25 @@ const DateModal = () => {
     }
   }, [isOpen, dates]);
 
-  // 핸들러
+  // 핸들러/메모이제이션된 날짜 변경 핸들러
   const handleCalendarDateChange = useCallback(newDates => {
     setSelectedDates(newDates);
   }, []);
 
-  const handleConfirm = () => {
+  // 핸들러/메모이제이션된 확인 버튼 핸들러
+  const handleConfirm = useCallback(() => {
     // 중앙 스토어에 업데이트
     updateDates(selectedDates);
-
     // prop으로 받은 콜백 실행
     if (onConfirm && typeof onConfirm === 'function') {
       onConfirm(selectedDates);
     }
-
     closeDateModal();
-  };
+  }, [selectedDates, updateDates, onConfirm, closeDateModal]);
+
+  // 날짜가 선택되었는지 확인하는 조건
+  const isDateSelectionComplete =
+    selectedDates.startDate && selectedDates.endDate;
 
   return (
     <Modal isOpen={isOpen} isFull={true}>
@@ -68,7 +67,7 @@ const DateModal = () => {
         </div>
         <FooterButton
           onClick={handleConfirm}
-          disabled={!selectedDates.startDate || !selectedDates.endDate}
+          disabled={!isDateSelectionComplete}
           className='w-full'
           name='확인'
         />
@@ -76,5 +75,4 @@ const DateModal = () => {
     </Modal>
   );
 };
-
 export default DateModal;
