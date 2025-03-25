@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import Badge from './Badge';
 import Heart from './Heart';
 import Icon from './Icon';
 import Rating from './Rating';
@@ -32,7 +31,6 @@ const HorizontalList = ({ products }) => {
             />
             <div className='mt-2'>
               <div className='flex items-center'>
-                {/* <Badge type='sale'>{product.discount}</Badge> */}
                 <h2 className='my-1.5 overflow-hidden text-left text-sm text-ellipsis whitespace-nowrap'>
                   {product.name}
                 </h2>
@@ -52,9 +50,7 @@ const HorizontalList = ({ products }) => {
               </div>
             </div>
           </button>
-          <div className='absolute top-4 right-4'>
-            <Heart hotelId={product.id} />
-          </div>
+          <Heart className={'absolute top-4 right-4'} hotelId={product.id} />
         </SwiperSlide>
       ))}
     </Swiper>
