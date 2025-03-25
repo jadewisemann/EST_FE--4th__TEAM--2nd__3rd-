@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import useAppDataStore from '../../store/appDataStore';
+import useModalStore from '../../store/modalStore';
+import useSearchStore from '../../store/searchStore';
+
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+
 import Button from '../../components/Button';
+import FilterModal from '../../components/Filter';
 import Icon from '../../components/Icon';
 import SearchModal from '../../components/modal/SearchModal';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
-import useAppDataStore from '../../store/appDataStore';
-import useModalStore from '../../store/modalStore';
-import useSearchStore from '../../store/searchStore';
 
 const StayListpage = () => {
   const location = useLocation();
@@ -20,7 +23,7 @@ const StayListpage = () => {
     useSearchStore();
   //모달
   const { dates, guests } = useAppDataStore(); //  전역 날짜 & 스크롤 위치
-  const { openSearchModal } = useModalStore();
+  const { openSearchModal, openFilterModal } = useModalStore();
   const [isLoading, setIsLoading] = useState(false);
   //탭
   const [activeTab, setActiveTab] = useState(0);
@@ -43,6 +46,14 @@ const StayListpage = () => {
   const [incrementView] = useState(7);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  //필터관련
+  const [selectedFilter, setSelectedFilter] = useState('낮은 요금순');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const handleFilterConfirm = value => {
+    setSelectedFilter(value);
+    setIsFilterOpen(false);
+  };
 
   //navigate에서 받아온 state가 있으면 전역상태로 저장main, nav 등에서 넘김
   useEffect(() => {
@@ -207,6 +218,8 @@ const StayListpage = () => {
         categories={categories}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        setIsFilterOpen={setIsFilterOpen}
+        selectedFilter={selectedFilter}
       >
         <VerticalList
           products={visibleProducts}
@@ -227,9 +240,15 @@ const StayListpage = () => {
           </Button>
         )}
       </Tab>
-
       <Nav />
       <SearchModal />
+      <FilterModal
+        isOpen={isFilterOpen}
+        title='정렬 기준'
+        onClose={() => setIsFilterOpen(false)}
+        onConfirm={value => setSelectedFilter(value)}
+        selected={selectedFilter}
+      />
     </>
   );
 };
