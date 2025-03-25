@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Anchor = ({ type, children }) => {
+const Anchor = ({ type, children, className }) => {
   const getLabel = () => {
     switch (type) {
       case 'searchpassword':
@@ -21,7 +21,7 @@ const Anchor = ({ type, children }) => {
             ? '/signup'
             : `/${type}`
       }
-      className={`font-inter text-base text-violet-600 underline underline-offset-4 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} hover:opacity-70`}
+      className={`font-inter text-base text-violet-600 underline underline-offset-4 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} ${className} hover:opacity-70`}
     >
       {getLabel()}
     </Link>
