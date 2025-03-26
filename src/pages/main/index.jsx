@@ -29,12 +29,29 @@ const MainPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [recommendedHotels, setRecommendedHotels] = useState([]);
   const [allRecommendedHotels, setAllRecommendedHotels] = useState([]);
+  const [backgroundImage, setBackgroundImage] = useState('');
 
   const navigate = useNavigate();
 
   const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
   const totalNights = `${dates.duration}박`;
   const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
+
+  // 백그라운드 이미지
+  useEffect(() => {
+    const hotelImages = [
+      '/src/assets/img/bg-main-01.png',
+      '/src/assets/img/bg-main-02.png',
+      '/src/assets/img/bg-main-03.png',
+      '/src/assets/img/bg-main-04.png',
+      '/src/assets/img/bg-main-05.png',
+      '/src/assets/img/bg-main-06.png',
+      '/src/assets/img/bg-main-07.png',
+    ];
+    const randomImage =
+      hotelImages[Math.floor(Math.random() * hotelImages.length)];
+    setBackgroundImage(randomImage);
+  }, []);
 
   //검색 데이터 가져오기
   const handleSearch = async e => {
@@ -178,11 +195,18 @@ const MainPage = () => {
 
   return (
     <>
-      <button type='button' onClick={() => toggleDarkMode()}>
-        다크모드
+      <button
+        type='button'
+        className='absolute top-4 right-4 cursor-pointer bg-violet-600'
+        onClick={() => toggleDarkMode()}
+      >
+        <strong className='text-white'>다크모드</strong>
       </button>
-      <div className='flex h-screen flex-col justify-between bg-[url(https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)]'>
-        <div className='flex flex-col px-5 pt-16 pb-10'>
+      <div
+        className='bg-no-repeat'
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className='px-5 pt-16 pb-10'>
           <div className='flex flex-col items-center text-xl text-white'>
             <Link to={user ? '/profile' : '/login'}>
               <strong className='underline'>
@@ -195,11 +219,10 @@ const MainPage = () => {
             </Link>
             <strong>환영합니다.</strong>
           </div>
-          <form action='' method='get' onSubmit={handleSearch}>
-            <div className='flex flex-col gap-3'>
+          <form onSubmit={handleSearch}>
+            <div className='mt-5 flex flex-col gap-3'>
               <Input
                 inputType='search'
-                label='search'
                 value={searchText}
                 onChange={setSearchText}
                 placeholder={'숙박명 검색'}
@@ -207,7 +230,7 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openDateModal}
@@ -218,13 +241,13 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 px-5 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openGuestModal}
               >
                 <Icon name='user' />
-                {`객실 ${guests.rooms}개 성인${guests.adults}명 아동 ${guests.children}명 유아${guests.infants}명`}
+                {`객실${guests.rooms}개 성인${guests.adults}명 아동${guests.children}명 유아${guests.infants}명`}
               </Button>
             </div>
             <Button
