@@ -48,7 +48,6 @@ const LoginPage = () => {
 
   // 토스트 에러 메시지
   const handleAuthError = error => {
-    console.log('몇번 나오려나');
     if (error.message.includes('auth/invalid-email')) {
       showToast('올바른 이메일을 입력해주세요');
       setEmail('');
@@ -69,8 +68,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col justify-between'>
-      <div className='flex flex-col px-5 pt-16 pb-10'>
+    <div className='flex h-screen flex-col'>
+      <div className='flex flex-col px-6 pt-4 pb-10'>
         {/* 뒤로가기 */}
         <button
           onClick={() => navigate(from, { replace: true })}
@@ -81,7 +80,7 @@ const LoginPage = () => {
         </button>
 
         {/* 페이지 정보 */}
-        <div className='mb-7 flex flex-col gap-5'>
+        <div className='mb-10 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
           <p>
             지금 로그인하여 추가 할인 정보를 <br />
@@ -89,39 +88,41 @@ const LoginPage = () => {
           </p>
         </div>
         <form
-          className='flex flex-col gap-5'
           onSubmit={e => {
             e.preventDefault();
             handleLogin();
           }}
         >
-          {/* 인풋 */}
-          <Input
-            inputType='email'
-            value={email}
-            onChange={setEmail}
-            onValidChange={setIsEmailValid}
-          />
-          <Input
-            inputType='password'
-            value={password}
-            onChange={setPassword}
-            onValidChange={setIsPasswordValid}
-          />
+          <div className='mb-6 flex flex-col gap-5'>
+            {/* 인풋 */}
+            <Input
+              inputType='email'
+              value={email}
+              onChange={setEmail}
+              onValidChange={setIsEmailValid}
+            />
+            <Input
+              inputType='password'
+              value={password}
+              onChange={setPassword}
+              onValidChange={setIsPasswordValid}
+            />
+          </div>
 
           {/* 앵커 */}
-          <Anchor type='searchpassword' />
+          <div className='mb-7 flex flex-col gap-7'>
+            <Anchor type='searchpassword' />
 
-          {/* 로그인 버튼 */}
-          <Button
-            color='prime'
-            size='full'
-            className='mb-7'
-            type='submit'
-            content='로그인'
-            childrenClassName='font-bold'
-            disabled={!isEmailValid || !isPasswordValid}
-          />
+            {/* 로그인 버튼 */}
+            <Button
+              color='prime'
+              size='full'
+              type='submit'
+              content='로그인'
+              childrenClassName='font-bold'
+              disabled={!isEmailValid || !isPasswordValid}
+            />
+          </div>
         </form>
         {/* 구글 로그인 */}
         <div className='border-t-1 border-neutral-300 pt-7'>

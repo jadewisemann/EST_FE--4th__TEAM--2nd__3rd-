@@ -47,8 +47,8 @@ const SignupPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col justify-between'>
-      <div className='flex flex-col px-5 pt-16 pb-10'>
+    <div className='flex h-screen flex-col'>
+      <div className='flex flex-col px-6 pt-4 pb-10'>
         {/* 뒤로가기 */}
         <button
           onClick={() => {
@@ -61,7 +61,7 @@ const SignupPage = () => {
         </button>
 
         {/* 페이지 정보 */}
-        <div className='mb-7 flex flex-col gap-5'>
+        <div className='mb-10 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>회원가입</h2>
           숙박 예약 기능을 사용하려면 <br />
           계정을 만드세요!

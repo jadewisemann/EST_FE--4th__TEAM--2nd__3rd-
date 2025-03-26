@@ -34,8 +34,8 @@ const SearchPasswordPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col justify-between'>
-      <div className='flex flex-col px-5 pt-16 pb-10'>
+    <div className='flex h-screen flex-col'>
+      <div className='flex flex-col px-6 pt-4 pb-10'>
         {/* 뒤로가기 */}
         <button
           onClick={() => {
@@ -48,7 +48,7 @@ const SearchPasswordPage = () => {
         </button>
 
         {/* 페이지 정보 */}
-        <div className='mb-7 flex flex-col gap-5'>
+        <div className='mb-10 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>비밀번호 찾기</h2>
           비밀번호를 잊어버리셨다면 <br />
           비밀번호를 복구하세요!
