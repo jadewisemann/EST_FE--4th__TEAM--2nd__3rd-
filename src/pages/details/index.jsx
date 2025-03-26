@@ -9,18 +9,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useAppDataStore from '../../store/appDataStore';
 
 // pageComponent
+import DetailProduct from './components/DetailProduct';
 import ShareBtn from './components/ShareBtn';
 
 // component
+import { getHotelById } from '../../firebase/search';
+
 import Button from '../../components/Button';
-import DetailProduct from '../../components/DetailProduct';
 import DetailSection from '../../components/DetailSection';
 import Icon from '../../components/Icon';
 import Nav from '../../components/Nav';
 import Rating from '../../components/Rating';
 import SubHeader from '../../components/SubHeader';
 // data
-import { getHotelById } from '../../firebase/search';
 
 const DetailsPage = () => {
   // page 사용 데이터(호텔 데이터)
