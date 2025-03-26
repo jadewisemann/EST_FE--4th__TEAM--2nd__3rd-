@@ -39,7 +39,7 @@ const typeConfig = {
     autoComplete: 'name',
   },
   tel: {
-    icon: 'lock',
+    icon: 'phone',
     type: 'tel',
     placeholder: '010-1234-5678',
     label: '휴대폰 번호',

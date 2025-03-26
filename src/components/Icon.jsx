@@ -1,3 +1,5 @@
+import { BsFillDoorOpenFill } from 'react-icons/bs';
+import { CiLock, CiCalendar, CiSearch } from 'react-icons/ci';
 import {
   FaHeart,
   FaRegHeart,
@@ -12,7 +14,6 @@ import {
   FaSmoking,
   FaCheck,
 } from 'react-icons/fa';
-
 import {
   FaChildReaching,
   FaBanSmoking,
@@ -22,32 +23,24 @@ import {
   FaArrowLeftLong,
   FaArrowLeft,
 } from 'react-icons/fa6';
-
-import {
-  MdOutlinePerson,
-  MdAlternateEmail,
-  MdOutlineDining,
-  MdPerson,
-} from 'react-icons/md';
-
-import { CiLock, CiCalendar, CiSearch } from 'react-icons/ci';
-
-import { PiHouse } from 'react-icons/pi';
-
+import { FcGoogle } from 'react-icons/fc';
 import { IoIosWifi, IoIosFitness, IoIosArrowDown } from 'react-icons/io';
-
 import {
   IoClose,
   IoShareSocialOutline,
   IoBedSharp,
   IoLocationSharp,
 } from 'react-icons/io5';
-
-import { BsFillDoorOpenFill } from 'react-icons/bs';
 import { LuArrowDownUp } from 'react-icons/lu';
+import {
+  MdOutlinePerson,
+  MdAlternateEmail,
+  MdOutlineDining,
+  MdPerson,
+} from 'react-icons/md';
+import { MdPhoneIphone } from 'react-icons/md';
+import { PiHouse } from 'react-icons/pi';
 import { VscBlank } from 'react-icons/vsc';
-import { FcGoogle } from 'react-icons/fc';
-
 const Icon = ({
   name,
   size = 24,
@@ -66,6 +59,7 @@ const Icon = ({
     close: IoClose,
     sort: LuArrowDownUp,
     arrow_down: IoIosArrowDown,
+    phone: MdPhoneIphone,
     // calendar
     calendar: CiCalendar,
     arrow_right: FaArrowRight,
@@ -111,7 +105,7 @@ const Icon = ({
       color={color}
       className={`${className ? className : 'text-violet-600'}`}
       size={size}
-      style={{ strokeWidth: strokeWidth ? strokeWidth : '1' }}
+      style={{ strokeWidth: strokeWidth }}
     />
   );
 };
