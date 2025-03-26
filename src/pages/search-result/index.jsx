@@ -65,6 +65,7 @@ const StayListpage = () => {
   // activeTab, name, selectedCategory, 호텔 갯수 등을 기반으로 헤더 정보(nameText 등) 설정
   const fallbackSearch = '서울'; // 예비값 설정
   const searchKeyword = name || selectedCategory || fallbackSearch;
+
   useEffect(() => {
     // 현재 탭과 조건에 따라 헤더에 보여 줄 텍스트 생성
     const hotelCount = hotelIds.length;
@@ -141,6 +142,21 @@ const StayListpage = () => {
       setIsLoading(false);
     }
   };
+
+  // 필터(정렬 기준)에 따라 정렬 적용
+  useEffect(() => {
+    let sortedList = [...hotelList];
+    if (selectedFilter === '낮은 요금순') {
+      sortedList.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
+    } else if (selectedFilter === '높은 요금순') {
+      sortedList.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
+    } else if (selectedFilter === '평점순') {
+      sortedList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+    setVisibleProducts(
+      sortedList.slice(0, visibleProducts.length || initialView),
+    );
+  }, [selectedFilter, hotelList]);
 
   // 더보기 데이터 불러오기
   const handleViewMore = async () => {
