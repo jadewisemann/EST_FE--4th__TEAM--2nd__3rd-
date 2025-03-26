@@ -12,7 +12,7 @@ const DetailSection = ({
   return (
     <>
       <div className='text-m flex flex-col gap-2.5 font-bold'>
-        <h3>{title}</h3>
+        <h3 className='dark:text-neutral-50'>{title}</h3>
         <div>
           {type === 'list-left' &&
             contents.map((item, idx) => (
@@ -38,7 +38,9 @@ const DetailSection = ({
           {type === 'list-left-dot-title' &&
             contents.map((item, idx) => (
               <div key={idx}>
-                <h4 className='my-1 text-sm font-bold'>{item.subTitle}</h4>
+                <h4 className='my-1 text-sm font-bold dark:text-neutral-300'>
+                  {item.subTitle}
+                </h4>
                 <ul
                   key={idx}
                   className={`mb-2.5 list-disc ${size} ${color} ${weight}`}
@@ -60,7 +62,9 @@ const DetailSection = ({
               >
                 {Object.entries(item.labels).map(([key, label]) => (
                   <div key={key} className='flex items-start'>
-                    <div className='basis-1/5 text-neutral-500'>{label}</div>
+                    <div className='basis-1/5 text-neutral-500 dark:text-neutral-300'>
+                      {label}
+                    </div>
                     <div>
                       {Array.isArray(item[key])
                         ? item[key].map((line, subIdx) => (
@@ -81,15 +85,15 @@ const DetailSection = ({
               {contents.map((item, idx) => (
                 <div
                   key={idx}
-                  className='flex items-center justify-between text-sm font-normal text-neutral-500'
+                  className='flex items-center justify-between text-sm font-normal text-neutral-500 dark:text-neutral-300'
                 >
                   <div
-                    className={`${item.label === '최종 결제금액' ? 'text-base text-black' : ''}`}
+                    className={`${item.label === '최종 결제금액' ? 'text-base text-black dark:text-neutral-50' : ''}`}
                   >
                     {item.label}
                   </div>
                   <div
-                    className={`${item.label === '최종 결제금액' ? 'text-lg font-bold text-violet-600' : ''}`}
+                    className={`${item.label === '최종 결제금액' ? 'text-lg font-bold text-violet-600 dark:text-violet-400' : ''}`}
                   >
                     {item.showMore ? (
                       <button className='cursor-pointer'>더보기 &gt;</button>

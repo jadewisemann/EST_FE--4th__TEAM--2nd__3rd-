@@ -2,7 +2,7 @@ import Icon from './Icon';
 
 const Complete = ({ type, message, description, children }) => (
   <>
-    <div className='my-11 flex flex-col items-center gap-5.5 text-center'>
+    <div className='my-11 flex flex-col items-center gap-5.5 text-center dark:text-neutral-50'>
       <Icon name='check_circle' size={50}></Icon>
       <strong className='px-10 text-lg'>{message}</strong>
       <div>

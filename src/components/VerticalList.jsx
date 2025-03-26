@@ -29,7 +29,7 @@ const VerticalList = ({ products }) => {
         return (
           <div
             key={product.id}
-            className='relative w-full border-b-1 border-neutral-200 py-4'
+            className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
           >
             <Link
               to={`/details/${encodeURIComponent(product.id)}`}
@@ -45,17 +45,19 @@ const VerticalList = ({ products }) => {
               </div>
               <div className='flex grow justify-between'>
                 <div className='flex flex-col'>
-                  <div className='mb-1.5 text-left text-sm font-medium'>
+                  <div className='mb-1.5 text-left text-sm font-medium dark:text-neutral-50'>
                     {title}
                   </div>
-                  <address className='flex text-left text-[11px] text-neutral-500 not-italic'>
+                  <address className='flex text-left text-[11px] text-neutral-500 not-italic dark:text-neutral-300'>
                     {location}
                   </address>
                   <div className='mt-auto flex items-center gap-1'>
-                    <span className='text-sm font-bold text-violet-600'>
+                    <span className='text-sm font-bold text-violet-600 dark:text-violet-400'>
                       {price.toLocaleString()}원
                     </span>
-                    <span className='text-xs text-neutral-500'>/ 1박</span>
+                    <span className='text-xs text-neutral-500 dark:text-neutral-300'>
+                      / 1박
+                    </span>
                   </div>
                 </div>
                 <div className='flex flex-col justify-between'>

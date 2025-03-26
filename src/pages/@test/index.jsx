@@ -218,6 +218,7 @@ const TestPage = () => {
         categories={categories}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        selectedFilter='정렬'
       >
         내용임돠
       </Tab>
@@ -361,7 +362,7 @@ const TestPage = () => {
       <DetailSection
         type='list-left'
         title='판매자 정보'
-        color='text-neutral-600'
+        color='text-neutral-600 dark:text-neutral-400'
         size='text-xs'
         weight='font-normal'
         contents={[
@@ -374,7 +375,7 @@ const TestPage = () => {
       <DetailSection
         type='list-left-dot'
         title='취소 / 환불 규정에 대한 동의'
-        color='text-neutral-600'
+        color='text-neutral-600 dark:text-neutral-400'
         size='text-xs'
         weight='font-normal'
         contents={[
@@ -394,7 +395,7 @@ const TestPage = () => {
       <DetailSection
         type='list-left-dot-title'
         title='숙소 규정'
-        color='text-neutral-600'
+        color='text-neutral-600 dark:text-neutral-400'
         size='text-xs'
         weight='font-normal'
         contents={[
@@ -418,7 +419,7 @@ const TestPage = () => {
       <DetailSection
         type='table-left'
         title='객실 정보'
-        color='text-neutral-600'
+        color='text-neutral-600 dark:text-neutral-400'
         size='text-sm'
         weight='font-normal'
         contents={[
