@@ -73,7 +73,6 @@ const SearchPasswordPage = () => {
             color='prime'
             size='full'
             type='submit'
-            onClick={handleSearchPw}
             content='확인'
             childrenClassName='font-bold'
             disabled={!isEmailValid}

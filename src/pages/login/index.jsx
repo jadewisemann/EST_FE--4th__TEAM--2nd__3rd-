@@ -48,6 +48,7 @@ const LoginPage = () => {
 
   // 토스트 에러 메시지
   const handleAuthError = error => {
+    console.log('몇번 나오려나');
     if (error.message.includes('auth/invalid-email')) {
       showToast('올바른 이메일을 입력해주세요');
       setEmail('');
@@ -117,7 +118,6 @@ const LoginPage = () => {
             size='full'
             className='mb-7'
             type='submit'
-            onClick={handleLogin}
             content='로그인'
             childrenClassName='font-bold'
             disabled={!isEmailValid || !isPasswordValid}

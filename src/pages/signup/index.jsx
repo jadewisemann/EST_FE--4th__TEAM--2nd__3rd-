@@ -108,7 +108,6 @@ const SignupPage = () => {
             color='prime'
             size='full'
             type='submit'
-            onClick={handleSignup}
             content='회원가입'
             childrenClassName='font-bold'
             disabled={
