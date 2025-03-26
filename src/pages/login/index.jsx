@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 // Library import
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Store import
 import useAuthStore from '../../store/authStore';
@@ -17,18 +17,20 @@ import Input from '../../components/Input';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const { googleLogin, login } = useAuthStore();
   const { showToast } = useToastStore();
+  const from = location.state?.from?.pathname || '/';
 
   // 일반 로그인
   const handleLogin = async () => {
     try {
       await login(email, password);
-      navigate('/'); // 로그인 성공 시 메인 페이지 이동
+      navigate(from, { replace: true }); // 원래 가려던 경로로 이동
     } catch (error) {
       handleAuthError(error);
     }
@@ -38,7 +40,7 @@ const LoginPage = () => {
   const handleGoogleLogin = async () => {
     try {
       await googleLogin();
-      navigate('/'); // 로그인 성공 시 메인 페이지 이동
+      navigate(from, { replace: true });
     } catch (error) {
       handleAuthError(error);
     }
@@ -70,9 +72,7 @@ const LoginPage = () => {
       <div className='flex flex-col px-5 pt-16 pb-10'>
         {/* 뒤로가기 */}
         <button
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={() => navigate(from, { replace: true })}
           className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
         >
           <Icon name='arrow_left' color='black' />

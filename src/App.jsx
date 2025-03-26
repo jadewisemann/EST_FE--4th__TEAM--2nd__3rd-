@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
+import ProtectedAuthRoute from './routes/ProtectedAuthRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 
 import {
@@ -42,17 +43,22 @@ const App = () => (
       <Route path='/details/:hotelId' element={<DetailsPage />} />
       <Route path='/checkout/:roomId' element={<CheckoutPage />} />
       <Route path='/order-confirm' element={<OrderConfirm />} />
-      <Route path='/login' element={<LoginPage />} />
       <Route path='/payment' element={<PaymentPage />} />
-      <Route path='/search' element={<SearchPage />} />
-      <Route path='/result' element={<StayListpage />} />
-      <Route path='/signup' element={<SignupPage />} />
       <Route path='/userinfo' element={<UserInfoPage />} />
       <Route path='/wishlist' element={<WishlistPage />} />
       <Route path='/reservationdetail' element={<ReservationDetailPage />} />
       <Route path='/*' element={<NotFoundPage />} />
       <Route path='/test' element={<TestPage />} />
-      <Route path='/searchpassword' element={<SearchPasswordPage />} />
+      <Route path='/result' element={<StayListpage />} />
+      <Route path='/search' element={<SearchPage />} />
+
+      {/* 로그인이 되어 있으면 접근 방지할 페이지*/}
+      <Route element={<ProtectedAuthRoute />}>
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/searchpassword' element={<SearchPasswordPage />} />
+      </Route>
+
       <Route element={<ProtectedRoute />}>
         {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
       </Route>
