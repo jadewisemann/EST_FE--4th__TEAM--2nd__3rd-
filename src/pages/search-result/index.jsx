@@ -21,53 +21,65 @@ const StayListpage = () => {
   const navigate = useNavigate();
   const { hotelIds, name, selectedCategory, numOfPeople, setSearchState } =
     useSearchStore();
-  //모달
-  const { dates, guests } = useAppDataStore(); //  전역 날짜 & 스크롤 위치
+
+  const { dates, guests } = useAppDataStore();
   const { openSearchModal } = useModalStore();
+
   const [isLoading, setIsLoading] = useState(false);
-  //탭
   const [activeTab, setActiveTab] = useState(0);
   const categories = ['전체', '모텔', '호텔/리조트', '팬션/풀빌라', '해외숙소'];
-  //날짜가공
+
   const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
   const totalNights = `${dates.duration}박`;
-  //헤더정보
+
   const [headerInfo, setHeaderInfo] = useState({
     name: '',
     fromToDate: '',
     totalNights: '1박',
     numOfAdults: 1,
   });
-  // 숙소 fetch데이터관련
+
   const [hotelList, setHotelList] = useState([]);
-  // 컨텐츠뷰관련
   const [visibleProducts, setVisibleProducts] = useState([]);
   const [initialView] = useState(7);
   const [incrementView] = useState(7);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-  //필터관련
-  const [selectedFilter, setSelectedFilter] = useState('낮은 요금순');
+
+  const [selectedFilter, setSelectedFilter] = useState('정렬');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([
+    '정렬',
+    '정렬',
+    '정렬',
+    '정렬',
+    '정렬',
+  ]);
 
   const handleFilterConfirm = value => {
+    setSelectedFilters(prev => {
+      const newFilters = [...prev];
+      newFilters[activeTab] = value;
+      return newFilters;
+    });
     setSelectedFilter(value);
     setIsFilterOpen(false);
   };
 
-  //navigate에서 받아온 state가 있으면 전역상태로 저장main, nav 등에서 넘김
+  useEffect(() => {
+    setSelectedFilter(selectedFilters[activeTab]);
+  }, [activeTab, selectedFilters]);
+
   useEffect(() => {
     if (location.state) {
       setSearchState(location.state);
     }
   }, [location.state, setSearchState]);
 
-  // activeTab, name, selectedCategory, 호텔 갯수 등을 기반으로 헤더 정보(nameText 등) 설정
-  const fallbackSearch = '서울'; // 예비값 설정
+  const fallbackSearch = '서울';
   const searchKeyword = name || selectedCategory || fallbackSearch;
 
   useEffect(() => {
-    // 현재 탭과 조건에 따라 헤더에 보여 줄 텍스트 생성
     const hotelCount = hotelIds.length;
     let nameText = '';
     if (activeTab === 0) {
@@ -96,17 +108,30 @@ const StayListpage = () => {
     guests,
   ]);
 
-  // activeTab 변경 시 해당 카테고리 숙소 데이터 초기 로드
   useEffect(() => {
     fetchInitialData();
   }, [activeTab]);
 
-  // activeTab에 따라 초기 숙소 데이터를 로드 (카테고리/추천/기본 검색)
+  useEffect(() => {
+    if (!hotelList || hotelList.length === 0) return;
+
+    let sorted = [...hotelList];
+    if (selectedFilter === '낮은 요금순') {
+      sorted.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
+    } else if (selectedFilter === '높은 요금순') {
+      sorted.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
+    } else if (selectedFilter === '평점순') {
+      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+    setVisibleProducts(sorted.slice(0, initialView));
+  }, [selectedFilter, hotelList, initialView]);
+
   const fetchInitialData = async () => {
     setIsLoading(true);
     try {
       let result = [];
       let last = null;
+
       if (activeTab === 0) {
         if (hotelIds.length > 0) {
           result = await Promise.all(hotelIds.map(id => getHotelById(id)));
@@ -143,25 +168,7 @@ const StayListpage = () => {
     }
   };
 
-  // 필터(정렬 기준)에 따라 정렬 적용
-  useEffect(() => {
-    let sortedList = [...hotelList];
-    if (selectedFilter === '낮은 요금순') {
-      sortedList.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
-    } else if (selectedFilter === '높은 요금순') {
-      sortedList.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
-    } else if (selectedFilter === '평점순') {
-      sortedList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    }
-    setVisibleProducts(
-      sortedList.slice(0, visibleProducts.length || initialView),
-    );
-  }, [selectedFilter, hotelList]);
-
-  // 더보기 데이터 불러오기
   const handleViewMore = async () => {
-    // 기존에 받아온 전체 데이터(hotelList)에서 아직 보여주지 않은 숙소가 있다면
-    // 그 일부(nextItems)를 잘라서 추가로 보여줌
     if (visibleProducts.length < hotelList.length) {
       const nextItems = hotelList.slice(
         visibleProducts.length,
@@ -169,7 +176,6 @@ const StayListpage = () => {
       );
       setVisibleProducts(prev => [...prev, ...nextItems]);
     } else if (hasMore && activeTab !== 0) {
-      //서버에 더 있는 경우, 새로 불러오기
       setIsLoading(true);
       try {
         const categoryKeyword = categories[activeTab].replace(
@@ -186,7 +192,6 @@ const StayListpage = () => {
         );
         const newHotels = res.hotels;
         const newLastDoc = res.lastDoc;
-
         setHotelList(prev => [...prev, ...newHotels]);
         setVisibleProducts(prev => [
           ...prev,
@@ -202,7 +207,6 @@ const StayListpage = () => {
     }
   };
 
-  // 숙소 클릭 시 해당 ID를 포함해 상세 페이지로 이동
   const handleItemClick = hotel => {
     navigate(`/detail/${encodeURIComponent(hotel.id)}`);
   };
@@ -218,8 +222,7 @@ const StayListpage = () => {
           <div className='flex flex-1 flex-col items-start'>
             <strong className='text-sm'>{headerInfo.name}</strong>
             <span className='text-xs'>
-              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights}
-              )&nbsp;성인&nbsp;
+              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights}) 성인{' '}
               {headerInfo.numOfAdults}명
               {(guests.children >= 1 || guests.infants >= 1) && '...'}
             </span>
@@ -256,13 +259,14 @@ const StayListpage = () => {
           </Button>
         )}
       </Tab>
+
       <Nav />
       <SearchModal />
       <FilterModal
         isOpen={isFilterOpen}
         title='정렬 기준'
         onClose={() => setIsFilterOpen(false)}
-        onConfirm={value => setSelectedFilter(value)}
+        onConfirm={handleFilterConfirm}
         selected={selectedFilter}
       />
     </>
