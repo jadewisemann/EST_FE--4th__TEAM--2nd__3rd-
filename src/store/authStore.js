@@ -10,13 +10,18 @@ import {
 } from '../firebase/auth';
 
 const useAuthStore = create(set => {
-  listenAuthState(user => {
-    set({ user, isLoading: false });
-  });
+  const updateUser = user => {
+    set(state => {
+      if (state.user?.uid === user?.uid) return state;
+      return { user };
+    });
+  };
+
+  listenAuthState(updateUser);
 
   return {
     user: null,
-    isLoading: true,
+    // loading: true,
     error: null,
 
     signUp: async (email, password) => {
