@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useAuthStore from '../../store/authStore';
+import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
 import useSearchStore from '../../store/searchStore';
 
@@ -22,6 +23,7 @@ const MainPage = () => {
   const { setSearchState } = useSearchStore();
   const { dates, guests } = useAppDataStore();
   const { modals, openDateModal, openGuestModal } = useModalStore();
+  const { toggleDarkMode } = useDarkModeStore();
 
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -176,6 +178,9 @@ const MainPage = () => {
 
   return (
     <>
+      <button type='button' onClick={() => toggleDarkMode()}>
+        다크모드
+      </button>
       <div className='flex h-screen flex-col justify-between bg-[url(https://content.skyscnr.com/m/6181bf94ffc99b59/original/Lotte-Hotel-Jeju.jpg?resize=1000px:1000px&quality=100)]'>
         <div className='flex flex-col px-5 pt-16 pb-10'>
           <div className='flex flex-col items-center text-xl text-white'>
