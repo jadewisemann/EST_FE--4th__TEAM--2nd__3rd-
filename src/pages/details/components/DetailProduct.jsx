@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import Button from './Button';
+import Button from '../../../components/Button';
 
 const DetailProduct = ({ detailProducts, rooms }) => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const DetailProduct = ({ detailProducts, rooms }) => {
           key={index}
           className='mb-4 overflow-hidden rounded-xl shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)]'
         >
-          <img className='block w-full' src={product.img} alt='' />
+          <img className='block aspect-video w-full' src={product.img} alt='' />
 
           <div>
             <div className='px-4 py-3'>
