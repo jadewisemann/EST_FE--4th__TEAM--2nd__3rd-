@@ -5,26 +5,26 @@ import { useState } from 'react';
 import useToastStore from '../../store/toastStore';
 
 // Component
-import Tab from '../../components/Tab';
-import Calendar from '../../components/Calendar';
-import Icon from '../../components/Icon';
-import ReviewRating from '../../components/ReviewRating';
-import Rating from '../../components/Rating';
-import Nav from '../../components/Nav';
-import Complete from '../../components/Complete';
-import Heart from '../../components/Heart';
+import Anchor from '../../components/Anchor';
 import Badge from '../../components/Badge';
 import Button from '../../components/Button';
-import Radio from '../../components/Radio';
+import Calendar from '../../components/Calendar';
 import CheckBox from '../../components/CheckBox';
+import Complete from '../../components/Complete';
 import Counter from '../../components/Counter';
-import HorizontalList from '../../components/HorizontalList';
 import DetailSection from '../../components/DetailSection';
-import VerticalList from '../../components/VerticalList';
-import SubHeader from '../../components/SubHeader';
-import DetailProduct from '../../components/DetailProduct';
+import Heart from '../../components/Heart';
+import HorizontalList from '../../components/HorizontalList';
+import Icon from '../../components/Icon';
 import Input from '../../components/Input';
-import Anchor from '../../components/Anchor';
+import Nav from '../../components/Nav';
+import Radio from '../../components/Radio';
+import Rating from '../../components/Rating';
+import ReviewRating from '../../components/ReviewRating';
+import SubHeader from '../../components/SubHeader';
+import Tab from '../../components/Tab';
+import VerticalList from '../../components/VerticalList';
+import DetailProduct from '../details/components/DetailProduct';
 
 // @수평 리스트 임시 이미지
 import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';

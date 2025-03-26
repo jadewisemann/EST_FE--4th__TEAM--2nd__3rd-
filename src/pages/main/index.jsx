@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useAuthStore from '../../store/authStore';
+import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
 import useSearchStore from '../../store/searchStore';
 
@@ -22,6 +23,7 @@ const MainPage = () => {
   const { setSearchState } = useSearchStore();
   const { dates, guests } = useAppDataStore();
   const { modals, openDateModal, openGuestModal } = useModalStore();
+  const { toggleDarkMode } = useDarkModeStore();
 
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -193,6 +195,13 @@ const MainPage = () => {
 
   return (
     <>
+      <button
+        type='button'
+        className='absolute top-4 right-4 cursor-pointer bg-violet-600'
+        onClick={() => toggleDarkMode()}
+      >
+        <strong className='text-white'>다크모드</strong>
+      </button>
       <div
         className='bg-no-repeat'
         style={{ backgroundImage: `url(${backgroundImage})` }}
