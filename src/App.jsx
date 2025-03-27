@@ -19,6 +19,7 @@ import {
   ReservationDetailPage,
   TestPage,
   SearchPasswordPage,
+  MyPage,
 } from './pages';
 // @ test page
 import LoginTestPage from './pages/@test/LoginTestPage';
