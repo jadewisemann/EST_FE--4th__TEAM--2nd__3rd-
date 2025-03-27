@@ -68,7 +68,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='flex flex-col px-6 pt-4 pb-10'>
+    <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
       {/* 뒤로가기 */}
       <button
         onClick={() => navigate(from, { replace: true })}
@@ -138,7 +138,8 @@ const LoginPage = () => {
 
       {/* 회원가입 앵커 */}
       <div className='flex justify-center gap-1'>
-        <p>아직 계정이 없으신가요?</p> <Anchor type='signup' />
+        아직 계정이 없으신가요?
+        <Anchor type='signup' />
       </div>
     </div>
   );

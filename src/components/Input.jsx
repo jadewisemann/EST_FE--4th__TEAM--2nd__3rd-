@@ -69,6 +69,7 @@ const Input = ({
   placeholder = '',
   errorMessage = '',
   autoComplete = '',
+  inputClass = '',
   onChange = () => {},
   onValidChange = () => {},
 }) => {
@@ -108,7 +109,7 @@ const Input = ({
 
       {/* 값에 따른 보더색상 변경 */}
       <div
-        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none focus-within:border-violet-600 ${value === '' ? 'border-neutral-300' : isValid ? 'border-violet-600' : 'border-red-500!'} `}
+        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none focus-within:border-violet-600 dark:bg-neutral-800 dark:focus-within:border-violet-400 ${value === '' ? 'border-neutral-300 dark:border-neutral-400' : isValid ? 'border-violet-600 dark:border-violet-400' : 'border-red-500!'} `}
       >
         {/* 아이콘 */}
         <div className='absolute left-5 min-w-[20px]'>
@@ -120,7 +121,7 @@ const Input = ({
         <input
           id={inputId}
           type={type || config.type}
-          className={`w-full rounded-full border-none px-14 py-4 outline-none`}
+          className={`w-full rounded-full border-none px-14 py-4 outline-none placeholder:text-neutral-300 dark:placeholder:text-neutral-400 ${inputClass}`}
           placeholder={placeholder || config.placeholder}
           value={value}
           onChange={handleChange}

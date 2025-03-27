@@ -47,7 +47,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className='flex flex-col px-6 pt-4 pb-10'>
+    <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
       {/* 뒤로가기 */}
       <button
         onClick={() => {

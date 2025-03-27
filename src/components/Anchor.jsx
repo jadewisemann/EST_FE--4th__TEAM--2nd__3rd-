@@ -21,7 +21,7 @@ const Anchor = ({ type, children, className }) => {
             ? '/signup'
             : `/${type}`
       }
-      className={`font-inter text-base text-violet-600 underline underline-offset-4 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} ${className} hover:opacity-70`}
+      className={`font-inter text-base text-violet-600 underline underline-offset-4 dark:text-violet-400 ${type === 'signUp' ? 'font-bold tracking-tight' : ''} ${className} hover:opacity-70`}
     >
       {getLabel()}
     </Link>
