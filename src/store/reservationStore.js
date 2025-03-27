@@ -1,9 +1,12 @@
+import { useEffect, useCallback } from 'react';
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 import useAuthStore from '../store/authStore';
 
 import { getRoomById } from '../firebase/searchQuery';
+import { getUserReservations } from '../firebase/userRepository';
 
 import { requestPayment } from '../services/paymentService';
 
@@ -88,6 +91,8 @@ const useReservationStore = create(
       userInput: null,
       error: null,
       paymentResult: null,
+      loading: false,
+      reservations: [],
 
       validateSession: () => {
         const { createdAt } = get();
@@ -266,6 +271,46 @@ const useReservationStore = create(
           : transition(STATE.IDLE, { error: null });
       },
 
+      fetchUserReservations: async (userId = null) => {
+        const { user } = useAuthStore.getState();
+        const userIdToUse = userId || (user ? user.uid : null);
+
+        if (!userIdToUse) {
+          set({
+            reservations: [],
+            loading: false,
+            error: ERR_MSG.USER_NOT_AUTHENTICATED,
+          });
+          return { success: false, error: ERR_MSG.USER_NOT_AUTHENTICATED };
+        }
+
+        set({ loading: true });
+
+        try {
+          const reservationsData = await getUserReservations(userIdToUse);
+
+          set({
+            reservations: reservationsData,
+            loading: false,
+            error: null,
+          });
+
+          return { success: true, data: reservationsData };
+        } catch (error) {
+          set({
+            loading: false,
+            error:
+              error.message || '예약 정보를 가져오는 중 오류가 발생했습니다',
+            reservations: [],
+          });
+          return { success: false, error: error.message };
+        }
+      },
+
+      clearReservations: () => {
+        set({ reservations: [], loading: false, error: null });
+      },
+
       getStateInfo: () => {
         const {
           currentState,
@@ -285,6 +330,7 @@ const useReservationStore = create(
         };
       },
     }),
+
     {
       name: 'payment-session',
       storage: createJSONStorage(() => sessionStorage),
@@ -300,5 +346,44 @@ const useReservationStore = create(
     },
   ),
 );
+
+// 사용자 예약 정보만 처리하는 전용 훅
+export const useUserReservations = () => {
+  const reservations = useReservationStore(state => state.reservations);
+  const loading = useReservationStore(state => state.loading);
+  const error = useReservationStore(state => state.error);
+
+  const fetchReservations = useReservationStore(
+    state => state.fetchUserReservations,
+  );
+
+  const user = useAuthStore(state => state.user);
+
+  const refreshReservations = useCallback(() => {
+    if (user) {
+      return fetchReservations(user.uid);
+    }
+    return Promise.resolve({ success: false, error: '인증되지 않은 사용자' });
+  }, [user, fetchReservations]);
+
+  return {
+    reservations,
+    loading,
+    error,
+    refreshReservations,
+    isAuthenticated: !!user,
+  };
+};
+
+export const useReservationWithAuth = () => {
+  const { reservations, loading, error, refreshReservations, isAuthenticated } =
+    useUserReservations();
+
+  useEffect(() => {
+    refreshReservations();
+  }, [isAuthenticated, refreshReservations]);
+
+  return { reservations, loading, error };
+};
 
 export default useReservationStore;

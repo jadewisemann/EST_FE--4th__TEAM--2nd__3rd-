@@ -12,21 +12,21 @@ const DetailSection = ({
     <div className='text-m flex flex-col gap-2.5 font-bold'>
       <h3 className='dark:text-neutral-50'>{title}</h3>
       <div>
-        {type === 'list-left' &&
-          contents.map((item, idx) => (
+        {type === 'list-left'
+          && contents.map((item, idx) => (
             <ul
               key={idx}
-              className={`${size} ${weight}text-neutral-600 dark:text-neutral-400`}
+              className={`${size} ${weight} text-neutral-600 dark:text-neutral-400`}
             >
               <li className='py-0.5'>{item}</li>
             </ul>
           ))}
 
-        {type === 'list-left-dot' &&
-          contents.map((item, idx) => (
+        {type === 'list-left-dot'
+          && contents.map((item, idx) => (
             <ul
               key={idx}
-              className={`ml-5 list-disc ${size} ${weight}text-neutral-600 dark:text-neutral-400`}
+              className={`ml-5 list-disc ${size} ${weight} text-neutral-600 dark:text-neutral-400`}
             >
               <li
                 className={`py-0.5 ${item.isHighlighted ? 'font-bold text-red-500' : ''}`}
@@ -36,15 +36,15 @@ const DetailSection = ({
             </ul>
           ))}
 
-        {type === 'list-left-dot-title' &&
-          contents.map((item, idx) => (
+        {type === 'list-left-dot-title'
+          && contents.map((item, idx) => (
             <div key={idx}>
               <h4 className='my-1 text-sm font-bold dark:text-neutral-300'>
                 {item.subTitle}
               </h4>
               <ul
                 key={idx}
-                className={`mb-2.5 list-disc ${size} ${weight}text-neutral-600 dark:text-neutral-400`}
+                className={`mb-2.5 list-disc ${size} ${weight} text-neutral-600 dark:text-neutral-400`}
               >
                 {item.subContents.map((content, i) => (
                   <li key={i} className='ml-5 py-0.5'>
@@ -55,11 +55,11 @@ const DetailSection = ({
             </div>
           ))}
 
-        {type === 'table-left' &&
-          contents.map((item, idx) => (
+        {type === 'table-left'
+          && contents.map((item, idx) => (
             <div
               key={idx}
-              className={`flex flex-col gap-2 ${size} ${weight}text-neutral-600 dark:text-neutral-400`}
+              className={`flex flex-col gap-2 ${size} ${weight} text-neutral-600 dark:text-neutral-400`}
             >
               {Object.entries(item.labels).map(([key, label]) => (
                 <div key={key} className='flex items-start'>
