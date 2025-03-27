@@ -81,7 +81,12 @@ const StayListpage = () => {
 
   // activeTab, name, selectedCategory, 호텔 갯수 등을 기반으로 헤더 정보(nameText 등) 설정
   const fallbackSearch = '서울'; // 예비값 설정
-  const searchKeyword = name || selectedCategory || fallbackSearch;
+  // activeTab 변경 시 해당 카테고리 숙소 데이터 초기 로드
+  useEffect(() => {
+    const searchKeyword = name || selectedCategory || fallbackSearch;
+    fetchInitialData(searchKeyword);
+  }, [activeTab, name, selectedCategory]);
+
   useEffect(() => {
     // 현재 탭과 조건에 따라 헤더에 보여 줄 텍스트 생성
     const hotelCount = hotelIds.length;
@@ -112,11 +117,6 @@ const StayListpage = () => {
     guests,
   ]);
 
-  // activeTab 변경 시 해당 카테고리 숙소 데이터 초기 로드
-  useEffect(() => {
-    fetchInitialData();
-  }, [activeTab]);
-
   // activeTab에 따라 초기 숙소 데이터를 로드 (카테고리/추천/기본 검색)
   useEffect(() => {
     if (!hotelList || hotelList.length === 0) return;
@@ -133,7 +133,7 @@ const StayListpage = () => {
   }, [selectedFilter, hotelList, initialView]);
 
   // 숙소 리스트 초기 데이터 로딩 함수
-  const fetchInitialData = async () => {
+  const fetchInitialData = async (keyword = fallbackSearch) => {
     setIsLoading(true);
     try {
       let result = [];
@@ -146,7 +146,7 @@ const StayListpage = () => {
           result = result.filter(Boolean);
         } else {
           // ID가 없으면 기본 검색 키워드로 숙소 조회
-          const searchResult = await searchHotelsAdvanced(searchKeyword);
+          const searchResult = await searchHotelsAdvanced(keyword);
           result = searchResult || [];
         }
         setHasMore(false);
