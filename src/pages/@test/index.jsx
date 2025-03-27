@@ -67,11 +67,16 @@ const TestPage = () => {
   ];
 
   // 라디오 버튼 예시
-  const radio1 = [
+  const payment = [
     { value: '신용카드', disabled: true },
-    { value: '포인트 결제', disabled: false },
+    { value: '포인트 결제', disabled: false, checked: true },
     { value: '현장에서 결제하기', disabled: false },
   ];
+
+  // 라디오 (결제 수단) 선택 인덱스 확인
+  const [selectedIndex, setSelectedIndex] = useState(
+    payment.findIndex(option => option.checked),
+  );
 
   // 수평 리스트 데이터
   const products = [
@@ -336,7 +341,12 @@ const TestPage = () => {
     <>
       <h1 className='text-4xl'>Radio</h1>
       <br />
-      <Radio name='payment' options={radio1} />
+      <Radio
+        name='payment'
+        options={payment}
+        selectedIndex={selectedIndex}
+        onChange={setSelectedIndex}
+      />
     </>,
     <>
       <h1 className='text-4xl'>Badge</h1>
