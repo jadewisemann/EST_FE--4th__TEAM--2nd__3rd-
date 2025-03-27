@@ -21,11 +21,6 @@ const ProtectedAuthRoute = () => {
     }
   }, [user, isLoading, showToast]);
 
-  // 유저 정보 가져오는 동안 로딩
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
   if (user) {
     return <Navigate to='/' replace />;
   }
