@@ -13,7 +13,7 @@ import DetailProduct from './components/DetailProduct';
 import ShareBtn from './components/ShareBtn';
 
 // component
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/searchQuery';
 
 import Button from '../../components/Button';
 import DetailSection from '../../components/DetailSection';
@@ -127,8 +127,8 @@ const DetailsPage = () => {
           </div>
           <a
             href={
-              'https://map.kakao.com/link/search/' +
-              encodeURIComponent(data.location[0])
+              'https://map.kakao.com/link/search/'
+              + encodeURIComponent(data.location[0])
             }
             target='_blank'
             className='flex cursor-pointer items-center gap-1 text-xs text-neutral-500 dark:text-neutral-300'

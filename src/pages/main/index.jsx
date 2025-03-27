@@ -8,7 +8,7 @@ import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
 import useSearchStore from '../../store/searchStore';
 
-import { searchHotelsAdvanced } from '../../firebase/search';
+import { searchHotelsAdvanced } from '../../firebase/searchQuery';
 
 import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';

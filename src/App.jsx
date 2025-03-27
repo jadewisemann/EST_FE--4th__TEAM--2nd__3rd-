@@ -19,11 +19,11 @@ import {
   ReservationDetailPage,
   TestPage,
   SearchPasswordPage,
+  MyPage,
 } from './pages';
 // @ test page
 import LoginTestPage from './pages/@test/LoginTestPage';
 import ModalTestPage from './pages/@test/ModalTestPage';
-import ReservationTestPage from './pages/@test/ReservationTestPage';
 import SearchTestPage from './pages/@test/SearchTestPage';
 
 import ModalProvider from './components/modal/ModalProvider';
@@ -61,11 +61,11 @@ const App = () => (
 
       <Route element={<ProtectedRoute />}>
         {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
+        <Route path='/mypage' element={<MyPage />} />
       </Route>
       {/* test pages */}
       <Route path='/test/search' element={<SearchTestPage />} />
       <Route path='/test/modal' element={<ModalTestPage />} />
-      <Route path='/test/reservation' element={<ReservationTestPage />} />
       <Route path='/test/login' element={<LoginTestPage />} />
     </Routes>
   </>

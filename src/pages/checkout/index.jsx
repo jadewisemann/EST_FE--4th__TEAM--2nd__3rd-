@@ -4,10 +4,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 // store
 import useAppDataStore from '../../store/appDataStore';
-import usePaymentStore from '../../store/paymentStore';
+import useReservationStore from '../../store/reservationStore';
 
 // data
-import { getRoomById } from '../../firebase/search';
+import { getRoomById } from '../../firebase/searchQuery';
 
 // component
 import Button from '../../components/Button';
@@ -23,7 +23,7 @@ const payment = [
 ];
 
 const CheckoutPage = () => {
-  const { loading, error, result, makePayment, resetState } = usePaymentStore();
+  // const { loading, error, result, makePayment, resetState } = useReservationStore();
 
   const navigate = useNavigate();
 

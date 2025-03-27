@@ -14,10 +14,28 @@ const useAppDataStore = create(set => {
     return `${year}-${month}-${day}`;
   };
 
+  const getDay = date => {
+    const dayIndex = date.getDay();
+    const days = {
+      /* eslint-disable */
+      KO: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+      ko: ['일', '월', '화', '수', '목', '금', '토'],
+      EN: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      /* eslint-enable */
+    };
+
+    return Object.fromEntries(
+      Object.entries(days).map(([key, value]) => [key, value[dayIndex]]),
+    );
+  };
+
   return {
     dates: {
       startDate: formatDate(start),
+      startDay: getDay(start),
       endDate: formatDate(end),
+      endDay: getDay(end),
       duration: defaultDuration,
     },
 

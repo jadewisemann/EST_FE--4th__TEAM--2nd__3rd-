@@ -19,6 +19,7 @@ export const callFunction = async (functionName, data = {}) => {
         message: '먼저 로그인 해야 합니다.',
       };
     }
+    console.log('data from call function', data);
 
     const functionRef = httpsCallable(functions, functionName);
     const result = await functionRef(data);
@@ -39,12 +40,8 @@ export const callFunction = async (functionName, data = {}) => {
  * @param {string} userId - 사용자 ID (선택 사항)
  * @returns {Promise<any>} - 결제 처리 결과
  */
-export const processPayment = async (userId, amount, reservationData) =>
-  await callFunction('payment', {
-    userId,
-    amount: Number(amount),
-    reservationData,
-  });
+export const processPayment = async paymentData =>
+  await callFunction('payment', paymentData);
 
 /**
  * 포인트 추가 함수 호출
