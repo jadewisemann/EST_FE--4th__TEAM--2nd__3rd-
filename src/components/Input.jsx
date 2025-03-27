@@ -113,7 +113,9 @@ const Input = ({
       >
         {/* 아이콘 */}
         <div className='absolute left-5 min-w-[20px]'>
-          {config.icon && <Icon name={config.icon} strokeWidth={0} />}
+          <label htmlFor={inputId}>
+            {config.icon && <Icon name={config.icon} strokeWidth={0} />}
+          </label>
         </div>
 
         {/* 인풋 필드 */}
@@ -138,7 +140,10 @@ const Input = ({
               onValidChange(false);
             }}
           >
-            <Icon name='close' color='black' />
+            <Icon
+              name='close'
+              className='text-neutral-800 dark:text-neutral-50'
+            />
             <span className='sr-only'>지우기 버튼</span>
           </button>
         )}

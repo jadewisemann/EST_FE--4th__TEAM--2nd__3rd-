@@ -74,7 +74,10 @@ const LoginPage = () => {
         onClick={() => navigate(from, { replace: true })}
         className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
       >
-        <Icon name='arrow_left' color='black' />
+        <Icon
+          name='arrow_left'
+          className='text-neutral-800 dark:text-neutral-50'
+        />
         <span className='sr-only'>뒤로가기</span>
       </button>
 
@@ -124,7 +127,7 @@ const LoginPage = () => {
         </div>
       </form>
       {/* 구글 로그인 */}
-      <div className='border-t-1 border-neutral-300 pt-7'>
+      <div className='dark:neutral-400 border-t-1 border-neutral-300 pt-7'>
         <Button
           color='line'
           size='full'
