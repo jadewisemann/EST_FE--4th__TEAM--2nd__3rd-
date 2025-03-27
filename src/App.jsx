@@ -61,6 +61,7 @@ const App = () => (
 
       <Route element={<ProtectedRoute />}>
         {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
+        <Route path='/mypage' element={<MyPage />} />
       </Route>
       {/* test pages */}
       <Route path='/test/search' element={<SearchTestPage />} />
