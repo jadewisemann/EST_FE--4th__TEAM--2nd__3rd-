@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import useWishlistStore from '../../store/wishlistStore';
 
-import { getHotelById } from '../../firebase/search';
+import { getHotelById } from '../../firebase/searchQuery';
 
 import Anchor from '../../components/Anchor';
 import Nav from '../../components/Nav';

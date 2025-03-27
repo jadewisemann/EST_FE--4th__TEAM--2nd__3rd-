@@ -6,7 +6,7 @@ import useAppDataStore from '../../store/appDataStore';
 import useModalStore from '../../store/modalStore';
 import useSearchStore from '../../store/searchStore';
 
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/search';
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/searchQuery';
 
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
@@ -88,9 +88,9 @@ const StayListpage = () => {
     let nameText = '';
     if (activeTab === 0) {
       nameText =
-        selectedCategory ||
-        name ||
-        (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
+        selectedCategory
+        || name
+        || (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
     } else {
       nameText = categories[activeTab];
     }

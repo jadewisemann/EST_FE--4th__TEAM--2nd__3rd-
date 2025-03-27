@@ -8,7 +8,7 @@ import {
   logout,
   resetPassword,
   googleLogin,
-} from '../firebase/auth';
+} from '../firebase/authProvider';
 
 const useAuthStore = create(
   persist(
