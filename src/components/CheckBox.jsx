@@ -22,7 +22,7 @@ const CheckBox = ({
       />
       <label
         htmlFor={inputId}
-        className={`text-sm font-medium peer-checked:text-black ${disabled ? 'text-neutral-400' : ''}`}
+        className={`text-sm font-medium dark:text-white ${disabled ? 'text-neutral-400' : ''}`}
       >
         {txt}
       </label>
