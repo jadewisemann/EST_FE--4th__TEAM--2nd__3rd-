@@ -1,5 +1,5 @@
-import darkLoadingGif from '../assets/img/bg-loading-dark.gif';
-import loadingGif from '../assets/img/bg-loading.gif';
+import loadingGif from '../assets/img/bg_loading.gif';
+import darkLoadingGif from '../assets/img/bg_loading_dark.gif';
 
 const Loading = () => (
   <div className='flex h-screen flex-col items-center justify-center dark:bg-neutral-800'>
