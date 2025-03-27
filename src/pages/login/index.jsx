@@ -132,7 +132,9 @@ const LoginPage = () => {
           onClick={handleGoogleLogin}
         >
           <Icon name='google_colored' />
-          <span className='font-bold'>Google로 로그인</span>
+          <span className='font-bold dark:text-neutral-50'>
+            Google로 로그인
+          </span>
         </Button>
       </div>
 

@@ -121,7 +121,7 @@ const Input = ({
         <input
           id={inputId}
           type={type || config.type}
-          className={`w-full rounded-full border-none px-14 py-4 outline-none placeholder:text-neutral-300 dark:placeholder:text-neutral-400 ${inputClass}`}
+          className={`w-full rounded-full border-none px-14 py-4 outline-none placeholder:text-neutral-300 dark:text-neutral-50 dark:placeholder:text-neutral-400 ${inputClass}`}
           placeholder={placeholder || config.placeholder}
           value={value}
           onChange={handleChange}
