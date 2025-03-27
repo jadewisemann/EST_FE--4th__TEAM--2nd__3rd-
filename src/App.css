@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+.dark {
+  @apply bg-neutral-800 text-neutral-50;
+}
+
 /* theme override */
 @theme {
   --text-xxs: 10px;
