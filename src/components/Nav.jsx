@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
+
+import useAuthStore from '../store/authStore';
 
 import Icon from './Icon';
 
 const Nav = () => {
+  const navigate = useNavigate();
+  const [show, setShow] = useState(true);
+  const { user } = useAuthStore();
+  const isLoggedIn = !!user;
   const [navMenus] = useState([
     { name: 'home', size: '18', path: '/' },
     { name: 'search', size: '18', path: '/result' },
     { name: 'heart', size: '16', path: '/wishlist' },
-    { name: 'user', size: '16', path: '/userinfo' },
+    { name: 'user', size: '16', path: isLoggedIn ? '/mypage' : '/login' },
   ]);
-  const [show, setShow] = useState(true);
 
   //스크롤이벤트
   const handleScroll = () => {
@@ -45,13 +50,24 @@ const Nav = () => {
     };
   }, []);
 
+  //마이페이지 로그인/비로그인 분기
+  const handleProtrctedClick = path => {
+    if (isLoggedIn) {
+      navigate(path);
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <div
-      className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)] ${show ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} `}
+      className={`fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)] ${
+        show ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+      }`}
     >
       {navMenus.map(item => (
         <NavLink
-          key={item.path}
+          key={item.name}
           to={item.path}
           className='flex w-full flex-col items-center py-5'
         >

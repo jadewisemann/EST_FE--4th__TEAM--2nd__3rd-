@@ -471,8 +471,10 @@ const TestPage = () => {
           { label: '비밀번호 변경', showMore: true },
           { label: '관심숙소', showMore: true },
           { label: '보유포인트', value: '500,000 P' },
+          { label: '비밀번호 변경', showMore: true, showMoreText: '더보기' },
+          { label: '다크모드', anchor: true, anchorText: '적용하기' },
         ]}
-        // onMoreClick={handleMoreClick} 더보기 클릭 시 열리는 팝업 넣기
+        onclick={() => {}}
       />
     </>,
     <>
