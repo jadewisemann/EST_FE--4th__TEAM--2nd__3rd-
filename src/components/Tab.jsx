@@ -13,7 +13,7 @@ const Tab = ({
   // const [sort, setSort] = useState('asc'); //asc: 오름차순, desc: 내림차순
 
   <>
-    <div className='relative mx-5 mt-5 flex items-center'>
+    <div className='relative mx-5 mt-5 flex items-center dark:text-amber-50'>
       <div className='flex items-center gap-x-2 overflow-x-auto pr-2'>
         {categories.map((item, idx) => (
           <button
@@ -21,19 +21,23 @@ const Tab = ({
             onClick={() => {
               setActiveTab(idx);
             }}
-            className={`shrink-0 cursor-pointer rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600' : 'border-neutral-300 text-black'}`}
+            className={`shrink-0 cursor-pointer rounded-2xl border-1 p-2 py-1.5 text-xs ${activeTab === idx ? 'border-violet-600 font-bold text-violet-600 dark:border-violet-400 dark:text-violet-400' : 'border-neutral-300 text-black dark:border-neutral-400 dark:text-neutral-50'}`}
           >
             {item}
           </button>
         ))}
       </div>
       <button
-        className='ml-auto flex h-9 flex-none cursor-pointer items-center gap-x-0.5 border-l-1 border-neutral-300 bg-white py-2 pl-1.5 text-xs'
+        className='ml-auto flex h-9 flex-none cursor-pointer items-center gap-x-0.5 border-l-1 border-neutral-300 bg-white py-2 pl-1.5 text-xs dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-50'
         onClick={() => {
           setIsFilterOpen(true);
         }}
       >
-        <Icon name='sort' color='black' size={16} />
+        <Icon
+          name='sort'
+          className='text-black dark:text-neutral-50'
+          size={16}
+        />
         <span className='sr-only'> 위아래 화살표 아이콘</span>
         {selectedFilter}
       </button>

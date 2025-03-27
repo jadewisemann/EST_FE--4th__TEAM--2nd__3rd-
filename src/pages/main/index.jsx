@@ -197,7 +197,7 @@ const MainPage = () => {
     <>
       <button
         type='button'
-        className='absolute top-4 right-4 cursor-pointer bg-violet-600'
+        className='absolute top-4 right-4 cursor-pointer bg-violet-600 dark:bg-violet-400'
         onClick={() => toggleDarkMode()}
       >
         <strong className='text-white'>다크모드</strong>
@@ -230,7 +230,7 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openDateModal}
@@ -241,7 +241,7 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openGuestModal}
@@ -261,7 +261,7 @@ const MainPage = () => {
           </form>
         </div>
 
-        <div className='rounded-t-md bg-white p-5 pb-[80px]'>
+        <div className='rounded-t-md bg-white p-5 pb-[80px] dark:bg-neutral-800'>
           <div className='mt-1 flex items-start justify-between gap-5'>
             {categories.map((item, idx) => (
               <button
@@ -272,14 +272,18 @@ const MainPage = () => {
                 }}
               >
                 <img className='h-18 object-contain' src={item.src} alt='' />
-                <span className='text-sm'>{item.label}</span>
+                <span className='text-sm dark:text-neutral-50'>
+                  {item.label}
+                </span>
               </button>
             ))}
           </div>
           <div className='mt-7 mb-4 flex items-center justify-between'>
-            <h4 className='text-base font-bold'>추천호텔</h4>
+            <h4 className='text-base font-bold dark:text-neutral-50'>
+              추천호텔
+            </h4>
             <button
-              className='cursor-pointer text-sm text-violet-600'
+              className='cursor-pointer text-sm text-violet-600 dark:text-violet-400'
               onClick={recommendedHotelviewMore}
             >
               전체보기

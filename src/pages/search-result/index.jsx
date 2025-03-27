@@ -227,22 +227,28 @@ const StayListpage = () => {
   };
 
   return (
-    <>
-      <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.1)]'>
+    <div className='dark:bg-neutral-800'>
+      <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)]'>
         <button
-          className='flex w-full cursor-pointer items-center rounded-full border-1 border-neutral-300 px-4 py-1'
+          className='flex w-full cursor-pointer items-center rounded-full border border-1 border-neutral-300 px-4 py-1 dark:border-neutral-400'
           onClick={openSearchModal}
         >
-          <Icon className='mr-3 text-violet-600' name='search' />
-          <div className='flex flex-1 flex-col items-start'>
+          <Icon
+            className='mr-3 text-violet-600 dark:text-violet-400'
+            name='search'
+          />
+          <div className='flex flex-1 flex-col items-start dark:text-neutral-50'>
             <strong className='text-sm'>{headerInfo.name}</strong>
             <span className='text-xs'>
-              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights}) 성인{' '}
+              {headerInfo.fromToDate}&nbsp;({headerInfo.totalNights}) 성인{''}
               {headerInfo.numOfAdults}명
               {(guests.children >= 1 || guests.infants >= 1) && '...'}
             </span>
           </div>
-          <Icon className='text-neutral-600' name='close' />
+          <Icon
+            className='text-neutral-600 dark:text-neutral-400'
+            name='close'
+          />
         </button>
       </div>
 
@@ -264,7 +270,7 @@ const StayListpage = () => {
           <Button
             size='full'
             color='invert'
-            className='boder-violet-600 mt-4 rounded-xl border-2'
+            className='boder-violet-600 dark:boder-violet-400 mt-4 rounded-xl border-2 dark:border-1 dark:bg-neutral-800'
             onClick={handleViewMore}
             disabled={isLoading}
           >
@@ -284,7 +290,7 @@ const StayListpage = () => {
         onConfirm={handleFilterConfirm}
         selected={selectedFilter}
       />
-    </>
+    </div>
   );
 };
 
