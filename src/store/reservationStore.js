@@ -6,7 +6,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import useAuthStore from '../store/authStore';
 
 import { getRoomById } from '../firebase/searchQuery';
-import { getUserReservations } from '../firebase/userRepository';
+import { fetchUserReservations } from '../firebase/userRepository';
 
 import { requestPayment } from '../services/paymentService';
 
@@ -287,7 +287,7 @@ const useReservationStore = create(
         set({ loading: true });
 
         try {
-          const reservationsData = await getUserReservations(userIdToUse);
+          const reservationsData = await fetchUserReservations(userIdToUse);
 
           set({
             reservations: reservationsData,
