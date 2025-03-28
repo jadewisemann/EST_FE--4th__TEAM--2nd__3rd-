@@ -120,7 +120,9 @@ const Input = ({
             {config.icon && (
               <Icon
                 name={config.icon}
-                strokeWidth={config.type === 'email' ? 0 : 1}
+                strokeWidth={
+                  config.type === 'email' || config.type === 'tel' ? 0 : 1
+                }
               />
             )}
           </label>
