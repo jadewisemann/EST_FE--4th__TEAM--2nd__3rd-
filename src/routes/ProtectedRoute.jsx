@@ -17,11 +17,6 @@ const ProtectedRoute = () => {
     }
   }, [user, isLoading, showToast]);
 
-  // 유저 정보 가져오는 동안 로딩
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
   // 유저 정보 없으면 로그인 페이지로
   if (!user) {
     return <Navigate to='/login' state={{ from: location }} replace />;

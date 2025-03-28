@@ -12,11 +12,59 @@ import {
 
 import { db } from './config';
 
+/**
+ * 문자열 가격을 숫자로 변환하는 함수
+ * @param {string|number} price 가격
+ * @returns {number} 변환된 숫자 가격
+ */
 const convertPriceToNumber = price => {
   if (typeof price === 'number') return price;
   if (!price) return 0;
 
   return parseInt(price.replace(/,/g, ''), 10);
+};
+
+/**
+ * 가격 필드를 정렬하는 함수
+ * @param {number|string} price 원래 가격
+ * @param {number|string} priceFinal 할인 가격
+ * @returns {array} 정렬된 [큰 가격, 작은 가격] 배열
+ */
+const sortPrices = (price, priceFinal) => {
+  const numericPrice = convertPriceToNumber(price);
+  const numericPriceFinal = priceFinal ? convertPriceToNumber(priceFinal) : '';
+
+  // price, price_final을 비교하여 언제나 price가 더 높도록 순서 변경
+  return numericPrice
+    && numericPriceFinal !== ''
+    && numericPriceFinal > numericPrice
+    ? [numericPriceFinal, numericPrice]
+    : [numericPrice, numericPriceFinal];
+};
+
+/**
+ * 객체의 가격 필드를 변환하는 함수
+ * @param {object} item 객체
+ * @returns {object} 가격이 변환된 객체
+ */
+const convertPriceFields = item => {
+  if (!item) return null;
+
+  // 객체 깊은 복사
+  const convertedItem = { ...item };
+
+  // price와 price_final 필드가 있는지 확인
+  if ('price' in convertedItem) {
+    const [price, priceFinal] = sortPrices(
+      convertedItem.price,
+      convertedItem.price_final,
+    );
+
+    convertedItem.price = price;
+    convertedItem.price_final = priceFinal;
+  }
+
+  return convertedItem;
 };
 
 /**
@@ -32,49 +80,13 @@ const convertHotelPrices = hotel => {
 
   // rooms가 있고, 배열인지 확인
   if (convertedHotel.rooms && Array.isArray(convertedHotel.rooms)) {
-    // rooms를 순회
-    convertedHotel.rooms = convertedHotel.rooms.map(room => {
-      // price를 Number 타입으로 변환
-      const numericPrice = convertPriceToNumber(room.price);
-      const numericPriceFinal = room.price_final
-        ? convertPriceToNumber(room.price_final)
-        : '';
-      // price, price_final을 비교하여 언제나 price가 더 높도록 순서 변경
-      const [price, priceFinal] =
-        numericPrice &&
-        numericPriceFinal !== '' &&
-        numericPriceFinal > numericPrice
-          ? [numericPriceFinal, numericPrice]
-          : [numericPrice, numericPriceFinal];
-
-      return {
-        ...room,
-        price: price,
-        price_final: priceFinal,
-      };
-    });
+    // rooms를 순회하면서 각 room의 가격 필드 변환
+    convertedHotel.rooms = convertedHotel.rooms.map(room =>
+      convertPriceFields(room),
+    );
   }
 
   return convertedHotel;
-};
-
-/**
- * n gram을 만드는 함수
- * @param {string} text 변환할 글자
- * @returns {array} 변환된 n gram의 배열
- */
-const generateNgrams = text => {
-  if (!text) return [];
-  const cleanText = text.replace(/\s+/g, '');
-  const ngrams = new Set();
-
-  for (let n = 1; n <= 3; n++) {
-    for (let i = 0; i <= cleanText.length - n; i++) {
-      ngrams.add(cleanText.substring(i, i + n));
-    }
-  }
-
-  return [...ngrams];
 };
 
 // indexedDB 이용하여 호텔을 캐슁
@@ -189,6 +201,55 @@ const getHotelById = async hotelId => {
     throw error;
   }
 };
+
+/**
+ * 방 id로 검색
+ * @param {String} roomId
+ * @returns
+ */
+const getRoomById = async roomId => {
+  try {
+    if (!roomId) throw new Error('방 ID가 필요합니다');
+
+    const roomDocRef = doc(db, 'rooms', roomId);
+    const roomDoc = await getDoc(roomDocRef);
+
+    if (roomDoc.exists()) {
+      const roomData = {
+        room_id: roomDoc.id,
+        ...roomDoc.data(),
+      };
+
+      // 가격 필드 변환
+      return convertPriceFields(roomData);
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('방 정보 가져오기 실패:', error);
+    throw error;
+  }
+};
+
+/**
+ * n gram을 만드는 함수
+ * @param {string} text 변환할 글자
+ * @returns {array} 변환된 n gram의 배열
+ */
+const generateNgrams = text => {
+  if (!text) return [];
+  const cleanText = text.replace(/\s+/g, '');
+  const ngrams = new Set();
+
+  for (let n = 1; n <= 3; n++) {
+    for (let i = 0; i <= cleanText.length - n; i++) {
+      ngrams.add(cleanText.substring(i, i + n));
+    }
+  }
+
+  return [...ngrams];
+};
+
 /**
  * n gram 검색 결과에서 스코어가 같은 호텔들을  title로 정렬하는 함수
  * @param {Object[]} hotels
@@ -414,35 +475,12 @@ const searchHotelsAdvanced = async (
   }
 };
 
-/**
- * 방 id로 검색
- * @param {String} roomId
- * @returns
- */
-const getRoomById = async roomId => {
-  try {
-    if (!roomId) throw new Error('방 ID가 필요합니다');
-
-    const roomDocRef = doc(db, 'rooms', roomId);
-    const roomDoc = await getDoc(roomDocRef);
-    if (roomDoc.exists()) {
-      const roomData = {
-        room_id: roomDoc.id,
-        ...roomDoc.data(),
-      };
-
-      return roomData;
-    } else null;
-  } catch (error) {
-    console.error('방 정보 가져오기 실패:', error);
-    throw error;
-  }
-};
-
 export {
   getHotelById,
   getRoomById,
   searchHotelsAdvanced,
   convertHotelPrices,
   convertPriceToNumber,
+  convertPriceFields,
+  sortPrices,
 };

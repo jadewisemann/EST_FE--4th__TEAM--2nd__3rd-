@@ -6,7 +6,7 @@ import app from './firebase-app.js';
 import {
   paymentHandler,
   paymentHttpHandler,
-} from './payment/process-payment.js';
+} from './payment/payment-service.js';
 
 console.log('index.js에서 Firebase 앱 참조:', app ? '성공' : '실패');
 

@@ -49,15 +49,17 @@ export default {
   rules: {
     ...js.configs.recommended.rules,
     ...reactHooks.configs.recommended.rules,
+    "array-bracket-newline": ["error", "consistent"],
+    "array-element-newline": ["error", "consistent"],
     'react/react-in-jsx-scope': 'off',
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error',{
+      "experimentalOperatorPosition": "start",
+    }],
     'arrow-body-style': 'warn',
     'prefer-arrow-callback': 'warn',
     'react/jsx-no-target-blank': 'off',
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true }
-    ],
+    'react-refresh/only-export-components': ['warn',
+      { allowConstantExport: true }],
     'no-unused-vars': 'error',
     'eqeqeq': ['error', 'always'],
     'react/function-component-definition': ['error', { 
@@ -65,7 +67,7 @@ export default {
       unnamedComponents: 'arrow-function', 
     }],
     'func-style': ['error', 'expression'],
-    'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
+    'operator-linebreak': ['error', 'before', {'overrides' : {'=': 'after',}}],
     'object-curly-newline': ['error', {
       'ObjectExpression': { 'multiline': true, 'consistent': true },
       'ObjectPattern': { 'multiline': true, 'consistent': true },
@@ -76,8 +78,7 @@ export default {
     // "comma-dangle": ["error", "never"]
     // 'tailwindcss/classnames-order': 'warn',    
     // 'tailwindcss/no-custom-classname': 'off'
-    'import/order': [
-      'error',
+    'import/order': ['error',
       {
         groups: [
           'builtin',  
@@ -163,7 +164,6 @@ export default {
         // "consolidateIslands": 'inside-groups',
         'newlines-between': 'always',
         "distinctGroup": true,
-      },
-    ],
+      },],
   }
 }

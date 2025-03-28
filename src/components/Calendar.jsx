@@ -118,8 +118,8 @@ const Calendar = ({ startDate, endDate, onChange }) => {
 
     const dateTime = date.getTime();
     return (
-      dateTime > selectedStartDate.getTime() &&
-      dateTime < selectedEndDate.getTime()
+      dateTime > selectedStartDate.getTime()
+      && dateTime < selectedEndDate.getTime()
     );
   };
 
@@ -132,9 +132,9 @@ const Calendar = ({ startDate, endDate, onChange }) => {
   const isToday = date => {
     const today = new Date();
     return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
+      date.getDate() === today.getDate()
+      && date.getMonth() === today.getMonth()
+      && date.getFullYear() === today.getFullYear()
     );
   };
 
@@ -234,16 +234,17 @@ const Calendar = ({ startDate, endDate, onChange }) => {
       const isInRange = isDateInRange(date);
 
       const isTempSelected =
-        tempDate &&
-        formatDateForCompare(date) === formatDateForCompare(tempDate);
+        tempDate
+        && formatDateForCompare(date) === formatDateForCompare(tempDate);
 
       const isStart =
-        selectedStartDate &&
-        formatDateForCompare(date) === formatDateForCompare(selectedStartDate);
+        selectedStartDate
+        && formatDateForCompare(date)
+          === formatDateForCompare(selectedStartDate);
 
       const isEnd =
-        selectedEndDate &&
-        formatDateForCompare(date) === formatDateForCompare(selectedEndDate);
+        selectedEndDate
+        && formatDateForCompare(date) === formatDateForCompare(selectedEndDate);
 
       // 날짜 조건 확인
       const isSundayDate = isSunday(date);

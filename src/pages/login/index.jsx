@@ -71,7 +71,7 @@ const LoginPage = () => {
     <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
       {/* 뒤로가기 */}
       <button
-        onClick={() => navigate(from, { replace: true })}
+        onClick={() => navigate(-1)}
         className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
       >
         <Icon

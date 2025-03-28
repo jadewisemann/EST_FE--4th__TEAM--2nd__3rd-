@@ -15,11 +15,11 @@ const Radio = ({ name, options, selectedIndex, onChange }) => {
             disabled={option.disabled}
             checked={selectedIndex === index}
             onChange={() => onChange(index)}
-            className='peer aspect-square w-[1.125rem] accent-violet-600'
+            className='peer aspect-square w-[1.125rem] accent-violet-600 dark:accent-violet-500'
           />
           <label
             htmlFor={`${name}-${index}`}
-            className='text-sm font-medium text-neutral-400 peer-checked:text-black'
+            className='text-sm font-medium text-neutral-400 peer-checked:text-black dark:peer-checked:text-white'
           >
             {option.value}
           </label>

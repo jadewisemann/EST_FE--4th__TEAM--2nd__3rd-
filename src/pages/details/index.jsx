@@ -13,7 +13,7 @@ import DetailProduct from './components/DetailProduct';
 import ShareBtn from './components/ShareBtn';
 
 // component
-import { getHotelById } from '../../firebase/search';
+import { getHotelById, searchHotelsAdvanced } from '../../firebase/searchQuery';
 
 import Button from '../../components/Button';
 import DetailSection from '../../components/DetailSection';
@@ -127,14 +127,18 @@ const DetailsPage = () => {
           </div>
           <a
             href={
-              'https://map.kakao.com/link/search/' +
-              encodeURIComponent(data.location[0])
+              'https://map.kakao.com/link/search/'
+              + encodeURIComponent(data.location[0])
             }
             target='_blank'
-            className='flex cursor-pointer items-center gap-1 text-xs text-neutral-400'
+            className='flex cursor-pointer items-center gap-1 text-xs text-neutral-500 dark:text-neutral-300'
             title={data.title + ' 카카오맵 열기'}
           >
-            <Icon name='location' size={16} className='text-neutral-600' />
+            <Icon
+              name='location'
+              size={16}
+              className='text-neutral-600 dark:text-neutral-300'
+            />
             {data.location[0]}
           </a>
         </div>
@@ -148,7 +152,7 @@ const DetailsPage = () => {
                 style={{
                   background: `url(${item.image}) no-repeat center/contain`,
                 }}
-                className='aspect-square w-4'
+                className='aspect-square w-4 dark:brightness-114 dark:contrast-94 dark:hue-rotate-210 dark:invert dark:saturate-4096 dark:sepia-1'
               ></i>
               <span>{item.text}</span>
             </li>
@@ -159,7 +163,9 @@ const DetailsPage = () => {
         <h3 className='text-lg font-bold'>객실선택</h3>
         <div className='my-2 flex justify-between'>
           <div className='flex flex-col gap-1'>
-            <span className='text-xs text-neutral-600'>체크인 & 체크아웃</span>
+            <span className='text-xs text-neutral-600 dark:text-neutral-400'>
+              체크인 & 체크아웃
+            </span>
             <span className='text-lg font-bold'>
               <span>{dates.startDate} ~ </span>
               <span className='whitespace-nowrap'>
@@ -168,14 +174,24 @@ const DetailsPage = () => {
             </span>
           </div>
           <div className='flex flex-col gap-1'>
-            <span className='text-xs text-neutral-600'>투숙객</span>
+            <span className='text-xs text-neutral-600 dark:text-neutral-400'>
+              투숙객
+            </span>
             <ul className='flex gap-1 text-lg font-bold [&>li]:flex [&>li]:items-center [&>li]:gap-1'>
               <li>
-                <Icon name='user' size={16} color='black' />
+                <Icon
+                  name='user'
+                  size={16}
+                  className='text-black dark:text-neutral-300'
+                />
                 {guests.adults}
               </li>
               <li>
-                <Icon name='children' size={16} color='black' />
+                <Icon
+                  name='children'
+                  size={16}
+                  className='text-black dark:text-neutral-300'
+                />
                 {guests.children}
               </li>
             </ul>
