@@ -159,9 +159,8 @@ const StayListpage = () => {
           <div className='flex flex-col items-start text-sm dark:text-neutral-50'>
             <strong>{headerInfo.name}</strong>
             <span className='text-xs'>
-              {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{' '}
+              {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{''}
               {headerInfo.numOfAdults}명
-              {(guests.children || guests.infants) && '...'}
             </span>
           </div>
           <Icon
@@ -182,6 +181,7 @@ const StayListpage = () => {
         <VerticalList
           products={visibleProducts}
           onItemClick={handleItemClick}
+          isLoading={isLoading}
         />
 
         {(visibleProducts.length < hotelList.length || hasMore) && (

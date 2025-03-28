@@ -5,9 +5,33 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Heart from './Heart';
 import Icon from './Icon';
 import Rating from './Rating';
+import SkeletonItem from './SkeletonItem';
 
-const HorizontalList = ({ products }) => {
+const HorizontalList = ({ products, isLoading }) => {
   const navigate = useNavigate();
+
+  if (isLoading) {
+    return (
+      <Swiper
+        spaceBetween={20}
+        slidesPerView={1.8}
+        slidesOffsetBefore={20}
+        slidesOffsetAfter={20}
+        freeMode
+        style={{ margin: '-20px', paddingBlock: '20px' }}
+      >
+        {Array.from({ length: 4 }).map((_, index) => (
+          <SwiperSlide
+            key={index}
+            className='rounded-[10px] p-3 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)] dark:bg-neutral-600'
+          >
+            <SkeletonItem type='horizon' />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    );
+  }
+
   return (
     <Swiper
       spaceBetween={20}

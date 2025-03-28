@@ -13,6 +13,7 @@ import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import Loading from '../../components/Loading';
 import DateModal from '../../components/modal/DateModal';
 import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
@@ -32,6 +33,23 @@ const MainPage = () => {
   const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
   const totalNights = `${dates.duration}박`;
   const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
+
+  //로딩 관련 상태 - 첫방문시 세션에 상태저장
+  const [isFirstVisit, setIsFirstVisit] = useState(
+    sessionStorage.getItem('firstVisit') === null,
+  );
+  // 스켈레톤에 보낼 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 첫방문시 3초간 로딩 페이지 호출
+  useEffect(() => {
+    if (isFirstVisit) {
+      setTimeout(() => {
+        setIsFirstVisit(false);
+        sessionStorage.setItem('firstVisit', 'false');
+      }, 3000);
+    }
+  }, [isFirstVisit]);
 
   // 백그라운드 이미지
   useEffect(() => {
@@ -91,6 +109,7 @@ const MainPage = () => {
       } catch (error) {
         console.error('추천 호텔 가져오기 실패:', error);
       }
+      setIsLoading(false); // 데이터 가져온후 로딩상태 변경
     };
     fetchRecommentedHotels();
   }, []);
@@ -101,6 +120,11 @@ const MainPage = () => {
     const encoded = encodeURI(keyword);
     navigate(`/result?keyword=${encoded}`);
   };
+
+  // 세션 상태 확인후 로딩페이지 호출
+  if (isFirstVisit) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -198,7 +222,7 @@ const MainPage = () => {
               전체보기
             </button>
           </div>
-          <HorizontalList products={recommendedHotels} />
+          <HorizontalList products={recommendedHotels} isLoading={isLoading} />
         </div>
       </div>
       {!isAnyModalOpen && <Nav />}
