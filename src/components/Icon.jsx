@@ -13,6 +13,8 @@ import {
   FaSwimmingPool,
   FaSmoking,
   FaCheck,
+  FaEye,
+  FaEyeSlash,
 } from 'react-icons/fa';
 import {
   FaChildReaching,
@@ -60,6 +62,8 @@ const Icon = ({
     sort: LuArrowDownUp,
     arrow_down: IoIosArrowDown,
     phone: MdPhoneIphone,
+    eye: FaEye,
+    eye_close: FaEyeSlash,
     // calendar
     calendar: CiCalendar,
     arrow_right: FaArrowRight,

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Icon from './Icon';
 
 // inputtype 정의
@@ -14,7 +16,7 @@ const typeConfig = {
   },
   password: {
     icon: 'lock',
-    placeholder: '•••••••',
+    placeholder: '••••••',
     type: 'password',
     label: '비밀번호',
     validation: value => (value || '').length > 5,
@@ -75,6 +77,7 @@ const Input = ({
 }) => {
   const config = typeConfig[inputType] || {};
   const inputId = `input-${inputType}`;
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   // 유효성 검사
   const checkValidity = (val, compVal) =>
@@ -122,7 +125,13 @@ const Input = ({
 
         <input
           id={inputId}
-          type={type || config.type}
+          type={
+            inputType === 'password' || inputType === 'confirmPassword'
+              ? isPasswordVisible
+                ? 'password'
+                : 'text'
+              : type || config.type
+          }
           className={`w-full rounded-full border-none px-14 py-4 outline-none placeholder:text-neutral-300 dark:text-neutral-50 dark:placeholder:text-neutral-400 ${inputClass}`}
           placeholder={placeholder || config.placeholder}
           value={value}
@@ -131,22 +140,42 @@ const Input = ({
         />
 
         {/* 지우기 버튼 */}
-        {value !== 0 && value && (
-          <button
-            type='button'
-            className='absolute right-5 cursor-pointer'
-            onClick={() => {
-              onChange('');
-              onValidChange(false);
-            }}
-          >
-            <Icon
-              name='close'
-              className='text-neutral-800 dark:text-neutral-50'
-            />
-            <span className='sr-only'>지우기 버튼</span>
-          </button>
-        )}
+        {inputType !== 'password' &&
+          inputType !== 'confirmPassword' &&
+          value && (
+            <button
+              type='button'
+              className='absolute right-5 cursor-pointer'
+              onClick={() => {
+                onChange('');
+                onValidChange(false);
+              }}
+            >
+              <Icon
+                name='close'
+                className='text-neutral-800 dark:text-neutral-50'
+              />
+              <span className='sr-only'>지우기 버튼</span>
+            </button>
+          )}
+
+        {/* 비밀번호 보이기*/}
+        {(inputType === 'password' || inputType === 'confirmPassword') &&
+          value && (
+            <button
+              type='button'
+              className='absolute right-5 cursor-pointer'
+              onClick={() => setIsPasswordVisible(prev => !prev)}
+            >
+              <Icon
+                name={isPasswordVisible ? 'eye' : 'eye_close'}
+                className='text-neutral-800 dark:text-neutral-50'
+              />
+              <span className='sr-only'>
+                {isPasswordVisible ? '비밀번호 보이기' : '비밀번호 숨기기'}
+              </span>
+            </button>
+          )}
       </div>
       {/* 에러 메세지 */}
       {showError && (
