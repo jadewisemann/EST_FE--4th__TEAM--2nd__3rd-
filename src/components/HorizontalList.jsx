@@ -69,7 +69,8 @@ const HorizontalList = ({ products, isLoading }) => {
               </address>
               <div className='mt-1 flex items-end gap-1'>
                 <span className='text-sm font-bold text-violet-600 dark:text-violet-500'>
-                  {product.price.toLocaleString()}원
+                  {/* {product.price.toLocaleString()}원 */}
+                  {(product.price ?? 0).toLocaleString()}원
                 </span>
                 <span className='text-xs text-neutral-500 dark:text-neutral-300'>
                   /1박

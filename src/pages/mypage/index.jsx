@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import useAuthStore from '../../store/authStore';
 import useDarkModeStore from '../../store/darkModeStore';
-import useReservationStore from '../../store/reservationStore';
+import useModalStore from '../../store/modalStore';
+import useReservationWithAuth from '../../store/userStore';
 
-import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
@@ -16,9 +16,18 @@ import VerticalList from '../../components/VerticalList';
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const { openPasswordChangeModal } = useModalStore();
   const { user, login, logout } = useAuthStore();
+  const { point, reservations, loading, error } = useReservationWithAuth();
+  const userName = user
+    ? `${user.displayName || user.email?.split('@')[0]}`
+    : '로그인';
 
-  const { reservations, loading } = useReservationStore();
+  console.log(point);
+  console.log(reservations);
+  console.log(loading);
+  console.log(error);
+
   const { toggleDarkMode } = useDarkModeStore();
 
   console.log('[MyPage] 예약 리스트:', reservations);
@@ -57,11 +66,10 @@ const MyPage = () => {
         title='내 정보'
         type='table-spacebetween'
         contents={[
-          { label: '이름', value: '홍길동' },
-          { label: '이메일', value: 'honh_honh_good@gmail.com' },
+          { label: '이름', value: userName },
+          { label: '이메일', value: user.email },
           { label: '보유포인트', value: '500,000 P' },
         ]}
-        onclick={() => {}} //더보기 클릭 시 열리는 팝업 넣기
       />
       <br />
       <DetailSection
@@ -71,7 +79,13 @@ const MyPage = () => {
           { label: '비밀번호 변경', showMore: true, showMoreText: '더보기' },
           { label: '다크모드', anchor: true, anchorText: '적용하기' },
         ]}
-        onclick={toggleDarkMode}
+        onclick={item => {
+          if (item.label === '비밀번호 변경') {
+            openPasswordChangeModal();
+          } else if (item.label === '다크모드') {
+            toggleDarkMode();
+          }
+        }}
       />
       <button
         onClick={handleLogout}
