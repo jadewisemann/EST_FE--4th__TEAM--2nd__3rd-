@@ -13,8 +13,6 @@ import {
   FaSwimmingPool,
   FaSmoking,
   FaCheck,
-  FaEye,
-  FaEyeSlash,
 } from 'react-icons/fa';
 import {
   FaChildReaching,
@@ -42,7 +40,7 @@ import {
 } from 'react-icons/md';
 import { MdPhoneIphone } from 'react-icons/md';
 import { PiHouse } from 'react-icons/pi';
-import { VscBlank } from 'react-icons/vsc';
+import { VscBlank, VscEye, VscEyeClosed } from 'react-icons/vsc';
 const Icon = ({
   name,
   size = 24,
@@ -62,8 +60,8 @@ const Icon = ({
     sort: LuArrowDownUp,
     arrow_down: IoIosArrowDown,
     phone: MdPhoneIphone,
-    eye: FaEye,
-    eye_close: FaEyeSlash,
+    eye: VscEye,
+    eye_close: VscEyeClosed,
     // calendar
     calendar: CiCalendar,
     arrow_right: FaArrowRight,
