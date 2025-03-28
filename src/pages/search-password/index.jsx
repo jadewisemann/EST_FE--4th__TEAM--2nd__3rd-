@@ -1,16 +1,13 @@
 import { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
 import useAuthStore from '../../store/authStore';
 import useToastStore from '../../store/toastStore';
 
 import Button from '../../components/Button';
-import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import SubHeader from '../../components/SubHeader';
 
 const SearchPasswordPage = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const { resetPassword } = useAuthStore();
@@ -34,53 +31,44 @@ const SearchPasswordPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
-      {/* 뒤로가기 */}
-      <button
-        onClick={() => {
-          navigate(-1);
-        }}
-        className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
-      >
-        <Icon
-          name='arrow_left'
-          className='text-neutral-800 dark:text-neutral-50'
-        />
-        <span className='sr-only'>뒤로가기</span>
-      </button>
+    <>
+      {/* 서브 헤더 */}
+      <SubHeader fixed={false} />
 
-      {/* 페이지 정보 */}
-      <div className='mb-10 flex flex-col gap-5'>
-        <h2 className='text-4xl font-bold text-violet-600'>비밀번호 찾기</h2>
-        비밀번호를 잊어버리셨다면 <br />
-        비밀번호를 복구하세요!
+      <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
+        {/* 페이지 정보 */}
+        <div className='mb-10 flex flex-col gap-5'>
+          <h2 className='text-4xl font-bold text-violet-600'>비밀번호 찾기</h2>
+          비밀번호를 잊어버리셨다면 <br />
+          비밀번호를 복구하세요!
+        </div>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            handleSearchPw();
+          }}
+        >
+          {/* 인풋 */}
+          <Input
+            className='mb-6'
+            inputType='email'
+            value={email}
+            onChange={setEmail}
+            onValidChange={setIsEmailValid}
+          />
+
+          {/*  버튼 */}
+          <Button
+            color='prime'
+            size='full'
+            type='submit'
+            content='확인'
+            childrenClassName='font-bold'
+            disabled={!isEmailValid}
+          />
+        </form>
       </div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          handleSearchPw();
-        }}
-      >
-        {/* 인풋 */}
-        <Input
-          className='mb-6'
-          inputType='email'
-          value={email}
-          onChange={setEmail}
-          onValidChange={setIsEmailValid}
-        />
-
-        {/*  버튼 */}
-        <Button
-          color='prime'
-          size='full'
-          type='submit'
-          content='확인'
-          childrenClassName='font-bold'
-          disabled={!isEmailValid}
-        />
-      </form>
-    </div>
+    </>
   );
 };
 

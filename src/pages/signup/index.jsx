@@ -10,8 +10,8 @@ import useToastStore from '../../store/toastStore';
 
 // Component
 import Button from '../../components/Button';
-import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import SubHeader from '../../components/SubHeader';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -47,77 +47,71 @@ const SignupPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
-      {/* 뒤로가기 */}
-      <button
-        onClick={() => {
-          navigate(-1);
-        }}
-        className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
-      >
-        <Icon
-          name='arrow_left'
-          className='text-neutral-800 dark:text-neutral-50'
-        />
-        <span className='sr-only'>뒤로가기</span>
-      </button>
+    <>
+      {/* 서브 헤더 */}
+      <SubHeader fixed={false} />
 
-      {/* 페이지 정보 */}
-      <div className='mb-10 flex flex-col gap-5'>
-        <h2 className='text-4xl font-bold text-violet-600'>회원가입</h2>
-        숙박 예약 기능을 사용하려면 <br />
-        계정을 만드세요!
-      </div>
-
-      {/* 인풋 */}
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          handleSignup();
-        }}
-      >
-        <div className='mb-6 flex flex-col gap-5'>
-          <Input
-            inputType='email'
-            value={email}
-            onChange={setEmail}
-            onValidChange={setIsEmailValid}
-          />
-          <Input
-            inputType='name'
-            value={name}
-            onChange={setName}
-            onValidChange={setIsNameValid}
-          />
-          <Input
-            inputType='password'
-            value={password}
-            onChange={setPassword}
-            autoComplete='new-password'
-            onValidChange={setIsPasswordValid}
-          />
-          <Input
-            inputType='confirmPassword'
-            value={confirmpassword}
-            compareValue={password}
-            onChange={setConfirmpassword}
-            onValidChange={setisConfirmValid}
-          />
+      <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
+        {/* 페이지 정보 */}
+        <div className='mb-10 flex flex-col gap-5'>
+          <h2 className='text-4xl font-bold text-violet-600'>회원가입</h2>
+          숙박 예약 기능을 사용하려면 <br />
+          계정을 만드세요!
         </div>
 
-        {/*버튼*/}
-        <Button
-          color='prime'
-          size='full'
-          type='submit'
-          content='회원가입'
-          childrenClassName='font-bold'
-          disabled={
-            !isEmailValid || !isPasswordValid || !isNameValid || !isConfirmValid
-          }
-        />
-      </form>
-    </div>
+        {/* 인풋 */}
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            handleSignup();
+          }}
+        >
+          <div className='mb-6 flex flex-col gap-5'>
+            <Input
+              inputType='email'
+              value={email}
+              onChange={setEmail}
+              onValidChange={setIsEmailValid}
+            />
+            <Input
+              inputType='name'
+              value={name}
+              onChange={setName}
+              onValidChange={setIsNameValid}
+            />
+            <Input
+              inputType='password'
+              value={password}
+              onChange={setPassword}
+              autoComplete='new-password'
+              onValidChange={setIsPasswordValid}
+            />
+            <Input
+              inputType='confirmPassword'
+              value={confirmpassword}
+              compareValue={password}
+              onChange={setConfirmpassword}
+              onValidChange={setisConfirmValid}
+            />
+          </div>
+
+          {/*버튼*/}
+          <Button
+            color='prime'
+            size='full'
+            type='submit'
+            content='회원가입'
+            childrenClassName='font-bold'
+            disabled={
+              !isEmailValid ||
+              !isPasswordValid ||
+              !isNameValid ||
+              !isConfirmValid
+            }
+          />
+        </form>
+      </div>
+    </>
   );
 };
 
