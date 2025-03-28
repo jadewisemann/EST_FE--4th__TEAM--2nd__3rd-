@@ -21,7 +21,6 @@ const DetailSection = ({
               <li className='py-0.5'>{item}</li>
             </ul>
           ))}
-
         {type === 'list-left-dot'
           && contents.map((item, idx) => (
             <ul
@@ -35,7 +34,6 @@ const DetailSection = ({
               </li>
             </ul>
           ))}
-
         {type === 'list-left-dot-title'
           && contents.map((item, idx) => (
             <div key={idx}>
@@ -54,7 +52,6 @@ const DetailSection = ({
               </ul>
             </div>
           ))}
-
         {type === 'table-left'
           && contents.map((item, idx) => (
             <div
@@ -80,7 +77,6 @@ const DetailSection = ({
               ))}
             </div>
           ))}
-
         {type === 'table-spacebetween' && (
           <div className='flex flex-col gap-2'>
             {contents.map((item, idx) => (
