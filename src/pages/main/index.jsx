@@ -34,16 +34,19 @@ const MainPage = () => {
   const totalNights = `${dates.duration}박`;
   const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
 
+  //로딩 관련 상태 - 첫방문시 세션에 상태저장
   const [isFirstVisit, setIsFirstVisit] = useState(
     sessionStorage.getItem('firstVisit') === null,
   );
+  // 스켈레톤에 보낼 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
 
-  // 첫로그인 로딩 페이지
+  // 첫방문시 3초간 로딩 페이지 호출
   useEffect(() => {
     if (isFirstVisit) {
       setTimeout(() => {
         setIsFirstVisit(false);
-        sessionStorage.setItem('firstVisit', 'false'); // 첫 방문이 아님을 저장
+        sessionStorage.setItem('firstVisit', 'false');
       }, 3000);
     }
   }, [isFirstVisit]);
@@ -106,6 +109,7 @@ const MainPage = () => {
       } catch (error) {
         console.error('추천 호텔 가져오기 실패:', error);
       }
+      setIsLoading(false); // 데이터 가져온후 로딩상태 변경
     };
     fetchRecommentedHotels();
   }, []);
@@ -117,7 +121,7 @@ const MainPage = () => {
     navigate(`/result?keyword=${encoded}`);
   };
 
-  // 로딩 페이지
+  // 세션 상태 확인후 로딩페이지 호출
   if (isFirstVisit) {
     return <Loading />;
   }

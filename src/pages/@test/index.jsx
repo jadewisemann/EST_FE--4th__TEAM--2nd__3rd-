@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 // Store
+import useDarkModeStore from '../../store/darkModeStore';
 import useToastStore from '../../store/toastStore';
 
 // Component
@@ -17,10 +18,12 @@ import Heart from '../../components/Heart';
 import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import Loading from '../../components/Loading';
 import Nav from '../../components/Nav';
 import Radio from '../../components/Radio';
 import Rating from '../../components/Rating';
 import ReviewRating from '../../components/ReviewRating';
+import SkeletonItem from '../../components/SkeletonItem';
 import SubHeader from '../../components/SubHeader';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
@@ -38,7 +41,8 @@ const TestPage = () => {
   const [search, setSearch] = useState('');
   const [tel, setTel] = useState('');
   const { showToast } = useToastStore();
-
+  const isLoading = true;
+  const { toggleDarkMode } = useDarkModeStore();
   const handleClick = () => {
     showToast('토스트 메시지가 표시됩니다!');
   };
@@ -64,6 +68,8 @@ const TestPage = () => {
     'Input',
     'Anchor',
     'Toast',
+    'Loading',
+    'SkeletonItem',
   ];
 
   // 라디오 버튼 예시
@@ -541,6 +547,17 @@ const TestPage = () => {
       <button className='mt-7 border-2' onClick={handleClick}>
         토스트 메시지 표시 버튼
       </button>
+    </>,
+    <>
+      <button className='mt-7 border-2' onClick={() => toggleDarkMode()}>
+        다크모드 버튼
+      </button>
+      <Loading />
+    </>,
+    <>
+      <VerticalList isLoading={isLoading} />
+      <br />
+      <HorizontalList isLoading={isLoading} type={'horizon'} />
     </>,
   ];
 

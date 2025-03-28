@@ -20,11 +20,14 @@ const HorizontalList = ({ products, isLoading }) => {
         freeMode
         style={{ margin: '-20px', paddingBlock: '20px' }}
       >
-        <SwiperSlide>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <SkeletonItem type='horizon' key={index} />
-          ))}
-        </SwiperSlide>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <SwiperSlide
+            key={index}
+            className='rounded-[10px] p-3 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)] dark:bg-neutral-600'
+          >
+            <SkeletonItem type='horizon' />
+          </SwiperSlide>
+        ))}
       </Swiper>
     );
   }

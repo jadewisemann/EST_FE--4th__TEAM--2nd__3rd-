@@ -1,19 +1,13 @@
 const SkeletonItem = ({ type }) => {
   if (type === 'horizon') {
     return (
-      <div className='w-full animate-pulse rounded-[10px] p-3 shadow-md dark:bg-neutral-600'>
-        <div className='block aspect-video w-full rounded-lg bg-gray-300 dark:bg-gray-700' />
+      <div className='w-full animate-pulse'>
+        <div className='block aspect-video w-full rounded-lg bg-gray-300' />
         <div className='mt-2'>
-          <div className='flex items-center'>
-            <div className='h-4 w-32 rounded bg-gray-300 dark:bg-gray-700' />
-            <div className='ml-auto h-4 w-10 rounded bg-gray-300 dark:bg-gray-700' />
-          </div>
-          <div className='mt-1 flex items-center'>
-            <div className='h-3 w-24 rounded bg-gray-300 dark:bg-gray-700' />
-          </div>
-          <div className='mt-1 flex items-end gap-1'>
-            <div className='h-5 w-16 rounded bg-gray-300 dark:bg-gray-700' />
-            <div className='h-4 w-8 rounded bg-gray-300 dark:bg-gray-700' />
+          <div className='flex flex-col'>
+            <div className='my-1.5 h-5 w-32 rounded bg-gray-300' />
+            <div className='h-5 w-24 rounded bg-gray-300' />
+            <div className='mt-1 h-5 w-20 rounded bg-gray-300' />
           </div>
         </div>
       </div>
@@ -37,3 +31,8 @@ const SkeletonItem = ({ type }) => {
 };
 
 export default SkeletonItem;
+
+// 사용법
+// < SkeletonItem type={} />
+// 기본적으로 버티컬에 맞춰 있으며
+// 호라이즌 사용시 type={'horizon'} 넣으면 됩니다.
