@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-import {
-  updateUserWishlist,
-  getUserWishlist,
-} from '../firebase/wishlistRepository';
+import { updateWishlist, fetchWishlist } from '../firebase/userRepository';
 
 import useAuthStore from './authStore';
 
@@ -24,7 +21,7 @@ const useWishlistStore = create(
         const { user } = useAuthStore.getState();
         if (user) {
           try {
-            await updateUserWishlist(user.uid, newWishlist);
+            await updateWishlist(user.uid, newWishlist);
           } catch (error) {
             console.error('위시리스트 추가 오류:', error);
           }
@@ -39,7 +36,7 @@ const useWishlistStore = create(
         const { user } = useAuthStore.getState();
         if (user) {
           try {
-            await updateUserWishlist(user.uid, newWishlist);
+            await updateWishlist(user.uid, newWishlist);
           } catch (error) {
             console.error('위시리스트 제거 오류:', error);
           }
@@ -54,14 +51,14 @@ const useWishlistStore = create(
 
         set({ isLoading: true });
         try {
-          const cloudWishlist = await getUserWishlist(user.uid);
+          const cloudWishlist = await fetchWishlist(user.uid);
           const localWishlist = get().wishlist;
 
           if (localWishlist.length > 0) {
             const mergedItems = Array.from(
               new Set([...cloudWishlist, ...localWishlist]),
             );
-            await updateUserWishlist(user.uid, mergedItems);
+            await updateWishlist(user.uid, mergedItems);
             set({ wishlist: mergedItems });
           } else {
             set({ wishlist: cloudWishlist });
@@ -79,7 +76,7 @@ const useWishlistStore = create(
 
         if (user) {
           try {
-            await updateUserWishlist(user.uid, []);
+            await updateWishlist(user.uid, []);
           } catch (error) {
             console.error('위시리스트 초기화 오류:', error);
           }

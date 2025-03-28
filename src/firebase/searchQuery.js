@@ -213,7 +213,7 @@ const getRoomById = async roomId => {
 
     const roomDocRef = doc(db, 'rooms', roomId);
     const roomDoc = await getDoc(roomDocRef);
-
+    //
     if (roomDoc.exists()) {
       const roomData = {
         room_id: roomDoc.id,
