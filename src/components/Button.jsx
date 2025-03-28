@@ -27,7 +27,7 @@ const Button = ({
   const cx = (...classes) => classes.filter(Boolean).join(' ');
 
   const defaultStyle =
-    'inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
+    'h-15 inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
   const focusedStyle = '';
   // const focusedStyle = 'focus:outline-none focus:ring-2 focus:ring-violet-300';
 
