@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import useAuthStore from '../../store/authStore';
 import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
-import useReservationWithAuth from '../../store/userStore';
+import useReservationWithAuth, { useUserStore } from '../../store/userStore';
 
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
@@ -18,19 +18,26 @@ const MyPage = () => {
   const navigate = useNavigate();
   const { openPasswordChangeModal } = useModalStore();
   const { user, login, logout } = useAuthStore();
-  const { point, reservations, loading, error } = useReservationWithAuth();
+  // const { point, reservations, loading, error } = useReservationWithAuth();
+  // const { point, reservations, loading, error } = useReservationWithAuth();
   const userName = user
     ? `${user.displayName || user.email?.split('@')[0]}`
     : '로그인';
 
-  console.log(point);
-  console.log(reservations);
-  console.log(loading);
-  console.log(error);
+  const { userData, points, loadUserData, isLoading, reservations } =
+    useUserStore();
+
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
+
+  console.log(points);
+  console.log(userData);
+  console.log('reservations', reservations);
 
   const { toggleDarkMode } = useDarkModeStore();
 
-  console.log('[MyPage] 예약 리스트:', reservations);
+  console.log('[MyPage] 예약 리스트:', userData);
 
   const handleLogout = async () => {
     const confirm = window.confirm('정말 로그아웃하시겠습니까?');
@@ -46,13 +53,8 @@ const MyPage = () => {
 
   return (
     <div className='container'>
-      <SubHeader
-        leftButton='arrow'
-        title='마이페이지'
-        hasShadow={false}
-        zIndex={10}
-      />
-      {!reservations || reservations.length === 0 ? (
+      <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
+      {/* {!reservations || reservations.length === 0 ? (
         <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
           <Button color='prime' size='full' onClick={handleSearchHotel}>
             숙소 검색하기
@@ -60,7 +62,7 @@ const MyPage = () => {
         </Complete>
       ) : (
         <VerticalList products={reservations} />
-      )}
+      )} */}
       <hr className='mb-6 block border-neutral-300' />
       <DetailSection
         title='내 정보'
@@ -68,7 +70,7 @@ const MyPage = () => {
         contents={[
           { label: '이름', value: userName },
           { label: '이메일', value: user.email },
-          { label: '보유포인트', value: '500,000 P' },
+          { label: '보유포인트', value: points },
         ]}
       />
       <br />
@@ -89,7 +91,7 @@ const MyPage = () => {
       />
       <button
         onClick={handleLogout}
-        className='mt-10 block w-full text-center text-xs underline underline-offset-2'
+        className='mt-8 block w-full text-center text-xs underline underline-offset-2'
       >
         로그아웃
       </button>
