@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import Loading from '../../components/Loading';
 import DateModal from '../../components/modal/DateModal';
 import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
@@ -36,6 +37,20 @@ const MainPage = () => {
   const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
   const totalNights = `${dates.duration}박`;
   const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
+
+  const [isFirstVisit, setIsFirstVisit] = useState(
+    sessionStorage.getItem('firstVisit') === null,
+  );
+
+  // 첫로그인 로딩 페이지
+  useEffect(() => {
+    if (isFirstVisit) {
+      setTimeout(() => {
+        setIsFirstVisit(false);
+        sessionStorage.setItem('firstVisit', 'false'); // 첫 방문이 아님을 저장
+      }, 3000);
+    }
+  }, [isFirstVisit]);
 
   // 백그라운드 이미지
   useEffect(() => {
@@ -193,6 +208,11 @@ const MainPage = () => {
     navigate('/result');
   };
 
+  // 로딩 페이지
+  if (isFirstVisit) {
+    return <Loading />;
+  }
+
   return (
     <>
       <button
@@ -289,7 +309,7 @@ const MainPage = () => {
               전체보기
             </button>
           </div>
-          <HorizontalList products={recommendedHotels} />
+          <HorizontalList products={recommendedHotels} isLoading={isLoading} />
         </div>
       </div>
       {!isAnyModalOpen && <Nav />}

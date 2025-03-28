@@ -3,7 +3,20 @@ import { Link } from 'react-router-dom';
 import Heart from '../components/Heart';
 import Rating from '../components/Rating';
 
-const VerticalList = ({ products }) => {
+import SkeletonItem from './SkeletonItem';
+
+const VerticalList = ({ products, isLoading }) => {
+  // 로딩중일때 스켈레톤 이미지
+  if (isLoading) {
+    return (
+      <div className='flex flex-col'>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <SkeletonItem key={index} />
+        ))}
+      </div>
+    );
+  }
+
   if (!products || products.length === 0) {
     return (
       <div className='py-8 text-center text-sm text-neutral-500'>

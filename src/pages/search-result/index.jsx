@@ -93,9 +93,9 @@ const StayListpage = () => {
     let nameText = '';
     if (activeTab === 0) {
       nameText =
-        selectedCategory
-        || name
-        || (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
+        selectedCategory ||
+        name ||
+        (hotelCount > 0 ? `총 ${hotelCount}개의 숙소` : fallbackSearch);
     } else {
       nameText = categories[activeTab];
     }
@@ -264,6 +264,7 @@ const StayListpage = () => {
         <VerticalList
           products={visibleProducts}
           onItemClick={handleItemClick}
+          isLoading={isLoading}
         />
 
         {(visibleProducts.length < hotelList.length || hasMore) && (
