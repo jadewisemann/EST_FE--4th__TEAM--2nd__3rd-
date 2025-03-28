@@ -34,8 +34,8 @@ const Button = ({
   const colors = {
     prime: 'bg-violet-600 text-white hover:bg-violet-700',
     invert:
-      'bg-white text-violet-500 border border-violet-200 hover:border-violet-300',
-    line: 'bg-white text-gray-600 border border-gray-300 hover:border-gray-400',
+      'bg-white text-violet-500 border-2  border-violet-200 hover:border-violet-300',
+    line: 'bg-white text-gray-600 border-2 border-gray-300 hover:border-gray-400',
     alt: 'bg-blue-100 text-gray-800 hover:bg-blue-200',
   };
 
