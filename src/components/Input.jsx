@@ -112,12 +112,19 @@ const Input = ({
 
       {/* 값에 따른 보더색상 변경 */}
       <div
-        className={`relative flex items-center gap-2.5 rounded-full border-2 bg-white text-neutral-600 transition-all outline-none focus-within:border-violet-600 dark:bg-neutral-800 dark:focus-within:border-violet-400 ${value === '' ? 'border-neutral-300 dark:border-neutral-400' : isValid ? 'border-violet-600 dark:border-violet-400' : 'border-red-500!'} `}
+        className={`relative flex items-center gap-2.5 rounded-full border-[1.5px] bg-white text-neutral-600 transition-all outline-none focus-within:border-violet-600 dark:bg-neutral-800 dark:focus-within:border-violet-400 ${value === '' ? 'border-neutral-300 dark:border-neutral-400' : isValid ? 'border-violet-600 dark:border-violet-400' : 'border-red-500!'} `}
       >
         {/* 아이콘 */}
         <div className='absolute left-5 min-w-[20px]'>
           <label htmlFor={inputId}>
-            {config.icon && <Icon name={config.icon} strokeWidth={0} />}
+            {config.icon && (
+              <Icon
+                name={config.icon}
+                strokeWidth={
+                  config.type === 'email' || config.type === 'tel' ? 0 : 1
+                }
+              />
+            )}
           </label>
         </div>
 
@@ -153,7 +160,7 @@ const Input = ({
             >
               <Icon
                 name='close'
-                className='text-neutral-800 dark:text-neutral-50'
+                className='text-neutral-600 dark:text-neutral-400'
               />
               <span className='sr-only'>지우기 버튼</span>
             </button>
@@ -169,7 +176,8 @@ const Input = ({
             >
               <Icon
                 name={isPasswordVisible ? 'eye' : 'eye_close'}
-                className='text-neutral-800 dark:text-neutral-50'
+                className='text-neutral-600 dark:text-neutral-400'
+                strokeWidth={0.5}
               />
               <span className='sr-only'>
                 {isPasswordVisible ? '비밀번호 보이기' : '비밀번호 숨기기'}
