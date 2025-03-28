@@ -26,6 +26,7 @@ import LoginTestPage from './pages/@test/LoginTestPage';
 import ModalTestPage from './pages/@test/ModalTestPage';
 import ReservationTestPage from './pages/@test/ReservationTestPage';
 import SearchTestPage from './pages/@test/SearchTestPage';
+import UserTestPage from './pages/@test/UserTestPage';
 
 import ModalProvider from './components/modal/ModalProvider';
 import ToastProvider from './components/ToastProvider';
@@ -69,6 +70,7 @@ const App = () => (
       <Route path='/test/modal' element={<ModalTestPage />} />
       <Route path='/test/login' element={<LoginTestPage />} />
       <Route path='/test/reservation' element={<ReservationTestPage />} />
+      <Route path='/test/user' element={<UserTestPage />} />
     </Routes>
   </>
 );
