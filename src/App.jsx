@@ -51,7 +51,7 @@ const App = () => (
       <Route path='/reservationdetail' element={<ReservationDetailPage />} />
       <Route path='/*' element={<NotFoundPage />} />
       <Route path='/test' element={<TestPage />} />
-      <Route path='/result' element={<StayListpage />} />
+      <Route path='/result/:name' element={<StayListpage />} />
       <Route path='/search' element={<SearchPage />} />
 
       {/* 로그인이 되어 있으면 접근 방지할 페이지*/}
