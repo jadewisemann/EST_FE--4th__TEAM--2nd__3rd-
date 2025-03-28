@@ -208,8 +208,9 @@ const MainPage = () => {
             ))}
           </div>
           <div className='mt-7 mb-4 flex items-center justify-between'>
-            <h4 className='text-base font-bold dark:text-neutral-50'></h4>
-            추천호텔
+            <h4 className='text-base font-bold dark:text-neutral-50'>
+              추천호텔
+            </h4>
             <button
               className='cursor-pointer text-sm text-violet-600 dark:text-violet-400'
               onClick={recommendedHotelviewMore}
