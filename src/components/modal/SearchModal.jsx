@@ -1,27 +1,45 @@
 // Store
-import useModalStore from '../../store/modalStore';
+import { useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
 import useAppDataStore from '../../store/appDataStore';
+import useModalStore from '../../store/modalStore';
 
 // Components
-import Modal from './Modal';
 import Button from '../Button';
+import Input from '../Input';
 import SubHeader from '../SubHeader';
 
+import Modal from './Modal';
 const SearchModal = () => {
-  // 모달 상태
+  const navigate = useNavigate();
+
   const { modals, closeSearchModal, openDateModal, openGuestModal } =
     useModalStore();
   const { isOpen, onConfirm } = modals.search;
 
-  // 전역 상태
   const { dates, guests } = useAppDataStore();
 
+  const [searchValue, setSearchValue] = useState('');
   // 핸들러
   const handleConfirmClick = () => {
+    closeSearchModal();
+
+    // navigate(
+    //   `/result/${encodeURIComponent(searchValue)}?query=${encodeURIComponent(searchValue)}`,
+    // );
+
+    // navigate('/result', {
+    //   state: { name: searchValue },
+    //   replace: false,
+    // });
+
+    navigate(`/result/${encodeURIComponent(searchValue)}`);
+
     if (onConfirm && typeof onConfirm === 'function') {
       onConfirm();
     }
-    closeSearchModal();
   };
 
   return (
@@ -34,10 +52,25 @@ const SearchModal = () => {
         fixed={false}
       />
       <div className='flex flex-col gap-4 p-4'>
-        <Button onClick={() => openDateModal()}>
+        <Input
+          inputType='search'
+          value={searchValue}
+          onChange={setSearchValue}
+        />
+        <Button
+          color='line'
+          icon='calendar'
+          iconSize='20'
+          onClick={() => openDateModal()}
+        >
           {`${dates.startDate} ~ ${dates.endDate}`}
         </Button>
-        <Button onClick={() => openGuestModal()}>
+        <Button
+          color='line'
+          icon='user'
+          iconSize='20'
+          onClick={() => openGuestModal()}
+        >
           {`객실 ${guests.rooms}개 성인 ${guests.adults}명 아동 ${guests.children}명`}
         </Button>
         <Button color='prime' size='full' onClick={handleConfirmClick}>
