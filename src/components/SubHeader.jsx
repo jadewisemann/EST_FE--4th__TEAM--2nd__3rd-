@@ -18,14 +18,12 @@ const SubHeader = ({
   const Close = <Icon name='close' color='black' />;
 
   const navigate = useNavigate();
-  const navigateHome = () => navigate('/');
+  const navigateHome = () => navigate('/', { replace: true });
 
   const leftButtonHandler = () => {
     if (callback && typeof callback === 'function') {
       callback();
-    }
-
-    if (leftButton === 'arrow' || leftButton === 'arrow-short') {
+    } else if (leftButton === 'arrow' || leftButton === 'arrow-short') {
       navigate(-1);
     }
   };
