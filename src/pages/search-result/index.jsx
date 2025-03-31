@@ -48,6 +48,19 @@ const SearchResult = () => {
     totalNights,
     numOfAdults: guests.adults || 1,
   };
+
+  const applySorting = (list, filter) => {
+    const sorted = [...list];
+    if (filter === '낮은 요금순') {
+      sorted.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
+    } else if (filter === '높은 요금순') {
+      sorted.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
+    } else if (filter === '평점순') {
+      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+    return sorted;
+  };
+
   // 숙소 초기 데이터 로드
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -85,8 +98,10 @@ const SearchResult = () => {
           setLastDoc(res.lastDoc);
           setHasMore(Boolean(res.lastDoc));
         }
-        setHotelList(result);
-        setVisibleProducts(result.slice(0, 7));
+
+        const sorted = applySorting(result, selectedFilter);
+        setHotelList(sorted);
+        setVisibleProducts(sorted.slice(0, 7));
       } catch (err) {
         console.error('데이터 로드 실패: ', err);
       } finally {
@@ -95,18 +110,13 @@ const SearchResult = () => {
     };
     fetchInitialData();
   }, [activeTab, keywordFromQuery]);
+
   // 필터 기준 변경 시 정렬 적용
   useEffect(() => {
-    let sorted = [...hotelList];
-    if (selectedFilter === '낮은 요금순') {
-      sorted.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
-    } else if (selectedFilter === '높은 요금순') {
-      sorted.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
-    } else if (selectedFilter === '평점순') {
-      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    }
-    setVisibleProducts(sorted.slice(0, 7));
-  }, [selectedFilter, hotelList]);
+    let sorted = applySorting(hotelList, selectedFilter);
+    setHotelList(sorted);
+    setVisibleProducts(sorted.slice(0, visibleProducts.length));
+  }, [selectedFilter]);
 
   // 더보기 클릭 시 데이터 추가 로드
   const handleViewMore = async () => {
@@ -129,8 +139,12 @@ const SearchResult = () => {
           true, // pagination 사용 여부
         );
         const newHotels = res.hotels;
-        setHotelList(prev => [...prev, ...newHotels]);
-        setVisibleProducts(prev => [...prev, ...newHotels.slice(0, 7)]);
+
+        const updateList = [...hotelList, ...newHotels];
+        const sorted = applySorting(updateList, selectedFilter);
+
+        setHotelList(sorted);
+        setVisibleProducts(sorted.slice(0, visibleProducts.length + 7));
         setLastDoc(res.lastDoc);
         setHasMore(Boolean(res.lastDoc));
       } catch (err) {
@@ -149,7 +163,7 @@ const SearchResult = () => {
     <div className='dark:bg-neutral-800'>
       <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800'>
         <button
-          className='flex w-full items-center rounded-full border px-4 py-1 dark:border-neutral-400'
+          className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 dark:border-neutral-400'
           onClick={openSearchModal}
         >
           <Icon
@@ -188,7 +202,7 @@ const SearchResult = () => {
           <Button
             size='full'
             color='invert'
-            className='mt-4 rounded-xl border-2 dark:border-neutral-400 dark:bg-neutral-800'
+            className='mt-4 border-2 dark:border-neutral-400 dark:bg-neutral-800'
             onClick={handleViewMore}
             disabled={isLoading}
           >
