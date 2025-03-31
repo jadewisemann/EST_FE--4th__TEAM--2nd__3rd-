@@ -13,7 +13,7 @@ const Nav = () => {
   const isLoggedIn = !!user;
   const [navMenus] = useState([
     { name: 'home', size: '18', path: '/' },
-    { name: 'search', size: '18', path: '/result' },
+    { name: 'search', size: '18', path: '/search-result' },
     { name: 'heart', size: '16', path: '/wishlist' },
     { name: 'user', size: '16', path: isLoggedIn ? '/mypage' : '/login' },
   ]);

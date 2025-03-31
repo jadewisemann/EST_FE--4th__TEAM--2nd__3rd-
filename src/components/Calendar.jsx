@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+import Icon from './Icon';
+
 /**
  * 캘린더 컴포넌트
  */
@@ -339,7 +341,9 @@ const Calendar = ({ startDate, endDate, onChange }) => {
               {formatDate(selectedStartDate)}
             </div>
           </div>
-          <div className='text-3xl font-bold'>{'->'}</div>
+          <div className='text-3xl font-bold'>
+            <Icon name='arrow_right' className='text-black dark:text-white' />
+          </div>
           <div className='flex flex-col items-center'>
             <div className='text-xs font-medium'>체크아웃</div>
             <div className='text-lg font-bold'>

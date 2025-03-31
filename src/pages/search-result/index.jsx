@@ -15,7 +15,7 @@ import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 
-const StayListpage = () => {
+const SearchResult = () => {
   const navigate = useNavigate();
   // 키워드 받기
   const [searchParams] = useSearchParams();
@@ -212,4 +212,4 @@ const StayListpage = () => {
   );
 };
 
-export default StayListpage;
+export default SearchResult;

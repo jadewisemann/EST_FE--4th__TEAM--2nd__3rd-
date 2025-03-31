@@ -24,8 +24,6 @@ const SubHeader = ({
   const navigate = useNavigate();
   const navigateHome = () => navigate('/', { replace: true });
 
-  console.log('leftButton', leftButton);
-
   const leftButtonHandler = () => {
     if (callback && typeof callback === 'function') {
       callback();
