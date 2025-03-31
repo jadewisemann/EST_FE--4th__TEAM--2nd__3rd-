@@ -89,6 +89,9 @@ const convertHotelPrices = hotel => {
   return convertedHotel;
 };
 
+// 메모리 캐시
+const memoryCache = new Map();
+
 // indexedDB 이용하여 호텔을 캐슁
 const DB_NAME = 'HotelCacheDB';
 const DB_VERSION = 1;
@@ -170,6 +173,11 @@ const getHotelById = async hotelId => {
       throw new Error('호텔 ID가 필요합니다');
     }
 
+    // 메모리 캐시 확인
+    if (memoryCache.has(hotelId)) {
+      return memoryCache.get(hotelId);
+    }
+
     // indexedDB에 캐시되어 있는 데이터 확인 ? 바로 반환 : 패칭
     const cachedHotel = await getFromCache(hotelId);
     if (cachedHotel) {
@@ -189,8 +197,10 @@ const getHotelById = async hotelId => {
 
       // 데이터를 변환
       const processedData = convertHotelPrices(hotelData);
-      // 캐쉬에 저장
+      // 인덱스드 db에 캐쉬에 저장
       await saveToCache(processedData);
+      // 메모리 캐시
+      memoryCache.set(hotelId, processedData);
 
       return processedData;
     } else {
