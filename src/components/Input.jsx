@@ -147,9 +147,9 @@ const Input = ({
         />
 
         {/* 지우기 버튼 */}
-        {inputType !== 'password' &&
-          inputType !== 'confirmPassword' &&
-          value && (
+        {inputType !== 'password'
+          && inputType !== 'confirmPassword'
+          && value && (
             <button
               type='button'
               className='absolute right-5 cursor-pointer'
@@ -167,8 +167,8 @@ const Input = ({
           )}
 
         {/* 비밀번호 보이기*/}
-        {(inputType === 'password' || inputType === 'confirmPassword') &&
-          value && (
+        {(inputType === 'password' || inputType === 'confirmPassword')
+          && value && (
             <button
               type='button'
               className='absolute right-5 cursor-pointer'

@@ -5,6 +5,9 @@ import { updateWishlist, fetchWishlist } from '../firebase/userRepository';
 
 import useAuthStore from './authStore';
 
+const filterNullValues = array =>
+  array.filter(item => item !== null && item !== undefined);
+
 const useWishlistStore = create(
   persist(
     (set, get) => ({
@@ -12,11 +15,15 @@ const useWishlistStore = create(
       isLoading: false,
 
       addToWishlist: async itemId => {
+        if (!itemId) return;
+
         const { wishlist } = get();
         if (wishlist.includes(itemId)) return;
 
         const newWishlist = [...wishlist, itemId];
-        set({ wishlist: newWishlist });
+        const cleanWishlist = filterNullValues(newWishlist);
+
+        set({ wishlist: cleanWishlist });
 
         const { user } = useAuthStore.getState();
         if (user) {
@@ -31,7 +38,9 @@ const useWishlistStore = create(
       removeFromWishlist: async itemId => {
         const { wishlist } = get();
         const newWishlist = wishlist.filter(item => item !== itemId);
-        set({ wishlist: newWishlist });
+        const cleanWishlist = filterNullValues(newWishlist);
+
+        set({ wishlist: cleanWishlist });
 
         const { user } = useAuthStore.getState();
         if (user) {
@@ -52,16 +61,24 @@ const useWishlistStore = create(
         set({ isLoading: true });
         try {
           const cloudWishlist = await fetchWishlist(user.uid);
+
+          const cleanCloudWishlist = filterNullValues(cloudWishlist || []);
+
           const localWishlist = get().wishlist;
 
-          if (localWishlist.length > 0) {
+          const cleanLocalWishlist = filterNullValues(localWishlist);
+
+          if (cleanLocalWishlist.length > 0) {
             const mergedItems = Array.from(
-              new Set([...cloudWishlist, ...localWishlist]),
+              new Set([...cleanCloudWishlist, ...cleanLocalWishlist]),
             );
-            await updateWishlist(user.uid, mergedItems);
-            set({ wishlist: mergedItems });
+
+            const cleanMergedItems = filterNullValues(mergedItems);
+
+            await updateWishlist(user.uid, cleanMergedItems);
+            set({ wishlist: cleanMergedItems });
           } else {
-            set({ wishlist: cloudWishlist });
+            set({ wishlist: cleanCloudWishlist });
           }
         } catch (error) {
           console.error('위시리스트 동기화 오류:', error);
@@ -79,6 +96,25 @@ const useWishlistStore = create(
             await updateWishlist(user.uid, []);
           } catch (error) {
             console.error('위시리스트 초기화 오류:', error);
+          }
+        }
+      },
+
+      cleanWishlist: () => {
+        const { wishlist } = get();
+        const cleanWishlist = filterNullValues(wishlist);
+
+        // 변경이 있을 때만 업데이트 진행
+        if (cleanWishlist.length !== wishlist.length) {
+          set({ wishlist: cleanWishlist });
+
+          const { user } = useAuthStore.getState();
+          if (user) {
+            try {
+              updateWishlist(user.uid, cleanWishlist);
+            } catch (error) {
+              console.error('위시리스트 정리 오류:', error);
+            }
           }
         }
       },

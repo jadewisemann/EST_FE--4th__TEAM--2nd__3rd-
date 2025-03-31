@@ -78,7 +78,7 @@ const VerticalList = ({ products, isLoading }) => {
                 </div>
               </div>
             </Link>
-            <Heart className='absolute right-0 bottom-4' />
+            <Heart className='absolute right-0 bottom-4' hotelId={product.id} />
           </div>
         );
       })}
