@@ -90,7 +90,7 @@ const MainPage = () => {
     e.preventDefault();
     if (!searchText.trim()) return;
     const encoded = encodeURIComponent(searchText);
-    navigate(`/result?keyword=${encoded}`);
+    navigate(`/search-result?keyword=${encoded}`);
   };
 
   // 카테고리 클릭 함수
