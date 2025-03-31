@@ -79,32 +79,35 @@ const MyPage = () => {
 
   const handleSearchHotel = () => {
     // navigate('/result', { state: { name: '부산' } }); 검색어 넘길 수 있음
-    navigate('/result');
+    navigate('/search-result');
   };
 
   return (
     <div className='container'>
       <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
       {!reservations || reservations.length === 0 ? (
-        <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
-          <Button color='prime' size='full' onClick={handleSearchHotel}>
-            숙소 검색하기
-          </Button>
-        </Complete>
+        <>
+          <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
+            <Button color='prime' size='full' onClick={handleSearchHotel}>
+              숙소 검색하기
+            </Button>
+          </Complete>
+          <hr className='mb-6 block border-neutral-300' />
+        </>
       ) : (
         <>
           <h3 className='mt-6 font-bold dark:text-neutral-50'>예약 세부정보</h3>
           <VerticalList products={mergedReservations} />
+          <hr className='mb-6 block border-0' />
         </>
       )}
-      <hr className='mb-6 block border-neutral-300' />
       <DetailSection
         title='내 정보'
         type='table-spacebetween'
         contents={[
           { label: '이름', value: userName },
           { label: '이메일', value: user.email },
-          { label: '보유포인트', value: points.toLocaleString() },
+          { label: '보유포인트', value: `${points.toLocaleString()} P` },
         ]}
       />
       <br />
