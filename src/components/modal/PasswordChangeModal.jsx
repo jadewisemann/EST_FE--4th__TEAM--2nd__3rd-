@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 import useModalStore from '../../store/modalStore';
+import useToastStore from '../../store/toastStore';
 
-import { changePassword } from '../../firebase/authProvider';
+import { changePassword, resetPassword } from '../../firebase/authProvider';
 
 import Button from '../Button';
 import Input from '../Input';
@@ -12,22 +13,30 @@ import Modal from './Modal';
 
 const PasswordChangeModal = () => {
   const { modals, closePasswordChangeModal } = useModalStore();
-  const { isOpen, onConfirm } = modals.passwordChange;
+  const { isOpen } = modals.passwordChange;
+
+  const { showToast } = useToastStore();
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = async () => {
-    if (onConfirm && typeof onConfirm === 'function') {
-      onConfirm({ newPassword });
-    }
-
     const result = await changePassword(oldPassword, newPassword);
-    if (result) setNewPassword('');
-    setConfirmPassword('');
+    console.log('result', result);
+    alert(result.message);
 
-    closePasswordChangeModal();
+    if (result.success) {
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      closePasswordChangeModal();
+    }
+  };
+
+  const onClick = async () => {
+    const result = await resetPassword();
+    showToast(result.message);
   };
 
   return (
@@ -53,6 +62,7 @@ const PasswordChangeModal = () => {
           onChange={setNewPassword}
           label='새로운 비밀번호'
         />
+
         <Input
           inputType='confirmPassword'
           value={confirmPassword}
@@ -68,6 +78,12 @@ const PasswordChangeModal = () => {
             !oldPassword || !newPassword || newPassword !== confirmPassword
           }
         />
+        <button
+          className='cursor-pointer hover:text-violet-400'
+          onClick={onClick}
+        >
+          대신 이메일로 인증
+        </button>
       </div>
     </Modal>
   );
