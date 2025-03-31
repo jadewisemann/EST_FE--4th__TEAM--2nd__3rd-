@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 
+// swiper
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -12,38 +13,35 @@ import useAppDataStore from '../../store/appDataStore';
 import DetailProduct from './components/DetailProduct';
 import ShareBtn from './components/ShareBtn';
 
-// component
-import { getHotelById, searchHotelsAdvanced } from '../../firebase/searchQuery';
+// data
+import { getHotelById } from '../../firebase/searchQuery';
 
+// component
 import Button from '../../components/Button';
 import DetailSection from '../../components/DetailSection';
 import Icon from '../../components/Icon';
-import Nav from '../../components/Nav';
+import Loading from '../../components/Loading';
 import Rating from '../../components/Rating';
 import SubHeader from '../../components/SubHeader';
-// data
 
 const DetailsPage = () => {
-  // page 사용 데이터(호텔 데이터)
-  const [data, setData] = useState(null);
+  // params
+  const { hotelId } = useParams(); // 호텔 ID
 
-  // 보여질 방의 갯수(초기 값 2)
-  const [visibleRooms, setVisibleRooms] = useState(2);
-
-  // 호텔 ID
-  const { hotelId } = useParams();
-  // 한글, 공백, 특수문자 예외처리하기 위한 decoding
-  const decodedHotelId = decodeURIComponent(hotelId);
+  // state
+  const [data, setData] = useState(null); // page 사용 데이터(호텔 데이터)
+  const [visibleRooms, setVisibleRooms] = useState(2); // 보여질 방의 갯수(초기 값 2)
 
   // 사용자 정보
   const { dates, guests } = useAppDataStore();
 
+  // useEffect
   // 페이지 로딩 직후 실행
   useEffect(() => {
     const fetchHotel = async () => {
       try {
         // hotel정보 담기
-        const hotelData = await getHotelById(`${decodedHotelId}`);
+        const hotelData = await getHotelById(hotelId);
 
         if (hotelData) {
           // 페이지 사용 data에 hotel 정보 담기
@@ -66,9 +64,10 @@ const DetailsPage = () => {
 
   // 데이터 로딩 처리
   if (!data) {
-    return <div>로딩 중</div>;
+    return <Loading />;
   }
 
+  // event
   // 더보기 버튼 클릭 시 room 더 보여주기
   const moreRoom = () => {
     const remainingRooms = data.rooms.length - visibleRooms;
@@ -87,7 +86,7 @@ const DetailsPage = () => {
 
   return (
     <>
-      <div className='container'>
+      <div className='container pb-10!'>
         <SubHeader
           leftButton='arrow'
           title={data.title}
@@ -254,7 +253,6 @@ const DetailsPage = () => {
             '고객센터 : 080 - 2465 - 6585',
           ]}
         />
-        <Nav />
       </div>
     </>
   );
