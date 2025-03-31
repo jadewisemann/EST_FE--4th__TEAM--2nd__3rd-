@@ -22,7 +22,7 @@ const SearchModal = () => {
   const { dates, guests } = useAppDataStore();
 
   const [searchValue, setSearchValue] = useState('');
-  // 핸들러
+
   const handleConfirmClick = () => {
     closeSearchModal();
 
@@ -51,7 +51,7 @@ const SearchModal = () => {
         rightButton={false}
         fixed={false}
       />
-      <div className='flex flex-col gap-4 p-4'>
+      <div className='flex flex-col gap-4 bg-white p-4 dark:bg-black'>
         <Input
           inputType='search'
           value={searchValue}

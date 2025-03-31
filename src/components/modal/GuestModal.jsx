@@ -2,14 +2,15 @@
 import { useState, useEffect } from 'react';
 
 // Store
-import useModalStore from '../../store/modalStore';
 import useAppDataStore from '../../store/appDataStore';
+import useModalStore from '../../store/modalStore';
 
 // Component
-import Modal from './Modal';
-import SubHeader from '../SubHeader';
 import Counter from '../Counter';
 import FooterButton from '../FooterButton';
+import SubHeader from '../SubHeader';
+
+import Modal from './Modal';
 
 const GuestModal = () => {
   // 모달 상태
@@ -50,7 +51,7 @@ const GuestModal = () => {
 
   return (
     <Modal isOpen={isOpen} isFull={true}>
-      <div className='flex h-full flex-col'>
+      <div className='flex h-full flex-col bg-white dark:bg-black'>
         <SubHeader
           title='객실 수 및 투숙 인원 선택'
           callback={closeGuestModal}

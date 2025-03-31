@@ -12,10 +12,14 @@ const SubHeader = ({
   zIndex = null,
 }) => {
   const Title = <h2 className='grow text-lg'>{title}</h2>;
-  const Home = <Icon name='home' color='black' />;
-  const ArrowLong = <Icon name='arrow_left_long' color='black' />;
-  const Arrow = <Icon name='arrow_left' color='black' />;
-  const Close = <Icon name='close' color='black' />;
+  const Home = <Icon name='home' className='dark:font-white font-black' />;
+  const ArrowLong = (
+    <Icon name='arrow_left_long' className='dark:font-white font-black' />
+  );
+  const Arrow = (
+    <Icon name='arrow_left' className='dark:font-white font-black' />
+  );
+  const Close = <Icon name='close' className='dark:font-white font-black' />;
 
   const navigate = useNavigate();
   const navigateHome = () => navigate('/', { replace: true });
@@ -43,7 +47,7 @@ const SubHeader = ({
   const homeButtonHandler = () => navigateHome();
 
   const defaultStyle =
-    'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white top-0 left-0';
+    'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white dark:bg-black top-0 left-0';
 
   let zIndexStyle = '';
   if (zIndex !== null && !isNaN(Number(zIndex))) {

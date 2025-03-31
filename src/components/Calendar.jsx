@@ -200,21 +200,21 @@ const Calendar = ({ startDate, endDate, onChange }) => {
     const styles = {
       dateCell: {
         base: 'relative flex h-10 items-center justify-center gap-0',
-        past: 'cursor-not-allowed text-neutral-300',
-        active: 'cursor-pointer',
+        past: 'cursor-not-allowed dark:text-neutral-400 text-neutral-300',
+        active: 'cursor-pointer text-black dark:text-white',
       },
       dateNumber: {
         base: 'relative z-1',
         selected:
-          'mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white',
+          'mx-auto flex h-10 w-10 items-center justify-center rounded-full dark:bg-violet-400 bg-violet-600 dark:text-black text-white ',
         today:
-          'mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-violet-600 text-violet-600',
+          'mx-auto flex h-10 w-10 items-center justify-center rounded-full border dark:border-violet-400 border-violet-600 dark:text-violet-400 text-violet-600 ',
         range:
-          'mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-blue-200 text-neutral-500',
+          'mx-auto flex h-10 w-10 items-center justify-center rounded-full dark:bg-blue-200 bg-blue-200 text-neutral-500 ',
       },
       range: {
-        left: 'absolute left-0 h-full w-1/2 bg-blue-200',
-        right: 'absolute right-0 h-full w-1/2 bg-blue-200',
+        left: 'absolute left-0 h-full w-1/2  dark:bg-blue-200 bg-blue-200',
+        right: 'absolute right-0 h-full w-1/2 dark:bg-blue-200 bg-blue-200',
       },
     };
 
@@ -257,11 +257,17 @@ const Calendar = ({ startDate, endDate, onChange }) => {
 
       // 숫자 스타일 생성
       const numberClass = `
-        ${styles.dateNumber.base} 
-        ${isSelected || isTempSelected ? styles.dateNumber.selected : ''}
-        ${isTodayDate && !isInRange ? styles.dateNumber.today : ''}
-        ${isInRange && styles.dateNumber.range}
-      `.trim();
+      ${styles.dateNumber.base}
+      ${
+        isSelected || isTempSelected
+          ? styles.dateNumber.selected
+          : isInRange
+            ? styles.dateNumber.range
+            : isTodayDate
+              ? styles.dateNumber.today
+              : ''
+      }
+    `.trim();
 
       // 날짜 셀에 적용할 배경 스타일 결정
       const renderRangeBackground = () => {
@@ -344,7 +350,7 @@ const Calendar = ({ startDate, endDate, onChange }) => {
 
         {stayDuration > 0 && (
           <div className='mt-2 text-center text-sm'>
-            <span className='font-medium text-violet-600'>
+            <span className='font-medium text-violet-600 dark:text-violet-400'>
               {stayDuration}박
             </span>{' '}
             숙박
@@ -371,13 +377,13 @@ const Calendar = ({ startDate, endDate, onChange }) => {
 
   return (
     <>
-      <div className='shadow-bottom sticky top-0 z-2 mb-4 flex w-full flex-col items-center justify-between bg-white pb-2'>
+      <div className='shadow-bottom sticky top-0 z-2 mb-4 flex w-full flex-col items-center justify-between bg-white pb-2 dark:bg-black'>
         {renderSelectedRange()}
         {renderWeekdayHeader()}
       </div>
 
       <div
-        className='overflow-y-auto px-4 pb-4'
+        className='overflow-y-auto bg-white px-4 pb-4 dark:bg-black'
         style={{ scrollbarWidth: 'none' }}
       >
         {months.map((month, index) => (

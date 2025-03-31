@@ -27,20 +27,20 @@ const Button = ({
   const cx = (...classes) => classes.filter(Boolean).join(' ');
 
   const defaultStyle =
-    'h-15 inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
+    'inline-flex cursor-pointer items-center gap-2 text-base font-medium transition-colors duration-200';
   const focusedStyle = '';
   // const focusedStyle = 'focus:outline-none focus:ring-2 focus:ring-violet-300';
 
   const colors = {
-    prime: 'bg-violet-600 text-white hover:bg-violet-700',
+    prime: 'bg-violet-600 dark:bg-violet-400 text-white hover:bg-violet-700',
     invert:
       'bg-white text-violet-500 border-2  border-violet-200 hover:border-violet-300',
-    line: 'bg-white text-gray-600 border-2 border-gray-300 hover:border-gray-400',
+    line: 'dark:bg-black bg-white dark:text-neutral-400 text-neutral-600 border-2 dark:border-neutral-400 border-neutral-300 hover:border-neutral-400',
     alt: 'bg-blue-100 text-gray-800 hover:bg-blue-200',
   };
 
   const sizes = {
-    full: `${color === 'invert' || color === 'line' ? 'rounded-4xl' : 'rounded-xl'} w-full h-12.5 py-3 px-4 text-base `,
+    full: `${color === 'invert' || color === 'line' ? 'rounded-4xl' : 'rounded-xl'} w-full h-15 py-3 px-4 text-base `,
     square: 'rounded-sm w-12 h-12 flex items-center justify-center',
     small: 'rounded-md py-2 px-4 w-fit text-sm',
     xSmall: 'rounded-md py-1.5 px-4 w-fit text-sm',

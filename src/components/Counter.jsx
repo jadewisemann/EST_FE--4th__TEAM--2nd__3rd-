@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import Button from './Button';
 import Icon from './Icon';
 
@@ -29,7 +30,9 @@ const Counter = ({
         <span className='text-5xl'>{count}</span>
         <div className='flex flex-col gap-1'>
           <span className='text-base'>{children}</span>
-          <span className='text-xs text-neutral-600'>{subTitle}</span>
+          <span className='text-xs text-neutral-600 dark:text-neutral-400'>
+            {subTitle}
+          </span>
         </div>
       </div>
       {/* controller */}

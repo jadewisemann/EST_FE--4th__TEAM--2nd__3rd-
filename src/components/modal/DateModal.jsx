@@ -53,7 +53,7 @@ const DateModal = () => {
 
   return (
     <Modal isOpen={isOpen} isFull={true}>
-      <div className='flex h-screen flex-col'>
+      <div className='flex h-screen flex-col bg-white dark:bg-black'>
         <SubHeader title='날짜 선택' callback={closeDateModal} fixed={false} />
         <div
           className='flex-1 overflow-y-auto'
