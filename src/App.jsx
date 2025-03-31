@@ -48,7 +48,7 @@ const App = () => (
       <Route path='/user-info' element={<UserInfoPage />} />
       <Route path='/wishlist' element={<WishlistPage />} />
       <Route
-        path='/reservation-detail/:roomId'
+        path='/reservation-detail/:roomId/:reservationId'
         element={<ReservationDetailPage />}
       />
       <Route path='/test' element={<TestPage />} />
