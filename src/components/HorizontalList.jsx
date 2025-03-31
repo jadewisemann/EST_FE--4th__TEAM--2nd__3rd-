@@ -50,16 +50,16 @@ const HorizontalList = ({ products, isLoading }) => {
           <button type='button' className='w-full'>
             <img
               className='block aspect-video w-full rounded-lg'
-              src={product.thumbnail}
+              src={product.image[0]}
               alt=''
             />
             <div className='mt-2'>
               <div className='flex items-center'>
                 <h2 className='my-1.5 overflow-hidden text-left text-sm text-ellipsis whitespace-nowrap dark:text-neutral-200'>
-                  {product.name}
+                  {product.title}
                 </h2>
                 <div className='ml-auto'>
-                  <Rating rate={product.rate} />
+                  <Rating rate={product.rating} />
                 </div>
               </div>
               <address className='flex items-center overflow-hidden text-[11px] text-ellipsis whitespace-nowrap text-neutral-500 not-italic dark:text-neutral-300'>
@@ -68,12 +68,14 @@ const HorizontalList = ({ products, isLoading }) => {
                   className='text-neutral-500 dark:text-neutral-300'
                   size={20}
                 />
-                {product.location}
+                {product.location[0]}
               </address>
               <div className='mt-1 flex items-end gap-1'>
                 <span className='text-sm font-bold text-violet-600 dark:text-violet-500'>
-                  {/* {product.price.toLocaleString()}원 */}
-                  {(product.price ?? 0).toLocaleString()}원
+                  {product.rooms[0].price_final
+                    ? product.rooms[0].price_final.toLocaleString()
+                    : product.rooms[0].price.toLocaleString()}
+                  원
                 </span>
                 <span className='text-xs text-neutral-500 dark:text-neutral-300'>
                   /1박
