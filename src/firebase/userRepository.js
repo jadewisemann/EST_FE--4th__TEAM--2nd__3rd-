@@ -28,7 +28,7 @@ export const fetchUserData = async uid => {
 };
 
 export const updateUserField = async (uid, field, value) => {
-  const { docRef } = getUserDoc(uid);
+  const { docRef } = await getUserDoc(uid);
   await updateDoc(docRef, { [field]: value });
   return true;
 };

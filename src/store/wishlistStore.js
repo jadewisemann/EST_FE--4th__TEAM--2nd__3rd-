@@ -18,17 +18,21 @@ const useWishlistStore = create(
         if (!itemId) return;
 
         const { wishlist } = get();
-        if (wishlist.includes(itemId)) return;
 
-        const newWishlist = [...wishlist, itemId];
+        const currentWishlist = Array.isArray(wishlist) ? wishlist : [];
+
+        if (currentWishlist.includes(itemId)) return;
+
+        const newWishlist = [...currentWishlist, itemId];
         const cleanWishlist = filterNullValues(newWishlist);
 
         set({ wishlist: cleanWishlist });
 
-        const { user } = useAuthStore.getState();
-        if (user) {
+        const authState = useAuthStore.getState();
+
+        if (authState && authState.user) {
           try {
-            await updateWishlist(user.uid, newWishlist);
+            await updateWishlist(authState.user.uid, cleanWishlist);
           } catch (error) {
             console.error('위시리스트 추가 오류:', error);
           }
