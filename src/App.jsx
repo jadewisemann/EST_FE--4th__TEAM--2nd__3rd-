@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 
-import ProtectedAuthRoute from './routes/ProtectedAuthRoute';
-import ProtectedRoute from './routes/ProtectedRoute';
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 import {
   DetailsPage,
@@ -55,14 +55,14 @@ const App = () => (
       <Route path='/search-result' element={<SearchResult />} />
 
       {/* 로그인이 되어 있으면 접근 방지할 페이지*/}
-      <Route element={<ProtectedAuthRoute />}>
+      <Route element={<PublicRoute />}>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/find-password' element={<FindPasswordPage />} />
       </Route>
 
       {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<PrivateRoute />}>
         <Route path='/mypage' element={<MyPage />} />
       </Route>
 

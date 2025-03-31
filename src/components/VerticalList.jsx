@@ -3,20 +3,7 @@ import { Link } from 'react-router-dom';
 import Heart from '../components/Heart';
 import Rating from '../components/Rating';
 
-import SkeletonItem from './SkeletonItem';
-
-const VerticalList = ({ products, isLoading }) => {
-  // 로딩중일때 스켈레톤 이미지
-  if (isLoading) {
-    return (
-      <div className='flex flex-col'>
-        {Array.from({ length: 4 }).map((_, index) => (
-          <SkeletonItem key={index} />
-        ))}
-      </div>
-    );
-  }
-
+const VerticalList = ({ products }) => {
   if (!products || products.length === 0) {
     return (
       <div className='py-8 text-center text-sm text-neutral-500'>
@@ -25,10 +12,16 @@ const VerticalList = ({ products, isLoading }) => {
     );
   }
 
+  // console.log('products:', products);
+  // console.log('products:', products[0]);
+
   return (
     <div className='flex flex-col'>
       {products.map(product => {
-        const image = product.rooms?.[0]?.img || product.image?.[0] || '';
+        const image =
+          typeof product.image === 'object' && product.image !== null
+            ? product.image?.[0] || product.rooms?.[0]?.img
+            : product?.image || '';
         const location = product.location?.[0] || '작성 된 주소가 없습니다.';
         const title = product.title || '숙소명 없음';
         const price =
@@ -39,7 +32,48 @@ const VerticalList = ({ products, isLoading }) => {
           ) || 0;
         const rating = product.rating || 0;
 
-        return (
+        const isReservation = !!product.checkIn && !!product.checkOut;
+
+        return isReservation ? (
+          <div
+            key={product.id}
+            className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
+          >
+            <Link
+              to={`/reservationdetail/${encodeURIComponent(product.id)}`}
+              // to={`/test/reservation/${encodeURIComponent(product.id)}`}
+              className='flex w-full cursor-pointer gap-3'
+              title={title}
+            >
+              <div className='shrink-0'>
+                <img
+                  className='block h-20 w-20 rounded-[10px] object-cover'
+                  src={image}
+                  alt={title}
+                />
+              </div>
+              <div className='flex grow flex-col'>
+                <div className='mb-0.5 text-left text-sm font-medium dark:text-neutral-50'>
+                  {title}
+                </div>
+                <div className='mb-0.5 flex text-left text-xs text-neutral-500 not-italic dark:text-neutral-300'>
+                  {product.roomName}
+                </div>
+                <div className='flex text-left text-xs text-neutral-500 not-italic dark:text-neutral-300'>
+                  {product.checkIn} ~ {product.checkOut}
+                </div>
+                <div className='mt-auto flex items-center gap-1'>
+                  <span className='text-sm font-bold text-violet-600 dark:text-violet-400'>
+                    {product.price.toLocaleString()}원
+                  </span>
+                  <span className='text-xs text-neutral-500 dark:text-neutral-300'>
+                    / 1박
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ) : (
           <div
             key={product.id}
             className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
@@ -78,7 +112,7 @@ const VerticalList = ({ products, isLoading }) => {
                 </div>
               </div>
             </Link>
-            <Heart className='absolute right-0 bottom-4' hotelId={product.id} />
+            <Heart className='absolute right-0 bottom-4' />
           </div>
         );
       })}

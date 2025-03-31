@@ -96,7 +96,7 @@ const MainPage = () => {
   // 카테고리 클릭 함수
   const navigateToCategory = categoryLabel => {
     const encoded = encodeURI(categoryLabel);
-    navigate(`/result?keyword=${encoded}`);
+    navigate(`/search-result?keyword=${encoded}`);
   };
 
   //추천호텔 데이터 가져오기
@@ -118,7 +118,7 @@ const MainPage = () => {
   const recommendedHotelviewMore = () => {
     const keyword = '추천호텔';
     const encoded = encodeURI(keyword);
-    navigate(`/result?keyword=${encoded}`);
+    navigate(`/search-result?keyword=${encoded}`);
   };
 
   // 세션 상태 확인후 로딩페이지 호출

@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import useAuthStore from '../../store/authStore';
 import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
-import useReservationWithAuth, { useUserStore } from '../../store/userStore';
+import { useReservationWithAuth } from '../../store/reservationStore';
+import { useUserStore } from '../../store/userStore';
+
+import { getRoomById } from '../../firebase/searchQuery';
 
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
@@ -17,27 +20,55 @@ import VerticalList from '../../components/VerticalList';
 const MyPage = () => {
   const navigate = useNavigate();
   const { openPasswordChangeModal } = useModalStore();
-  const { user, logout } = useAuthStore();
-  // const { point, reservations, loading, error } = useReservationWithAuth();
-  // const { point, reservations, loading, error } = useReservationWithAuth();
+  const { user, login, logout } = useAuthStore();
+  const { userData, points, loadUserData, isLoading } = useUserStore();
+  const { reservations, loading, error } = useReservationWithAuth();
+  const [mergedReservations, setMergedReservations] = useState([]);
+  const { toggleDarkMode } = useDarkModeStore();
+
   const userName = user
     ? `${user.displayName || user.email?.split('@')[0]}`
     : '로그인';
-
-  const { userData, points, loadUserData, isLoading, reservations } =
-    useUserStore();
 
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
 
-  console.log(points);
-  console.log(userData);
-  console.log('reservations', reservations);
-
-  const { toggleDarkMode } = useDarkModeStore();
-
-  console.log('[MyPage] 예약 리스트:', userData);
+  useEffect(() => {
+    const fetchRooms = async () => {
+      if (!reservations || reservations.length === 0) {
+        setMergedReservations([]);
+        return;
+      }
+      const merged = await Promise.all(
+        reservations.map(async res => {
+          try {
+            const room = await getRoomById(res.roomId);
+            return {
+              ...res,
+              title:
+                room?.hotel_title
+                || room?.title
+                || res?.roomName
+                || '객실 정보 없음',
+              image: room?.img || '이미지 없음',
+              price: room?.price || room?.price_final || '금액 정보 없음',
+            };
+          } catch (error) {
+            console.error('❌ room fetch 실패:', res.roomId, error);
+            return {
+              ...res,
+              title: res.hotelName || '숙소명 없음',
+              image: [],
+              price: '금액 정보 없음',
+            };
+          }
+        }),
+      );
+      setMergedReservations(merged);
+    };
+    fetchRooms();
+  }, [reservations]);
 
   const handleLogout = async () => {
     const confirm = window.confirm('정말 로그아웃하시겠습니까?');
@@ -61,7 +92,10 @@ const MyPage = () => {
           </Button>
         </Complete>
       ) : (
-        <VerticalList products={reservations} />
+        <>
+          <h3 className='mt-6 font-bold dark:text-neutral-50'>예약 세부정보</h3>
+          <VerticalList products={mergedReservations} />
+        </>
       )}
       <hr className='mb-6 block border-neutral-300' />
       <DetailSection
