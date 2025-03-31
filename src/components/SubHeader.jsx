@@ -40,7 +40,7 @@ const SubHeader = ({
     </button>
   );
 
-  const homeButtonHandler = navigateHome();
+  const homeButtonHandler = () => navigateHome();
 
   const defaultStyle =
     'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white top-0 left-0';
