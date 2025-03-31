@@ -12,6 +12,7 @@ import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import SubHeader from '../../components/SubHeader';
 
 // Component import
 
@@ -68,85 +69,78 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
-      {/* 뒤로가기 */}
-      <button
-        onClick={() => navigate(-1)}
-        className='mb-10 w-6 hover:cursor-pointer hover:opacity-70'
-      >
-        <Icon
-          name='arrow_left'
-          className='text-neutral-800 dark:text-neutral-50'
-        />
-        <span className='sr-only'>뒤로가기</span>
-      </button>
+    <>
+      {/* 서브 헤더 */}
+      <SubHeader fixed={false} />
 
-      {/* 페이지 정보 */}
-      <div className='mb-10 flex flex-col gap-5'>
-        <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
-        <p>
-          지금 로그인하여 추가 할인 정보를 <br />
-          받아 보세요!
-        </p>
-      </div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          handleLogin();
-        }}
-      >
-        <div className='mb-6 flex flex-col gap-5'>
-          {/* 인풋 */}
-          <Input
-            inputType='email'
-            value={email}
-            onChange={setEmail}
-            onValidChange={setIsEmailValid}
-          />
-          <Input
-            inputType='password'
-            value={password}
-            onChange={setPassword}
-            onValidChange={setIsPasswordValid}
-          />
+      <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
+        {/* 페이지 정보 */}
+        <div className='mb-10 flex flex-col gap-5'>
+          <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
+          <p>
+            지금 로그인하여 추가 할인 정보를 <br />
+            받아 보세요!
+          </p>
         </div>
-
-        {/* 앵커 */}
-        <div className='mb-7 flex flex-col gap-7'>
-          <Anchor type='searchpassword' />
-
-          {/* 로그인 버튼 */}
-          <Button
-            color='prime'
-            size='full'
-            type='submit'
-            content='로그인'
-            childrenClassName='font-bold'
-            disabled={!isEmailValid || !isPasswordValid}
-          />
-        </div>
-      </form>
-      {/* 구글 로그인 */}
-      <div className='dark:neutral-400 border-t-1 border-neutral-300 pt-7'>
-        <Button
-          color='line'
-          size='full'
-          className='mb-7 inline-flex items-center justify-center gap-2'
-          onClick={handleGoogleLogin}
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            handleLogin();
+          }}
         >
-          <Icon name='google_colored' />
-          <span className='font-bold dark:text-neutral-50'>
-            Google로 로그인
-          </span>
-        </Button>
-      </div>
+          <div className='mb-6 flex flex-col gap-5'>
+            {/* 인풋 */}
+            <Input
+              inputType='email'
+              value={email}
+              onChange={setEmail}
+              onValidChange={setIsEmailValid}
+            />
+            <Input
+              inputType='password'
+              value={password}
+              onChange={setPassword}
+              onValidChange={setIsPasswordValid}
+            />
+          </div>
 
-      {/* 회원가입 앵커 */}
-      <div className='flex justify-center gap-1'>
-        아직 계정이 없으신가요?
-        <Anchor type='signup' />
+          {/* 앵커 */}
+          <div className='mb-7 flex flex-col gap-7'>
+            <Anchor type='searchpassword' />
+
+            {/* 로그인 버튼 */}
+            <Button
+              color='prime'
+              size='full'
+              type='submit'
+              content='로그인'
+              childrenClassName='font-bold'
+              disabled={!isEmailValid || !isPasswordValid}
+            />
+          </div>
+        </form>
+        {/* 구글 로그인 */}
+        <div className='dark:neutral-400 border-t-1 border-neutral-300 pt-7'>
+          <Button
+            color='line'
+            size='full'
+            className='mb-7 inline-flex items-center justify-center gap-2'
+            onClick={handleGoogleLogin}
+          >
+            <Icon name='google_colored' />
+            <span className='font-bold dark:text-neutral-50'>
+              Google로 로그인
+            </span>
+          </Button>
+        </div>
+
+        {/* 회원가입 앵커 */}
+        <div className='flex justify-center gap-1'>
+          아직 계정이 없으신가요?
+          <Anchor type='signup' />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
