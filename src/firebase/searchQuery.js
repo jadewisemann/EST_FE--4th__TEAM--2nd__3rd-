@@ -301,7 +301,13 @@ const sortHotelsByTitleWithinSameScores = hotels => {
  * @param {Object} lastDoc
  * @returns
  */
-const searchWithNgrams = async (searchNgrams, region, resultLimit, lastDoc) => {
+const searchWithNgrams = async (
+  searchNgrams,
+  region,
+  resultLimit,
+  lastDoc,
+  availableOnly = true,
+) => {
   const searchResults = {};
 
   await Promise.all(
@@ -355,23 +361,23 @@ const searchWithNgrams = async (searchNgrams, region, resultLimit, lastDoc) => {
   // lastDoc이 있으면 시작 index 조정
   const startIndex = lastDoc ? sortedIds.indexOf(lastDoc.id) + 1 : 0;
 
-  // 호텔 정보 받아오기
+  // 호텔 정보 받아오기, 빈 배열 필터링
   const hotelPromises = sortedIds
     .slice(startIndex, startIndex + resultLimit)
     .map(async id => {
       const hotelData = await getHotelById(id);
 
-      if (hotelData) {
-        return {
-          ...hotelData,
-          // 디버그 추가
-          _debug: {
-            score: searchResults[id].score,
-            matchedNgrams: searchResults[id].matchedNgrams,
-          },
-        };
-      }
-      return null;
+      return !hotelData
+        ? null
+        : availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
+          ? null
+          : {
+              ...hotelData,
+              _debug: {
+                score: searchResults[id].score,
+                matchedNgrams: searchResults[id].matchedNgrams,
+              },
+            };
     });
 
   // false 제거
@@ -398,7 +404,12 @@ const searchWithNgrams = async (searchNgrams, region, resultLimit, lastDoc) => {
  * @param {Object} lastDoc
  * @returns
  */
-const searchWithBaseQuery = async (region, resultLimit, lastDoc) => {
+const searchWithBaseQuery = async (
+  region,
+  resultLimit,
+  lastDoc,
+  availableOnly = true,
+) => {
   // 기본 쿼리
   const queryConditions = [
     orderBy('title'),
@@ -411,18 +422,19 @@ const searchWithBaseQuery = async (region, resultLimit, lastDoc) => {
   const baseQuery = query(collection(db, 'hotels'), ...queryConditions);
   const snapshot = await getDocs(baseQuery);
 
-  // 호텔 데이터 가져오기
+  // 호텔 데이터 가져오기, 빈 rooms 제외
   const hotelPromises = snapshot.docs.map(async (document, index) => {
     const hotelId = document.id;
     const hotelData = await getHotelById(hotelId);
 
-    if (hotelData) {
-      return {
-        ...hotelData,
-        _debug: { index },
-      };
-    }
-    return null;
+    return !hotelData
+      ? null
+      : availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
+        ? null
+        : {
+            ...hotelData,
+            _debug: { index },
+          };
   });
 
   // 결과 필터링
@@ -452,6 +464,7 @@ const searchHotelsAdvanced = async (
   pageSize = limit,
   lastDoc = null,
   pagination = false,
+  availableOnly = true,
 ) => {
   try {
     // parameter 검증
@@ -472,9 +485,15 @@ const searchHotelsAdvanced = async (
         region,
         resultLimit,
         lastDoc,
+        availableOnly,
       );
     } else {
-      result = await searchWithBaseQuery(region, resultLimit, lastDoc);
+      result = await searchWithBaseQuery(
+        region,
+        resultLimit,
+        lastDoc,
+        availableOnly,
+      );
     }
 
     // pagination 안하면 호텔만 반환
