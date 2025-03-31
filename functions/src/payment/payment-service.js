@@ -9,7 +9,6 @@ import { processPayment } from './process-payment.js';
  * @returns {Object} 결제 결과
  */
 export const paymentHandler = async (data, context) => {
-  // 사용자 인증 확인
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -19,7 +18,6 @@ export const paymentHandler = async (data, context) => {
 
   const { roomId, userInput } = data;
 
-  // 필수 파라미터 확인
   if (!roomId || !userInput) {
     throw new functions.https.HttpsError(
       'invalid-argument',
@@ -27,7 +25,6 @@ export const paymentHandler = async (data, context) => {
     );
   }
 
-  // 결제 처리
   return await processPayment(data);
 };
 
@@ -37,7 +34,6 @@ export const paymentHandler = async (data, context) => {
  * @param {Object} res - HTTP 응답 객체
  */
 export const paymentHttpHandler = async (req, res) => {
-  // POST 요청만 허용
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
     return;
@@ -45,7 +41,6 @@ export const paymentHttpHandler = async (req, res) => {
 
   const { userId, amount, reservationData } = req.body;
 
-  // 필수 파라미터 확인
   if (!userId || !amount || !reservationData) {
     res.status(400).json({
       success: false,
@@ -54,10 +49,8 @@ export const paymentHttpHandler = async (req, res) => {
     return;
   }
 
-  // 결제 처리
   const result = await processPayment(userId, amount, reservationData);
 
-  // 결과 반환
   if (result.success) {
     res.status(200).json(result);
   } else {

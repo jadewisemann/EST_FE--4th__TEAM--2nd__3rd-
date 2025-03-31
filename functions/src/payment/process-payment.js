@@ -69,7 +69,7 @@ export const processPayment = async data => {
       };
     }
 
-    // 포인트 검증co
+    // 포인트 검증
     if (
       userInput.point !== undefined
       && (typeof userInput.point !== 'number' || userInput.point < 0)
@@ -80,29 +80,35 @@ export const processPayment = async data => {
       };
     }
 
-    // 날짜 형식 검증
-    const dateRegex = /^\d{2}-\d{2}-\d{2}$/; // YY-MM-DD 형식 확인
-    if (
-      !dateRegex.test(userInput.checkIn)
-      || !dateRegex.test(userInput.checkOut)
-    ) {
+    // 날짜 형식 검증 및 변환
+    const yymmddRegex = /^\d{2}-\d{2}-\d{2}$/;
+    const yyyymmddRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    let checkIn = userInput.checkIn;
+    let checkOut = userInput.checkOut;
+
+    if (yymmddRegex.test(checkIn)) {
+      const parts = checkIn.split('-');
+      checkIn = `20${parts[0]}-${parts[1]}-${parts[2]}`;
+    } else if (!yyyymmddRegex.test(checkIn)) {
       return {
         success: false,
-        message: '날짜는 YY-MM-DD 형식이어야 합니다.',
+        message: '체크인 날짜는 YYYY-MM-DD 또는 YY-MM-DD 형식이어야 합니다.',
       };
     }
 
-    // 날짜 변환 및 유효성 검사
-    const checkInParts = userInput.checkIn.split('-');
-    const checkOutParts = userInput.checkOut.split('-');
+    if (yymmddRegex.test(checkOut)) {
+      const parts = checkOut.split('-');
+      checkOut = `20${parts[0]}-${parts[1]}-${parts[2]}`;
+    } else if (!yyyymmddRegex.test(checkOut)) {
+      return {
+        success: false,
+        message: '체크아웃 날짜는 YYYY-MM-DD 또는 YY-MM-DD 형식이어야 합니다.',
+      };
+    }
 
-    // YY-MM-DD 형식을 20YY-MM-DD 형식으로 변환
-    const checkInDate = new Date(
-      `20${checkInParts[0]}-${checkInParts[1]}-${checkInParts[2]}`,
-    );
-    const checkOutDate = new Date(
-      `20${checkOutParts[0]}-${checkOutParts[1]}-${checkOutParts[2]}`,
-    );
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
 
     if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
       return {
@@ -200,13 +206,9 @@ export const processPayment = async data => {
       const serverTimestamp = FieldValue.serverTimestamp();
       const currentTimestamp = timestamp || Date.now();
 
-      // 예약 ID 생성
       const reservationId = `${user.uid}_${currentTimestamp}`;
-
-      // 최종 지불 금액
       const finalPaymentAmount = userInput.paymentAmount - usePoints;
 
-      // 사용자 포인트 차감
       if (usePoints > 0) {
         transaction.update(userRef, {
           points: currentPoints - usePoints,
@@ -214,7 +216,6 @@ export const processPayment = async data => {
         });
       }
 
-      // 예약 정보 생성
       const reservationRef = db.collection('reservations').doc(reservationId);
       const reservationData = {
         userId: user.uid,
@@ -232,8 +233,8 @@ export const processPayment = async data => {
         phone: userInput.phone,
         email: userInput.email,
         request: userInput.request || '',
-        checkIn: userInput.checkIn,
-        checkOut: userInput.checkOut,
+        checkIn: checkIn,
+        checkOut: checkOut,
         agreement: userInput.agreement,
         transactionId: transactionId,
         createdAt: serverTimestamp,
@@ -242,7 +243,7 @@ export const processPayment = async data => {
 
       transaction.set(reservationRef, reservationData);
 
-      // 포인트 사용 기록 (포인트를 사용한 경우에만)
+      // 포인트 사용 기록
       if (usePoints > 0) {
         const pointHistoryRef = db.collection('pointHistory').doc();
         const pointHistoryData = {
