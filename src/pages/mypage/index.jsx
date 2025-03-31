@@ -17,7 +17,7 @@ import VerticalList from '../../components/VerticalList';
 const MyPage = () => {
   const navigate = useNavigate();
   const { openPasswordChangeModal } = useModalStore();
-  const { user, login, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
   // const { point, reservations, loading, error } = useReservationWithAuth();
   // const { point, reservations, loading, error } = useReservationWithAuth();
   const userName = user
@@ -54,7 +54,7 @@ const MyPage = () => {
   return (
     <div className='container'>
       <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
-      {/* {!reservations || reservations.length === 0 ? (
+      {!reservations || reservations.length === 0 ? (
         <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
           <Button color='prime' size='full' onClick={handleSearchHotel}>
             숙소 검색하기
@@ -62,7 +62,7 @@ const MyPage = () => {
         </Complete>
       ) : (
         <VerticalList products={reservations} />
-      )} */}
+      )}
       <hr className='mb-6 block border-neutral-300' />
       <DetailSection
         title='내 정보'
@@ -70,7 +70,7 @@ const MyPage = () => {
         contents={[
           { label: '이름', value: userName },
           { label: '이메일', value: user.email },
-          { label: '보유포인트', value: points },
+          { label: '보유포인트', value: points.toLocaleString() },
         ]}
       />
       <br />
