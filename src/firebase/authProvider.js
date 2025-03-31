@@ -35,7 +35,34 @@ export const googleLogin = async () => {
 
 export const logout = () => signOut(auth);
 
-export const resetPassword = email => sendPasswordResetEmail(auth, email);
+export const resetPassword = async email => {
+  try {
+    await sendPasswordResetEmail(
+      auth,
+      email || auth.currentUser ? auth.currentUser.email : null,
+    );
+
+    return {
+      success: true,
+      message: '비밀번호 재설정 이메일이 전송되었습니다.',
+    };
+  } catch (error) {
+    let errorMessage = '비밀번호 재설정 이메일 전송 중 오류가 발생했습니다.';
+
+    if (error.code === 'auth/network-request-failed') {
+      errorMessage = '네트워크 연결을 확인해주세요.';
+    } else if (error.code === 'auth/user-not-found') {
+      errorMessage = '해당 이메일로 등록된 사용자가 없습니다.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = '유효하지 않은 이메일 주소입니다.';
+    } else if (error.code === 'auth/too-many-requests') {
+      errorMessage =
+        '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.';
+    }
+
+    return { success: false, message: errorMessage, error };
+  }
+};
 
 export const changePassword = async (currentPassword, newPassword) => {
   try {
@@ -47,6 +74,7 @@ export const changePassword = async (currentPassword, newPassword) => {
       user.email,
       currentPassword,
     );
+
     await reauthenticateWithCredential(user, credential);
     await updatePassword(user, newPassword);
     return { success: true, message: '비밀번호가 성곡적으로 변경되었습니다.' };
