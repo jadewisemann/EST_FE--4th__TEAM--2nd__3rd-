@@ -106,7 +106,7 @@ const LoginPage = () => {
 
           {/* 앵커 */}
           <div className='mb-7 flex flex-col gap-7'>
-            <Anchor type='searchpassword' />
+            <Anchor type='find-password' />
 
             {/* 로그인 버튼 */}
             <Button

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const Anchor = ({ type, children, className }) => {
   const getLabel = () => {
     switch (type) {
-      case 'searchpassword':
+      case 'find-password':
         return '닉네임 / 비밀번호 찾기';
       case 'signup':
         return '회원가입';
@@ -15,8 +15,8 @@ const Anchor = ({ type, children, className }) => {
   return (
     <Link
       to={
-        type === 'searchpassword'
-          ? '/searchpassword'
+        type === 'find-password'
+          ? '/find-password'
           : type === 'signup'
             ? '/signup'
             : `/${type}`

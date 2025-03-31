@@ -5,7 +5,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import useToastStore from '../store/toastStore';
 
-const ProtectedAuthRoute = () => {
+const PublicRoute = () => {
   const { user, isLoading } = useAuthStore();
   const { showToast } = useToastStore();
 
@@ -28,4 +28,4 @@ const ProtectedAuthRoute = () => {
   return <Outlet />;
 };
 
-export default ProtectedAuthRoute;
+export default PublicRoute;
