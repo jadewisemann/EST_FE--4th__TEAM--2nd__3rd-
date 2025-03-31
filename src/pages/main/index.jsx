@@ -163,7 +163,7 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openDateModal}
@@ -174,7 +174,7 @@ const MainPage = () => {
               <Button
                 color='line'
                 size='full'
-                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-2 border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
+                className='flex h-[58px] cursor-pointer items-center gap-2.5 rounded-4xl border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
                 childrenClassName='grow-0 gap-3'
                 type='button'
                 onClick={openGuestModal}
