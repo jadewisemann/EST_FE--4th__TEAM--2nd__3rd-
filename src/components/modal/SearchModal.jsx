@@ -26,16 +26,7 @@ const SearchModal = () => {
   const handleConfirmClick = () => {
     closeSearchModal();
 
-    // navigate(
-    //   `/result/${encodeURIComponent(searchValue)}?query=${encodeURIComponent(searchValue)}`,
-    // );
-
-    // navigate('/result', {
-    //   state: { name: searchValue },
-    //   replace: false,
-    // });
-
-    navigate(`/result/${encodeURIComponent(searchValue)}`);
+    navigate(`/result/?keyword=${encodeURIComponent(searchValue)}`);
 
     if (onConfirm && typeof onConfirm === 'function') {
       onConfirm();
