@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Icon from './Icon';
 
 const SubHeader = ({
@@ -9,14 +11,27 @@ const SubHeader = ({
   fixed = true,
   zIndex = null,
 }) => {
-  const SubHeader = <h2 className='grow text-lg'>{title}</h2>;
+  const Title = <h2 className='grow text-lg'>{title}</h2>;
   const Home = <Icon name='home' color='black' />;
   const ArrowLong = <Icon name='arrow_left_long' color='black' />;
   const Arrow = <Icon name='arrow_left' color='black' />;
   const Close = <Icon name='close' color='black' />;
 
+  const navigate = useNavigate();
+  const navigateHome = () => navigate('/');
+
+  const leftButtonHandler = () => {
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
+
+    if (leftButton === 'arrow' || leftButton === 'arrow-short') {
+      navigate(-1);
+    }
+  };
+
   const LeftButton = (
-    <button onClick={callback} className='cursor-pointer p-4'>
+    <button onClick={leftButtonHandler} className='cursor-pointer p-4'>
       {leftButton === 'close'
         ? Close
         : leftButton === 'arrow'
@@ -27,8 +42,7 @@ const SubHeader = ({
     </button>
   );
 
-  // TODO: 홈으로 가는 핸들러 추가 필요
-  const homeButtonHandler = () => {};
+  const homeButtonHandler = navigateHome();
 
   const defaultStyle =
     'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white top-0 left-0';
@@ -39,16 +53,16 @@ const SubHeader = ({
   }
 
   const style =
-    defaultStyle +
-    (hasShadow ? ' shadow-bottom' : '') +
-    (fixed ? ' fixed' : '') +
-    zIndexStyle;
+    defaultStyle
+    + (hasShadow ? ' shadow-bottom' : '')
+    + (fixed ? ' fixed' : '')
+    + zIndexStyle;
 
   return (
     <>
       <div className={style}>
         {LeftButton}
-        {title && SubHeader}
+        {title && Title}
         {rightButton && (
           <button onClick={homeButtonHandler} className='cursor-pointer p-4'>
             {Home}
