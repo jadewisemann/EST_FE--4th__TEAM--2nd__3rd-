@@ -28,8 +28,8 @@ const SearchTestPage = () => {
     paymentAmount: 0,
     point: 1000,
     guestCount: 1,
-    checkIn: '25-04-08',
-    checkOut: '25-04-09',
+    checkIn: '2025-04-08',
+    checkOut: '2025-04-09',
   });
 
   const { resetSession, submitPayment, loadRoomData, currentState } =
