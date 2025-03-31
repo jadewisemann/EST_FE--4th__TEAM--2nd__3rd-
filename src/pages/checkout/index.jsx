@@ -5,15 +5,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 // store
 import useAppDataStore from '../../store/appDataStore';
 import useReservationStore from '../../store/reservationStore';
-
-// data
-import { getRoomById } from '../../firebase/searchQuery';
+import useUserStore from '../../store/userStore';
 
 // component
 import Button from '../../components/Button';
 import CheckBox from '../../components/CheckBox';
 import DetailSection from '../../components/DetailSection';
 import Input from '../../components/Input';
+import Loading from '../../components/Loading';
 import Radio from '../../components/Radio';
 import SubHeader from '../../components/SubHeader';
 
@@ -23,58 +22,76 @@ const payment = [
 ];
 
 const CheckoutPage = () => {
-  // const { loading, error, result, makePayment, resetState } = useReservationStore();
-
   const navigate = useNavigate();
 
-  // 이름
-  const [name, setName] = useState('');
-  const [isNameValid, setIsNameValid] = useState(false);
+  // params
+  const { roomId } = useParams();
 
-  // 이메일
-  const [email, setEmail] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  // store
+  const { resetSession, submitPayment, loadRoomData, currentState } =
+    useReservationStore();
+  const { points, loadUserData } = useUserStore();
+  const { dates, guests } = useAppDataStore();
 
-  // 전화번호
-  const [tel, setTel] = useState('');
-  const [isTelValid, setIsTelValid] = useState(false);
-
-  // 전체 동의 체크
-  const [agree, setAgree] = useState(false);
-
-  // 포인트 인풋
-  const [point, setPoint] = useState();
-
-  // 포인트 사용 체크
-  const [usePoint, setUsePoint] = useState(false);
-
-  // 결제하기 활성화
-  const [allGood, setAllGood] = useState(false);
-
-  // 호텔 데이터
-  const [data, setData] = useState(null);
-
+  // state
+  const [data, setData] = useState(null); // 호텔 데이터
+  const [price, setPrice] = useState(0); // 가격
+  const [usePoint, setUsePoint] = useState(false); // 포인트 사용 여부
+  // Input 유효성 검사
+  const [isValid, setIsValid] = useState({
+    name: false,
+    phone: false,
+    email: false,
+  });
+  const [active, setActive] = useState(false); // 결제하기 활성화
   // 라디오 (결제 수단) 선택 인덱스 확인
   const [selectedIndex, setSelectedIndex] = useState(
     payment.findIndex(option => option.checked),
   );
+  // 결제 시 예약 정보
+  const [reservationInfo, setReservationInfo] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    request: '1632156asd',
+    agreement: false,
+    paymentMethod: payment.find(item => item.checked).value,
+    paymentAmount: price,
+    point: 0,
+    guestCount: guests.adults,
+    checkIn: dates.startDate,
+    checkOut: dates.endDate,
+  });
 
-  // 사용자 정보
-  const { dates, guests } = useAppDataStore();
+  // useEffect
+  useEffect(() => {
+    resetSession();
 
-  // Room ID
-  const { roomId } = useParams();
-  const decodedRoomId = decodeURIComponent(roomId);
+    return () => {
+      if (currentState !== 'completed') {
+        resetSession();
+      }
+    };
+  }, [resetSession]);
 
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        // Room 아이디로 Room 데이터 호출
-        const roomData = await getRoomById(`${decodedRoomId}`);
+        // Room 아이디로 데이터 가져오기
+        const roomData = await loadRoomData(roomId);
 
         if (roomData) {
           // 사용할 data에 가져온 roomData로 세팅
-          setData(roomData);
+          setData(roomData.data);
+          const finalPrice =
+            roomData.data.price_final !== ''
+              ? roomData.data.price_final
+              : roomData.data.price;
+          setPrice(finalPrice);
+          setReservationInfo(prev => ({
+            ...prev,
+            paymentAmount: finalPrice,
+          }));
         } else {
           console.log('해당 ID의 Room이 존재하지 않습니다.');
         }
@@ -87,93 +104,75 @@ const CheckoutPage = () => {
   }, []);
 
   useEffect(() => {
-    if (isNameValid && isTelValid && isEmailValid && agree) {
-      setAllGood(true);
+    loadUserData();
+  }, []);
+
+  useEffect(() => {
+    if (
+      isValid.name
+      && isValid.phone
+      && isValid.email
+      && reservationInfo.agreement
+    ) {
+      setActive(true);
     } else {
-      setAllGood(false);
+      setActive(false);
     }
-  }, [isNameValid, isTelValid, isEmailValid, agree]);
+  }, [isValid, reservationInfo.agreement]);
 
   // Room 데이터 로딩 중
   if (!data) {
-    return <div>로딩 중</div>;
+    return <Loading />;
   }
 
-  const userData = {
-    point: 20000,
+  // event
+  // 예약 정보 입력 핸들러
+  const handleReservationChange = e => {
+    const { name, value, type, checked } = e.target;
+    setReservationInfo({
+      ...reservationInfo,
+      [name]: type === 'checkbox' ? checked : value,
+    });
   };
 
-  // 취소 환불 규정 동의
-  const handleAgree = () => {
-    setAgree(!agree);
+  // 결제 처리 핸들러
+  const handleReservation = async e => {
+    e.preventDefault();
+
+    // 결제 요청
+    const result = await submitPayment(reservationInfo);
+    if (result && result.success) {
+      navigate(`/reservation-detail/${roomId}/${result.reservationId}`);
+    }
   };
 
   // 포인트 전체 사용
   const handlePoint = () => {
     setUsePoint(!usePoint);
-
     if (usePoint === false) {
-      const price = data.price_final ? data.price_final : data.price;
-      if (userData.point < price) {
-        setPoint(userData.point);
+      if (points < price) {
+        setReservationInfo({
+          ...reservationInfo,
+          point: points,
+        });
       } else {
-        setPoint(price);
+        setReservationInfo({
+          ...reservationInfo,
+          point: price,
+        });
       }
     } else {
-      setPoint();
-    }
-  };
-
-  // makePayment 함수 사용 예시
-  const handlePayment = async () => {
-    try {
-      // 매개변수: userId, 금액, 예약 데이터
-      await makePayment('test123', data.price_final, {
-        hotelId: data.id, // 필수: 호텔 고유 ID
-        hotelName: data.title, // 필수: 호텔 이름
-        checkIn: data.startDate, // 필수: 체크인 날짜 (YYYY-MM-DD 형식)
-        checkOut: data.endDate, // 필수: 체크아웃 날짜 (YYYY-MM-DD 형식)
-        guestCount: guests.adults, // 필수: 숙박 인원 수
-        reservation_name: name, // 필수: 예약자 이름
-        reservation_phone: tel, // 필수: 예약자 연락처
-        reservation_email: email, // 필수: 예약자 이메일
-        reservation_request: '', // 선택사항: 특별 요청사항
+      setReservationInfo({
+        ...reservationInfo,
+        point: 0,
       });
-
-      // 성공 처리
-      console.log('결제 결과:', result);
-    } catch (error) {
-      // 오류 처리 (이미 스토어에서도 error 상태가 설정됨)
-      console.error('결제 실패:', error);
     }
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    if (!name.trim()) {
-      alert('예약자 이름을 입력해 주세요.');
-      return;
-    }
-
-    if (!tel.trim()) {
-      alert('휴대폰 번호를 입력해 주세요.');
-      return;
-    }
-
-    if (!email.trim()) {
-      alert('이메일을 입력해 주세요.');
-      return;
-    }
-
-    handlePayment();
-    navigate(`/order-confirm`);
   };
 
   return (
     <>
       <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
-      <div className='container mt-5 mb-[40px]'>
+      <div className='container mt-5 mb-12'>
         <div>
           <h2 className='mb-2 flex items-center gap-2 font-medium'>
             <span className='text-lg'>{data.title}</span>
@@ -210,27 +209,45 @@ const CheckoutPage = () => {
 
         <hr className='my-4 border-gray-200' />
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleReservation}>
           <fieldset className='[&>div]:mt-2'>
             <legend className='mb-2 text-lg font-bold'>예약자 정보</legend>
             <Input
               inputType='name'
               label='예약자 이름 (해외 숙소의 경우, 여권 영문명)'
-              value={name}
-              onChange={setName}
-              onValidChange={setIsNameValid}
+              value={reservationInfo.name}
+              onChange={value =>
+                handleReservationChange({
+                  target: { name: 'name', value },
+                })
+              }
+              onValidChange={valid =>
+                setIsValid(prev => ({ ...prev, name: valid }))
+              }
             />
             <Input
               inputType='tel'
-              value={tel}
-              onChange={setTel}
-              onValidChange={setIsTelValid}
+              value={reservationInfo.phone}
+              onChange={value =>
+                handleReservationChange({
+                  target: { name: 'phone', value },
+                })
+              }
+              onValidChange={valid =>
+                setIsValid(prev => ({ ...prev, phone: valid }))
+              }
             />
             <Input
               inputType='email'
-              value={email}
-              onChange={setEmail}
-              onValidChange={setIsEmailValid}
+              value={reservationInfo.email}
+              onChange={value =>
+                handleReservationChange({
+                  target: { name: 'email', value },
+                })
+              }
+              onValidChange={valid =>
+                setIsValid(prev => ({ ...prev, email: valid }))
+              }
             />
           </fieldset>
 
@@ -258,9 +275,17 @@ const CheckoutPage = () => {
           <CheckBox
             name='payment'
             txt='동의합니다.'
-            checked={agree}
+            checked={reservationInfo.agreement}
+            onChange={e =>
+              handleReservationChange({
+                target: {
+                  name: 'agreement',
+                  checked: e.target.checked,
+                  type: 'checkbox',
+                },
+              })
+            }
             className={'mt-2'}
-            onChange={handleAgree}
           />
 
           <hr className='my-4 border-gray-200' />
@@ -317,9 +342,39 @@ const CheckoutPage = () => {
                   <span className='text-neutral-600 dark:text-neutral-300'>
                     보유 포인트
                   </span>
-                  <span>{userData.point.toLocaleString()} P</span>
+                  <span>{points.toLocaleString()} P</span>
                 </div>
-                <Input inputType='number' value={point} onChange={setPoint} />
+                <Input
+                  inputType='number'
+                  value={reservationInfo.point || ''}
+                  placeholder='포인트를 입력하세요'
+                  onChange={value => {
+                    if (Number(value) < 0) {
+                      handleReservationChange({
+                        target: { name: 'point', value: 0 },
+                      });
+                    } else if (Number(value) <= reservationInfo.paymentAmount) {
+                      handleReservationChange({
+                        target: { name: 'point', value: Number(value) },
+                      });
+                    } else {
+                      handleReservationChange({
+                        target: {
+                          name: 'point',
+                          value: reservationInfo.paymentAmount,
+                        },
+                      });
+                    }
+                  }}
+                  onBlur={() => {
+                    // 입력하지 않고 넘어갔을 때 reservationInfo.point가 0으로 설정
+                    if (reservationInfo.point === '') {
+                      handleReservationChange({
+                        target: { name: 'point', value: 0 },
+                      });
+                    }
+                  }}
+                />
                 <div className='mt-3 flex justify-between'>
                   <span className='text-sm text-neutral-600 dark:text-neutral-300'>
                     1P = 1KRW
@@ -352,7 +407,7 @@ const CheckoutPage = () => {
               color='prime'
               size='full'
               className='rounded-2xl'
-              disabled={!allGood}
+              disabled={!active}
             >
               결제하기
             </Button>
