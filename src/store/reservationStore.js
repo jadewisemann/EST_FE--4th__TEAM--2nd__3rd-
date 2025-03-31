@@ -38,15 +38,6 @@ const STATE = {
 const validateUserInput = userInput => {
   const errors = {};
 
-  // agreement: true
-  // checkIn: "2025-03-27"
-  // checkOut: "2025-03-29"
-  // guestCount: 1
-  // paymentMethod: "card"
-  // email: "test@test.com"
-  // name: "test"
-  // phone: "010-1111-2222"
-  // request: "test"
   if (!userInput.name || userInput.name.trim() === '') {
     errors.name = ERR_MSG.VALIDATE_INPUT.MISSING_NAME;
   }
@@ -182,15 +173,26 @@ const useReservationStore = create(
       },
 
       submitPayment: async userInput => {
-        const { transition, validateSession, roomId, userData, transactionId } =
-          get();
+        const {
+          transition,
+          validateSession,
+          roomId,
+          userData,
+          transactionId,
+          canTransitionTo,
+          currentState,
+        } = get();
 
         if (!validateSession()) {
           return { success: false, error: ERR_MSG.SESSION_EXPIRED };
         }
 
-        console.log('userInput', userInput);
-        console.log('typeof userInput', typeof userInput);
+        if (!canTransitionTo(STATE.PROCESSING)) {
+          console.error(
+            `${ERR_MSG.NOT_VALID_TRANSITION}: ${currentState} => ${STATE.PROCESSING}`,
+          );
+          return { success: false, error: ERR_MSG.NOT_VALID_TRANSITION };
+        }
 
         const validation = validateUserInput(userInput);
         if (!validation.isValid) {
