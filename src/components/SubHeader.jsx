@@ -24,10 +24,13 @@ const SubHeader = ({
   const navigate = useNavigate();
   const navigateHome = () => navigate('/', { replace: true });
 
+  console.log('leftButton', leftButton);
+
   const leftButtonHandler = () => {
     if (callback && typeof callback === 'function') {
       callback();
-    } else if (leftButton === 'arrow' || leftButton === 'arrow-short') {
+    }
+    if (leftButton === 'arrow' || leftButton === 'arrow-short') {
       navigate(-1);
     }
   };
