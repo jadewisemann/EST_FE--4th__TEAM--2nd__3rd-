@@ -169,6 +169,7 @@ const useInfiniteScroll = (loadMoreData, hasMore, isLoading) => {
   const observer = useRef(null);
 
   // 옵저버 설정
+  useEffect(() => {
     // 기존 옵저버 제거
     if (observer.current) {
       observer.current.disconnect();
