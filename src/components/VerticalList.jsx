@@ -33,6 +33,7 @@ const VerticalList = ({ products }) => {
         const rating = product.rating || 0;
 
         const isReservation = !!product.checkIn && !!product.checkOut;
+        console.log('product:', product);
 
         return isReservation ? (
           <div
@@ -40,8 +41,7 @@ const VerticalList = ({ products }) => {
             className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
           >
             <Link
-              to={`/reservationdetail/${encodeURIComponent(product.id)}`}
-              // to={`/test/reservation/${encodeURIComponent(product.id)}`}
+              to={`/reservation-detail/${product.roomId}/${product.id.slice(-13)}`}
               className='flex w-full cursor-pointer gap-3'
               title={title}
             >
@@ -112,7 +112,7 @@ const VerticalList = ({ products }) => {
                 </div>
               </div>
             </Link>
-            <Heart className='absolute right-0 bottom-4' />
+            <Heart className='absolute right-0 bottom-4' hotelId={product.id} />
           </div>
         );
       })}
