@@ -23,10 +23,15 @@ const FilterModal = ({ isOpen, title, onClose, onConfirm, selected }) => {
       <div className='flex flex-col gap-2'>
         <ul className=''>
           {filterList.map((item, idx) => (
-            <li key={idx} className='border-b-1 border-neutral-300 px-5'>
+            <li
+              key={idx}
+              className='border-b-1 border-neutral-300 px-5 dark:bg-neutral-800'
+            >
               <button
                 className={`flex w-full cursor-pointer items-center justify-between py-4 text-left ${
-                  selected === item ? 'font-bold text-violet-600' : 'text-black'
+                  selected === item
+                    ? 'font-bold text-violet-600 dark:text-violet-400'
+                    : 'text-black dark:text-neutral-50'
                 }`}
                 onClick={() => handleClick(item)}
               >
