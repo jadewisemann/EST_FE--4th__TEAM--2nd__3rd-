@@ -26,7 +26,7 @@ const SearchModal = () => {
   const handleConfirmClick = () => {
     closeSearchModal();
 
-    navigate(`/result/?keyword=${encodeURIComponent(searchValue)}`);
+    navigate(`/search-result/?keyword=${encodeURIComponent(searchValue)}`);
 
     if (onConfirm && typeof onConfirm === 'function') {
       onConfirm();
