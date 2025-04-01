@@ -128,13 +128,13 @@ const MainPage = () => {
 
   return (
     <>
-      <button
+      {/* <button
         type='button'
         className='absolute top-4 right-4 cursor-pointer bg-violet-600 dark:bg-violet-400'
         onClick={() => toggleDarkMode()}
       >
         <strong className='text-white'>다크모드</strong>
-      </button>
+      </button> */}
       <div
         className='bg-no-repeat'
         style={{ backgroundImage: `url(${backgroundImage})` }}
