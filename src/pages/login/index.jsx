@@ -71,7 +71,7 @@ const LoginPage = () => {
   return (
     <>
       {/* 서브 헤더 */}
-      <SubHeader fixed={false} />
+      <SubHeader fixed={false} hasShadow={false} />
 
       <div className='flex h-screen flex-col px-6 pt-4 pb-10 dark:bg-neutral-800'>
         {/* 페이지 정보 */}
