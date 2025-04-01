@@ -27,6 +27,7 @@ const useAuthStore = create(
         user: null,
         isLoading: true,
         error: null,
+        isLogout: false,
 
         signUp: async (email, password) => {
           try {
@@ -62,8 +63,9 @@ const useAuthStore = create(
         },
 
         logout: async () => {
+          set({ isLogout: true });
           await logout();
-          set({ user: null });
+          setTimeout(() => set({ user: null, isLogout: false }), 500);
           localStorage.removeItem('isFirstLogin');
         },
 
