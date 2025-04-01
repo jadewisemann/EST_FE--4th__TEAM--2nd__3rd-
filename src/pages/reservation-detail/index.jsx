@@ -41,6 +41,7 @@ const ReservationDetailPage = () => {
           setData(RoomData);
         } else {
           console.log('해당 ID의 호텔이 존재하지 않습니다.');
+          navigate('/');
         }
       } catch (error) {
         console.error('에러 발생:', error);
@@ -128,14 +129,10 @@ const ReservationDetailPage = () => {
               label: '포인트 사용',
               value: `${userData.pointsUsed.toLocaleString()}원`,
             },
+            { label: '결제방법', value: userData.paymentMethod },
             {
               label: '최종 결제금액',
               value: `${userData.finalAmount.toLocaleString()}원`,
-            },
-            { label: '결제방법', value: userData.paymentMethod },
-            {
-              label: '적립 포인트',
-              value: '포인트 결제는 적립 대상이 아닙니다.',
             },
           ]}
         />
