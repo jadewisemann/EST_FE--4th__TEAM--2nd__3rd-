@@ -94,6 +94,7 @@ const CheckoutPage = () => {
           }));
         } else {
           console.log('해당 ID의 Room이 존재하지 않습니다.');
+          navigate('/');
         }
       } catch (error) {
         console.error('에러 발생:', error);
@@ -120,8 +121,8 @@ const CheckoutPage = () => {
     }
   }, [isValid, reservationInfo.agreement]);
 
-  // Room 데이터 로딩 중
-  if (!data) {
+  // Room 데이터 로딩 중, 결제 처리 진행중 로딩 화면
+  if (!data || currentState === 'PROCESSING') {
     return <Loading />;
   }
 
