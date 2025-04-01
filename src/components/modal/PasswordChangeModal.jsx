@@ -69,6 +69,7 @@ const PasswordChangeModal = () => {
           onChange={setConfirmPassword}
           compareValue={newPassword}
         />
+
         <Button
           content='확인'
           color='prime'

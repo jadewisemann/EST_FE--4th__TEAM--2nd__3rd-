@@ -16,7 +16,7 @@ import {
   OrderConfirm,
   ReservationDetailPage,
   TestPage,
-  SearchResult,
+  SearchResultPage,
   MyPage,
   FindPasswordPage,
 } from './pages';
@@ -52,7 +52,7 @@ const App = () => (
         element={<ReservationDetailPage />}
       />
       <Route path='/test' element={<TestPage />} />
-      <Route path='/search-result' element={<SearchResult />} />
+      <Route path='/search-result' element={<SearchResultPage />} />
 
       {/* 로그인이 되어 있으면 접근 방지할 페이지*/}
       <Route element={<PublicRoute />}>

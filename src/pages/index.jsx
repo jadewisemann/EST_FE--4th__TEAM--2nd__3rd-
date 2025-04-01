@@ -9,7 +9,7 @@ import NotFoundPage from './not-found';
 import OrderConfirm from './order-confirm';
 import PaymentPage from './payment';
 import ReservationDetailPage from './reservation-detail';
-import SearchResult from './search-result';
+import SearchResultPage from './search-result';
 import SignupPage from './signup';
 import UserInfoPage from './user-info';
 import WishlistPage from './wishlist';
@@ -20,7 +20,7 @@ export {
   MainPage,
   NotFoundPage,
   PaymentPage,
-  SearchResult,
+  SearchResultPage,
   SignupPage,
   UserInfoPage,
   WishlistPage,
