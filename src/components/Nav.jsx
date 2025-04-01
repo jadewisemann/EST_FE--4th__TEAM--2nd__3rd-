@@ -15,7 +15,7 @@ const Nav = () => {
     { name: 'home', size: '18', path: '/' },
     { name: 'search', size: '18', path: '/search-result' },
     { name: 'heart', size: '16', path: '/wishlist' },
-    { name: 'user', size: '16', path: isLoggedIn ? '/mypage' : '/login' },
+    { name: 'user', size: '16', path: '/mypage' },
   ]);
 
   //스크롤이벤트
