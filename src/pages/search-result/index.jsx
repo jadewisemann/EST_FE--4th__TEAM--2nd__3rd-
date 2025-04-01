@@ -270,7 +270,7 @@ const SearchResultPage = () => {
         <VerticalList products={visibleProducts} isLoading={isLoading} />
 
         {/* 트리거 */}
-        {hasMore && (
+        {hasMore && !isLoading && (
           <div
             ref={loadMoreButtonRef}
             className='flex h-20 w-full items-center justify-center'
