@@ -142,7 +142,9 @@ const CheckoutPage = () => {
     // 결제 요청
     const result = await submitPayment(reservationInfo);
     if (result && result.success) {
-      navigate(`/reservation-detail/${roomId}/${result.reservationId}`);
+      navigate(
+        `/reservation-detail/${roomId}/${result.reservationId.slice(-13)}`,
+      );
     }
   };
 

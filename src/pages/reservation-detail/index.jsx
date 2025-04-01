@@ -1,99 +1,76 @@
-// component
-import SubHeader from '../../components/SubHeader';
-import DetailSection from '../../components/DetailSection';
-import Button from '../../components/Button';
+import { useEffect, useState } from 'react';
 
-// temp
-import tempHotel1 from './../../assets/temp/temp_hotel1.jpg';
+import { useParams, useNavigate } from 'react-router-dom';
+
+// store
+import { useUserStore } from '../../store/userStore';
+
+// data
+import { getRoomById } from '../../firebase/searchQuery';
+
+// component
+import Button from '../../components/Button';
+import DetailSection from '../../components/DetailSection';
+import Loading from '../../components/Loading';
+import SubHeader from '../../components/SubHeader';
 
 const ReservationDetailPage = () => {
-  const data = {
-    slides: [tempHotel1, tempHotel1, tempHotel1, tempHotel1, tempHotel1],
-    title: '리츠칼튼 호텔',
-    engTitle: 'Ritz-Carlton Hotel',
-    hotelStar: 5,
-    rate: 4.5,
-    location: '서울시 송파구',
-    reviewAmount: 2888,
-    price: 120000,
-    options: { wifi: true, fitness: true, dining: true, swimmingPool: true },
-    room: [
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '싱글 침대 2개',
-        price: 120000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: true,
-          addPerson: false,
-          smoke: false,
-          wifi: true,
-        },
-        specialOffer: true,
-      },
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '킹사이즈 침대',
-        price: 100000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: false,
-          addPerson: false,
-          smoke: true,
-          wifi: true,
-        },
-        specialOffer: false,
-      },
-      {
-        thumbnail: tempHotel1,
-        name: '스탠다드 트윈룸 (조식 포함)',
-        bed: '킹사이즈 침대',
-        price: 100000,
-        info: {
-          max: 2,
-          checkInHour: '15:00',
-          checkOutHour: '11:00',
-          noRefund: false,
-          addPerson: false,
-          smoke: true,
-          wifi: true,
-        },
-        specialOffer: false,
-      },
-    ],
-  };
+  const navigate = useNavigate();
 
-  const selectedData = data.room[0];
+  // params
+  const { roomId, reservationId } = useParams();
 
-  const userData = {
-    name: '홍길동',
-    checkIn: '3/4',
-    checkOut: '3/5',
-    visitor: {
-      adult: 2,
-      children: 0,
-    },
-    point: 500000,
-    request: '늦은 체크인 예정',
-  };
+  // store
+  const { reservations, loadReservations } = useUserStore();
+
+  // state
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  // useEffect
+  useEffect(() => {
+    loadReservations();
+  }, []);
+
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        const RoomData = await getRoomById(roomId);
+
+        if (RoomData) {
+          setData(RoomData);
+        } else {
+          console.log('해당 ID의 호텔이 존재하지 않습니다.');
+        }
+      } catch (error) {
+        console.error('에러 발생:', error);
+      }
+    };
+
+    fetchRoom();
+  }, []);
+
+  useEffect(() => {
+    setUserData(
+      reservations.find(item => item.id.slice(-13) === reservationId),
+    );
+  }, [reservations]);
+
+  // Room 데이터 로딩 중
+  if (!data) {
+    return <Loading />;
+  }
 
   return (
     <>
-      <SubHeader leftButton='arrow' title='예약 확인 및 결제' />
+      <SubHeader leftButton='arrow' title='예약 확인' />
       <div className='container mt-5'>
         <div className='mb-3'>
           <h2 className='mb-2 flex items-center gap-2 font-medium'>
-            <span className='text-xl'>{data.title}</span>
-            <span className='text-sm'>({data.engTitle})</span>
+            <span className='text-xl'>{data.hotel_title}</span>
           </h2>
           <div className='overflow-hidden rounded-xl'>
-            <img className='h-full' src={data.slides[0]} alt='' />
+            <img className='h-full' src={data.img} alt='' />
           </div>
         </div>
 
@@ -102,8 +79,8 @@ const ReservationDetailPage = () => {
           title='객실 정보'
           contents={[
             {
-              hotelName: data.title,
-              roomName: selectedData.name,
+              hotelName: data.hotel_title,
+              roomName: data.title,
               schedule: `${userData.checkIn} ~ ${userData.checkOut}`,
               labels: {
                 hotelName: '숙소명',
@@ -122,7 +99,7 @@ const ReservationDetailPage = () => {
           contents={[
             {
               userName: userData.name,
-              visitor: `성인 ${userData.visitor.adult}인`,
+              visitor: `성인 ${userData.guestCount}인`,
               schedule: userData.request,
               labels: {
                 userName: '이름',
@@ -139,11 +116,23 @@ const ReservationDetailPage = () => {
           title='결제 정보'
           type='table-spacebetween'
           contents={[
-            { label: '숙소 가격 (객실 1개 x 1박)', value: '120,000원' },
-            { label: '할인가격', value: '0원' },
-            { label: '세금 및 수수료 (10%)', value: '12,000원' },
-            { label: '최종 결제금액', value: '132,000원' },
-            { label: '결제방법', value: '포인트 결제' },
+            {
+              label: '숙소 가격 (객실 1개 x 1박)',
+              value: `${data.price.toLocaleString()}원`,
+            },
+            {
+              label: '할인가격',
+              value: `${data.price_final ? (data.price - data.price_final).toLocaleString() : 0}원`,
+            },
+            {
+              label: '포인트 사용',
+              value: `${userData.pointsUsed.toLocaleString()}원`,
+            },
+            {
+              label: '최종 결제금액',
+              value: `${userData.finalAmount.toLocaleString()}원`,
+            },
+            { label: '결제방법', value: userData.paymentMethod },
             {
               label: '적립 포인트',
               value: '포인트 결제는 적립 대상이 아닙니다.',
@@ -151,12 +140,14 @@ const ReservationDetailPage = () => {
           ]}
         />
 
-        <div className='shadow-top fixed bottom-0 left-0 w-full items-center justify-center bg-white p-6'>
+        <div className='bottom-fixed'>
           <Button
             color='prime'
             size='full'
             className='rounded-2xl'
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/');
+            }}
           >
             확인
           </Button>
