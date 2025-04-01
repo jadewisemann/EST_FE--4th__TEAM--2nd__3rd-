@@ -88,20 +88,27 @@ const Input = ({
 
   // 핸들러
   const handleChange = e => {
-    const newValue = e.target.value;
+    let newValue = e.target.value;
 
-    // tel 타입일 경우 숫자와 - 만 허용
+    // tel 타입일 경우 숫자만 입력받도록 필터링
     if (inputType === 'tel') {
-      const filteredValue = newValue.replace(/[^\d-]/g, '');
-      if (filteredValue !== newValue) {
-        onChange(filteredValue);
-        onValidChange(checkValidity(filteredValue, compareValue));
-        return;
-      }
+      newValue = newValue.replace(/[^\d]/g, '');
+      newValue = formatPhoneNumber(newValue);
     }
 
     onChange(newValue);
     onValidChange(checkValidity(newValue, compareValue));
+  };
+
+  // 하이픈 추가
+  const formatPhoneNumber = number => {
+    if (number.length <= 3) {
+      return number;
+    } else if (number.length <= 7) {
+      return `${number.slice(0, 3)}-${number.slice(3)}`;
+    } else {
+      return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7, 11)}`;
+    }
   };
 
   return (
@@ -147,9 +154,9 @@ const Input = ({
         />
 
         {/* 지우기 버튼 */}
-        {inputType !== 'password'
-          && inputType !== 'confirmPassword'
-          && value && (
+        {inputType !== 'password' &&
+          inputType !== 'confirmPassword' &&
+          value && (
             <button
               type='button'
               className='absolute right-5 cursor-pointer'
@@ -167,8 +174,8 @@ const Input = ({
           )}
 
         {/* 비밀번호 보이기*/}
-        {(inputType === 'password' || inputType === 'confirmPassword')
-          && value && (
+        {(inputType === 'password' || inputType === 'confirmPassword') &&
+          value && (
             <button
               type='button'
               className='absolute right-5 cursor-pointer'
