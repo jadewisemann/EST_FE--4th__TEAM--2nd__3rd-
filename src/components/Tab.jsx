@@ -1,7 +1,10 @@
 const Tab = ({ categories = [], activeTab = 0, setActiveTab, children }) => (
   <>
     <div className='relative mx-5 mt-5 flex items-center dark:text-amber-50'>
-      <div className='flex items-center gap-x-2 overflow-x-auto pr-2'>
+      <div
+        className='flex items-center gap-x-2 overflow-x-auto pr-2'
+        style={{ scrollbarWidth: 'none' }}
+      >
         {categories.map((item, idx) => (
           <button
             key={idx}
