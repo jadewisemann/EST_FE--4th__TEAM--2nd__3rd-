@@ -8,7 +8,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 
-import firebaseConfig from './firebase-config';
+import firebaseConfig from './firebase-config.js';
 
 const initializeFirebase = () => {
   const app = initializeApp(firebaseConfig);
