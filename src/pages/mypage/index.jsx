@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -19,19 +19,19 @@ import VerticalList from '../../components/VerticalList';
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const { openPasswordChangeModal } = useModalStore();
-  const { user, login, logout } = useAuthStore();
-  const { userData, points, loadUserData, isLoading } = useUserStore();
-  const { reservations, loading, error } = useReservationWithAuth();
-  const [mergedReservations, setMergedReservations] = useState([]);
-  const { toggleDarkMode } = useDarkModeStore();
-  const [showAll, setShowAll] = useState(false); 
-  const [visibleCount, setVisibleCount] = useState(3); // 몇 개 보여줄지
-  
 
+  const { user, logout } = useAuthStore();
+  const { toggleDarkMode } = useDarkModeStore();
+  const { openPasswordChangeModal } = useModalStore();
+  const { points, loadUserData, isLoading } = useUserStore();
+
+  const { reservations } = useReservationWithAuth();
+
+  // const [showAll, setShowAll] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(3); // 몇 개 보여줄지
+  const [mergedReservations, setMergedReservations] = useState([]);
   const displayedReservations = mergedReservations.slice(0, visibleCount);
 
-  
   const userName = user
     ? `${user.displayName || user.email?.split('@')[0]}`
     : '로그인';
@@ -46,6 +46,7 @@ const MyPage = () => {
         setMergedReservations([]);
         return;
       }
+
       const merged = await Promise.all(
         reservations.map(async res => {
           try {
@@ -71,6 +72,7 @@ const MyPage = () => {
           }
         }),
       );
+
       setMergedReservations(merged);
     };
     fetchRooms();
@@ -80,18 +82,26 @@ const MyPage = () => {
     const confirm = window.confirm('정말 로그아웃하시겠습니까?');
     if (!confirm) return;
     await logout();
-    navigate('/login'); // 로그아웃 후 로그인 페이지로 이동
+    navigate('/');
   };
 
   const handleSearchHotel = () => {
-    // navigate('/result', { state: { name: '부산' } }); 검색어 넘길 수 있음
     navigate('/search-result');
   };
+
+  useEffect(() => {
+    console.log('isLoading', isLoading);
+  }, isLoading);
 
   return (
     <div className='container'>
       <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
-      {!reservations || reservations.length === 0 ? (
+
+      {isLoading ? (
+        <>
+          <div>로딩 중</div>
+        </>
+      ) : !reservations || reservations.length === 0 ? (
         <>
           <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
             <Button color='prime' size='full' onClick={handleSearchHotel}>
@@ -103,7 +113,10 @@ const MyPage = () => {
       ) : (
         <>
           <h3 className='mt-6 font-bold dark:text-neutral-50'>예약 세부정보</h3>
-          <VerticalList products={displayedReservations} />
+          <VerticalList
+            products={displayedReservations}
+            isLoading={isLoading}
+          />
 
           {mergedReservations.length > visibleCount ? (
             <Button
