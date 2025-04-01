@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -7,160 +7,244 @@ import useModalStore from '../../store/modalStore';
 
 import { searchHotelsAdvanced } from '../../firebase/searchQuery';
 
-import Button from '../../components/Button';
 import Icon from '../../components/Icon';
-import FilterModal from '../../components/modal/FilterModal';
-import SearchModal from '../../components/modal/SearchModal';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 
-const SearchResult = () => {
-  const navigate = useNavigate();
-  // 키워드 받기
-  const [searchParams] = useSearchParams();
-  const keywordFromQuery = searchParams.get('keyword') || '서울';
-  // 탭 카테고리 정의
-  const categories = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외숙소'];
-  const [activeTab, setActiveTab] = useState(0);
-  // 파이어스토어에서 허용되지 않는 문자 제거
-  const sanitizeKeyword = keyword => keyword.replace(/[~*/\[\]]/g, '');
-  // 데이터 관련
+const DEFAULT_KEYWORD = '서울';
+const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외숙소'];
+
+const ITEMS_PER_PAGE = 7;
+const MAX_SEARCH_LIMIT = 20;
+
+const SCROLL_LOAD_DURATION = 500; // ms
+
+const sanitizeKeyword = keyword => keyword.replace(/[~*/\[\]]/g, '');
+
+const useHotelData = (keywordFromQuery, activeTab) => {
   const [hotelList, setHotelList] = useState([]);
-  // 필터 관련
-  const [selectedFilter, setSelectedFilter] = useState('정렬');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  // 더보기 관련
   const [visibleProducts, setVisibleProducts] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  // 날짜 모달 관련
-  const { dates, guests } = useAppDataStore();
+
+  const prepareKeywords = useCallback(() => {
+    if (activeTab === 0) {
+      return keywordFromQuery.split(',').map(k => sanitizeKeyword(k.trim()));
+    }
+
+    return [sanitizeKeyword(CATEGORIES[activeTab])];
+  }, [keywordFromQuery, activeTab]);
+
+  // 초기 데이터 로딩
+  const fetchInitialData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const keywords = prepareKeywords();
+      const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+
+      const response = await searchHotelsAdvanced(
+        primaryKeyword,
+        null,
+        MAX_SEARCH_LIMIT,
+        MAX_SEARCH_LIMIT,
+        null,
+        true,
+      );
+
+      let results = response.hotels || [];
+
+      if (activeTab === 0 && keywords.length > 1) {
+        const secondaryResults = await Promise.all(
+          keywords.slice(1).map(k => searchHotelsAdvanced(k)),
+        );
+
+        const secondaryMerged = secondaryResults.flat();
+        const allResults = [...results, ...secondaryMerged];
+        results = Array.from(new Map(allResults.map(h => [h.id, h])).values());
+      }
+
+      setHotelList(results);
+      setVisibleProducts(results.slice(0, ITEMS_PER_PAGE));
+      setLastDoc(response.lastDoc);
+      setHasMore(Boolean(response.lastDoc));
+    } catch (err) {
+      console.error('데이터 로드 실패: ', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [activeTab, prepareKeywords]);
+
+  // 추가 데이터 로드
+  const loadMoreData = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    // 패칭 없이 보여줄 데이터가 있는 경우
+    if (visibleProducts.length < hotelList.length) {
+      setIsLoading(true);
+
+      try {
+        const nextItems = hotelList.slice(
+          visibleProducts.length,
+          visibleProducts.length + ITEMS_PER_PAGE,
+        );
+
+        setVisibleProducts(prev => [...prev, ...nextItems]);
+      } finally {
+        setIsLoading(false);
+      }
+
+      return;
+    }
+
+    // 패칭이 필요한 경우 => 패칭
+    setIsLoading(true);
+    try {
+      const keywords = prepareKeywords();
+      const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+
+      const res = await searchHotelsAdvanced(
+        primaryKeyword,
+        null,
+        MAX_SEARCH_LIMIT,
+        MAX_SEARCH_LIMIT,
+        lastDoc,
+        true,
+      );
+
+      if (res.hotels?.length > 0) {
+        // 중복 제거 => 호첼 업데이트
+        const existingIds = new Set(hotelList.map(h => h.id));
+        const uniqueNewHotels = res.hotels.filter(
+          hotel => !existingIds.has(hotel.id),
+        );
+
+        const updatedList = [...hotelList, ...uniqueNewHotels];
+
+        setHotelList(updatedList);
+        setVisibleProducts(prev => [
+          ...prev,
+          ...uniqueNewHotels.slice(0, ITEMS_PER_PAGE),
+        ]);
+        setLastDoc(res.lastDoc);
+        setHasMore(Boolean(res.lastDoc));
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error('더보기 실패:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [
+    hotelList,
+    hasMore,
+    isLoading,
+    lastDoc,
+    visibleProducts.length,
+    prepareKeywords,
+  ]);
+
+  const resetData = useCallback(() => {
+    setVisibleProducts([]);
+    setHotelList([]);
+    setLastDoc(null);
+    setHasMore(true);
+  }, []);
+
+  return {
+    hotelList,
+    visibleProducts,
+    hasMore,
+    isLoading,
+    fetchInitialData,
+    loadMoreData,
+    resetData,
+  };
+};
+
+const useInfiniteScroll = (loadMoreData, hasMore, isLoading) => {
+  const loadMoreButtonRef = useRef(null);
+  const observer = useRef(null);
+
+  // 옵저버 설정
+    // 기존 옵저버 제거
+    if (observer.current) {
+      observer.current.disconnect();
+    }
+
+    // 새로운 옵저버 부착
+    observer.current = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          setTimeout(loadMoreData, SCROLL_LOAD_DURATION);
+        }
+      },
+      { threshold: 1 },
+    );
+
+    if (loadMoreButtonRef.current) {
+      observer.current.observe(loadMoreButtonRef.current);
+    }
+
+    // 언마운트시에 옵저버 지우기
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [loadMoreData, hasMore, isLoading]);
+
+  return loadMoreButtonRef;
+};
+
+const SearchResultPage = () => {
   const { openSearchModal } = useModalStore();
-  // 날짜 관련 텍스트
-  const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
-  const totalNights = `${dates.duration}박`;
-  // 헤더 정보
+  const { dates, guests } = useAppDataStore();
+
+  const [searchParams] = useSearchParams();
+  const keywordFromQuery = searchParams.get('keyword') || DEFAULT_KEYWORD;
+
+  const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState(0);
+
+  const {
+    visibleProducts,
+    hasMore,
+    isLoading,
+    fetchInitialData,
+    loadMoreData,
+    resetData,
+  } = useHotelData(keywordFromQuery, activeTab);
+
+  const loadMoreButtonRef = useInfiniteScroll(loadMoreData, hasMore, isLoading);
+
   const headerInfo = {
-    name: activeTab === 0 ? keywordFromQuery : categories[activeTab],
-    fromToDate,
-    totalNights,
+    name: activeTab === 0 ? keywordFromQuery : CATEGORIES[activeTab],
+    fromToDate: `${dates.startDate} ~ ${dates.endDate}`,
+    totalNights: `${dates.duration}박`,
     numOfAdults: guests.adults || 1,
   };
 
-  const applySorting = (list, filter) => {
-    const sorted = [...list];
-    if (filter === '낮은 요금순') {
-      sorted.sort((a, b) => a.rooms?.[0]?.price - b.rooms?.[0]?.price);
-    } else if (filter === '높은 요금순') {
-      sorted.sort((a, b) => b.rooms?.[0]?.price - a.rooms?.[0]?.price);
-    } else if (filter === '평점순') {
-      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    }
-    return sorted;
-  };
-
-  // 숙소 초기 데이터 로드
+  // 탭 변경 => 데이터 초기화 & 로드
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setIsLoading(true);
-      try {
-        let result = [];
-        if (activeTab === 0) {
-          // 검색어를 입력 & 카테고리 버튼 클릭 해서 들어오는 경우,
-          // 특수문자 있을 때 각각 검색해서 결과 합치기 (호텔/리조트)
-          // 예)'호텔'과 '리조트'를 동시에 검색하고, 그 결과를 하나의 배열로 합침
-          const keywords = keywordFromQuery
-            .split(',')
-            .map(k => sanitizeKeyword(k.trim()));
-          const allResults = await Promise.all(
-            keywords.map(k => searchHotelsAdvanced(k)),
-          );
-          const merged = allResults.flat();
-          const unique = Array.from(
-            new Map(merged.map(h => [h.id, h])).values(),
-          ); //중복된 호텔 객체 제거
-          result = unique;
-          setHasMore(false);
-        } else {
-          //카테고리버튼 클릭 때 마다 데이터 호출
-          const categoryKeyword = sanitizeKeyword(categories[activeTab]);
-          const res = await searchHotelsAdvanced(
-            categoryKeyword, //검색 키워드
-            null, //지역 필터
-            20, //최대 검색 수
-            20, //한 번에 불러올 페이지 갯수
-            null, //마지막으로 받은 문서 기준 이후 데이터 받아오기
-            true, //pagination 모드인지
-          );
-          result = res.hotels;
-          setLastDoc(res.lastDoc);
-          setHasMore(Boolean(res.lastDoc));
-        }
-
-        const sorted = applySorting(result, selectedFilter);
-        setHotelList(sorted);
-        setVisibleProducts(sorted.slice(0, 7));
-      } catch (err) {
-        console.error('데이터 로드 실패: ', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    resetData();
     fetchInitialData();
-  }, [activeTab, keywordFromQuery]);
+  }, [activeTab, keywordFromQuery, resetData, fetchInitialData]);
 
-  // 필터 기준 변경 시 정렬 적용
-  useEffect(() => {
-    let sorted = applySorting(hotelList, selectedFilter);
-    setHotelList(sorted);
-    setVisibleProducts(sorted.slice(0, visibleProducts.length));
-  }, [selectedFilter]);
-
-  // 더보기 클릭 시 데이터 추가 로드
-  const handleViewMore = async () => {
-    if (visibleProducts.length < hotelList.length) {
-      const more = hotelList.slice(
-        visibleProducts.length,
-        visibleProducts.length + 7,
-      );
-      setVisibleProducts(prev => [...prev, ...more]);
-    } else if (hasMore && activeTab !== 0) {
-      setIsLoading(true);
-      try {
-        const categoryKeyword = sanitizeKeyword(categories[activeTab]);
-        const res = await searchHotelsAdvanced(
-          categoryKeyword,
-          null,
-          20, // limit: 전체 결과 수
-          20, // pageSize: 한 번에 가져올 수
-          lastDoc, // 시작점 (페이징)
-          true, // pagination 사용 여부
-        );
-        const newHotels = res.hotels;
-
-        const updateList = [...hotelList, ...newHotels];
-        const sorted = applySorting(updateList, selectedFilter);
-
-        setHotelList(sorted);
-        setVisibleProducts(sorted.slice(0, visibleProducts.length + 7));
-        setLastDoc(res.lastDoc);
-        setHasMore(Boolean(res.lastDoc));
-      } catch (err) {
-        console.error('더보기 실패:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-  // 숙소 클릭 시 ID 기반 상세 페이지 이동
-  const handleItemClick = hotel => {
-    navigate(`/detail/${encodeURIComponent(hotel.id)}`);
-  };
+  // 숙소 클릭 핸들러
+  const handleItemClick = useCallback(
+    hotel => {
+      navigate(`/detail/${encodeURIComponent(hotel.id)}`);
+    },
+    [navigate],
+  );
 
   return (
     <div className='dark:bg-neutral-800'>
+      {/* 헤더 */}
       <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800'>
         <button
           className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 dark:border-neutral-400'
@@ -173,7 +257,7 @@ const SearchResult = () => {
           <div className='flex flex-col items-start text-sm dark:text-neutral-50'>
             <strong>{headerInfo.name}</strong>
             <span className='text-xs'>
-              {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{''}
+              {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{' '}
               {headerInfo.numOfAdults}명
             </span>
           </div>
@@ -186,11 +270,9 @@ const SearchResult = () => {
       <div className='h-16'></div>
 
       <Tab
-        categories={categories}
+        categories={CATEGORIES}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        setIsFilterOpen={setIsFilterOpen}
-        selectedFilter={selectedFilter}
       >
         <VerticalList
           products={visibleProducts}
@@ -198,32 +280,78 @@ const SearchResult = () => {
           isLoading={isLoading}
         />
 
-        {(visibleProducts.length < hotelList.length || hasMore) && (
-          <Button
-            size='full'
-            color='invert'
-            className='mt-4 border-2 dark:border-neutral-400 dark:bg-neutral-800'
-            onClick={handleViewMore}
-            disabled={isLoading}
+        {/* 트리거 */}
+        {hasMore && (
+          <div
+            ref={loadMoreButtonRef}
+            className='flex h-20 w-full items-center justify-center'
           >
-            {isLoading
-              ? '불러오는 중...'
-              : `더보기 (${Math.max(hotelList.length - visibleProducts.length, 0) + (hasMore ? 20 : 0)}개)`}
-          </Button>
+            <div className='h-12 w-12'>
+              <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+                <circle
+                  fill='#7f22fe'
+                  stroke='#7f22fe'
+                  stroke-width='4'
+                  r='15'
+                  cx='40'
+                  cy='100'
+                >
+                  <animate
+                    attributeName='opacity'
+                    calcMode='spline'
+                    dur='1'
+                    values='1;0;1;'
+                    keySplines='.5 0 .5 1;.5 0 .5 1'
+                    repeatCount='indefinite'
+                    begin='-.4'
+                  ></animate>
+                </circle>
+                <circle
+                  fill='#7f22fe'
+                  stroke='#7f22fe'
+                  stroke-width='4'
+                  r='15'
+                  cx='100'
+                  cy='100'
+                >
+                  <animate
+                    attributeName='opacity'
+                    calcMode='spline'
+                    dur='1'
+                    values='1;0;1;'
+                    keySplines='.5 0 .5 1;.5 0 .5 1'
+                    repeatCount='indefinite'
+                    begin='-.2'
+                  ></animate>
+                </circle>
+                <circle
+                  fill='#7f22fe'
+                  stroke='#7f22fe'
+                  stroke-width='4'
+                  r='15'
+                  cx='160'
+                  cy='100'
+                >
+                  <animate
+                    attributeName='opacity'
+                    calcMode='spline'
+                    dur='1'
+                    values='1;0;1;'
+                    keySplines='.5 0 .5 1;.5 0 .5 1'
+                    repeatCount='indefinite'
+                    begin='0'
+                  ></animate>
+                </circle>
+              </svg>
+            </div>
+            {/* <div className='inline-block h-8 w-8 animate-spin rounded-full border-t-2 border-b-2 border-violet-600'></div> */}
+          </div>
         )}
       </Tab>
 
       <Nav />
-      <SearchModal />
-      <FilterModal
-        isOpen={isFilterOpen}
-        title='정렬 기준'
-        onClose={() => setIsFilterOpen(false)}
-        onConfirm={setSelectedFilter}
-        selected={selectedFilter}
-      />
     </div>
   );
 };
 
-export default SearchResult;
+export default SearchResultPage;
