@@ -1,19 +1,29 @@
+import { useRef } from 'react';
+
 import { Link } from 'react-router-dom';
 
-import Heart from '../components/Heart';
-import Rating from '../components/Rating';
+import Heart from './Heart';
+import Rating from './Rating';
+import SkeletonItem from './SkeletonItem';
 
-const VerticalList = ({ products }) => {
-  if (!products || products.length === 0) {
+const VerticalList = ({ products, isLoading }) => {
+  const isLoadingRef = useRef(false);
+  if (isLoading && !isLoadingRef.current) {
+    return (
+      <div className='flex flex-col'>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <SkeletonItem key={index} />
+        ))}
+      </div>
+    );
+  } else if (!products || products.length === 0) {
     return (
       <div className='py-8 text-center text-sm text-neutral-500'>
         등록된 숙소가 없습니다.
       </div>
     );
   }
-
-  // console.log('products:', products);
-  // console.log('products:', products[0]);
+  isLoadingRef.current = true;
 
   return (
     <div className='flex flex-col'>
@@ -33,7 +43,7 @@ const VerticalList = ({ products }) => {
         const rating = product.rating || 0;
 
         const isReservation = !!product.checkIn && !!product.checkOut;
-        console.log('product:', product);
+        // console.log('product:', product);
 
         return isReservation ? (
           <div
@@ -57,7 +67,7 @@ const VerticalList = ({ products }) => {
                   {title}
                 </div>
                 <div className='mb-0.5 flex text-left text-xs text-neutral-500 not-italic dark:text-neutral-300'>
-                  {product.roomName}
+                  {product.room_title}
                 </div>
                 <div className='flex text-left text-xs text-neutral-500 not-italic dark:text-neutral-300'>
                   {product.checkIn} ~ {product.checkOut}
