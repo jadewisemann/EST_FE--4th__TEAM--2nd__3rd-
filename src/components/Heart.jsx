@@ -24,7 +24,7 @@ const Heart = ({ hotelId, className }) => {
     <button
       type='button'
       onClick={heartHandler}
-      className={`cursor-pointer rounded-4xl border-1 border-neutral-300 bg-white p-1.5 ${className}`}
+      className={`cursor-pointer rounded-4xl border-1 border-neutral-300 bg-white p-1.5 dark:border-neutral-400 dark:bg-neutral-800 ${className}`}
     >
       <Icon
         name={isChecked ? 'heart_fill' : 'heart'}
