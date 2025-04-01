@@ -25,7 +25,13 @@ const MyPage = () => {
   const { reservations, loading, error } = useReservationWithAuth();
   const [mergedReservations, setMergedReservations] = useState([]);
   const { toggleDarkMode } = useDarkModeStore();
+  const [showAll, setShowAll] = useState(false); 
+  const [visibleCount, setVisibleCount] = useState(3); // 몇 개 보여줄지
+  
 
+  const displayedReservations = mergedReservations.slice(0, visibleCount);
+
+  
   const userName = user
     ? `${user.displayName || user.email?.split('@')[0]}`
     : '로그인';
@@ -97,8 +103,20 @@ const MyPage = () => {
       ) : (
         <>
           <h3 className='mt-6 font-bold dark:text-neutral-50'>예약 세부정보</h3>
-          <VerticalList products={mergedReservations} />
-          <hr className='mb-6 block border-0' />
+          <VerticalList products={displayedReservations} />
+
+          {mergedReservations.length > visibleCount ? (
+            <Button
+              size='full'
+              color='invert'
+              className='mx-auto mt-4 mb-10'
+              onClick={() => setVisibleCount(prev => prev + 5)}
+            >
+              더보기 ({mergedReservations.length - visibleCount}개)
+            </Button>
+          ) : (
+            <hr className='mb-6 block border-0' />
+          )}
         </>
       )}
       <DetailSection
