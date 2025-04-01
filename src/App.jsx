@@ -42,7 +42,7 @@ const App = () => (
     <Routes>
       <Route path='/' element={<MainPage />} />
       <Route path='/details/:hotelId' element={<DetailsPage />} />
-      <Route path='/checkout/:roomId' element={<CheckoutPage />} />
+
       <Route path='/order-confirm' element={<OrderConfirm />} />
       <Route path='/payment' element={<PaymentPage />} />
       <Route path='/user-info' element={<UserInfoPage />} />
@@ -64,6 +64,7 @@ const App = () => (
       {/* 로그인 해야만 접근 가능한 페이지를 위치시킬 곳 */}
       <Route element={<PrivateRoute />}>
         <Route path='/mypage' element={<MyPage />} />
+        <Route path='/checkout/:roomId' element={<CheckoutPage />} />
       </Route>
 
       {/* test pages */}
