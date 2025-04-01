@@ -1,14 +1,14 @@
 import useToastStore from '../store/toastStore';
 
 const ToastProvider = () => {
-  const { message } = useToastStore();
+  const { message, className } = useToastStore();
 
   if (!message) return null;
 
   return (
     <div
       role='alert'
-      className='fixed top-10 left-1/2 z-[1000] -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-white shadow-md'
+      className={`fixed top-10 left-1/2 z-[1000] -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-white shadow-md ${className}`}
     >
       {message}
     </div>
@@ -24,4 +24,5 @@ export default ToastProvider;
 // 호출과 showToast() 안에 출력 메세지를 넣으면 됩니다
 //ex) const handleClick = () => {
 // showToast('토스트 메시지가 표시됩니다!');
+// showToast('스타일 변경','bg-red-500')
 // };
