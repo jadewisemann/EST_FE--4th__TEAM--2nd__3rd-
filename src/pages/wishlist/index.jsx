@@ -37,7 +37,7 @@ const WishlistPage = () => {
 
   return (
     <>
-      <SubHeader leftButton='arrow' title='관심 숙소' />
+      <SubHeader leftButton='arrow' title='관심 숙소' zIndex={10} />
       <div className='container'>
         {wishlist.length === 0 ? (
           <div className='flex flex-col items-center gap-4'>

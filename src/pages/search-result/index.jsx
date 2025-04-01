@@ -235,14 +235,6 @@ const SearchResultPage = () => {
     fetchInitialData();
   }, [activeTab, keywordFromQuery, resetData, fetchInitialData]);
 
-  // 숙소 클릭 핸들러
-  const handleItemClick = useCallback(
-    hotel => {
-      navigate(`/detail/${encodeURIComponent(hotel.id)}`);
-    },
-    [navigate],
-  );
-
   return (
     <div className='dark:bg-neutral-800'>
       {/* 헤더 */}
@@ -275,11 +267,7 @@ const SearchResultPage = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       >
-        <VerticalList
-          products={visibleProducts}
-          onItemClick={handleItemClick}
-          isLoading={isLoading}
-        />
+        <VerticalList products={visibleProducts} isLoading={isLoading} />
 
         {/* 트리거 */}
         {hasMore && (
