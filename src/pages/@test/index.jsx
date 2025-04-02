@@ -456,7 +456,7 @@ const TestPage = () => {
         title='결제 정보'
         type='table-spacebetween'
         contents={[
-          { label: '숙소 가격 (객실 1개 x 1박)', value: '120,000원' },
+          { label: '숙소 가격', value: '120,000원' },
           { label: '할인가격', value: '0원' },
           { label: '세금 및 수수료 (10%)', value: '12,000원' },
           { label: '최종 결제금액', value: '132,000원' },

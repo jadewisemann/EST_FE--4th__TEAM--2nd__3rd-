@@ -60,7 +60,7 @@ const DetailSection = ({
             >
               {Object.entries(item.labels).map(([key, label]) => (
                 <div key={key} className='flex items-start'>
-                  <div className='basis-1/5 text-neutral-500 dark:text-neutral-300'>
+                  <div className='min-w-18 shrink-0 text-neutral-500 dark:text-neutral-300'>
                     {label}
                   </div>
                   <div>

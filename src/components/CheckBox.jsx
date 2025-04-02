@@ -17,7 +17,7 @@ const CheckBox = ({
         disabled={disabled}
         aria-disabled={disabled}
         className='peer aspect-square w-[0.875rem] accent-violet-600'
-        defaultChecked={checked}
+        checked={checked}
         onChange={onChange}
       />
       <label

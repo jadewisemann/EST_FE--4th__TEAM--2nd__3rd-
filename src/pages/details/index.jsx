@@ -105,7 +105,7 @@ const DetailsPage = () => {
             disableOnInteraction: false,
           }}
           speed={500}
-          style={{ marginInline: '-20px' }}
+          style={{ marginInline: '-1.25rem' }}
         >
           {data.image.map((slide, index) => (
             <SwiperSlide key={index}>

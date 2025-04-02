@@ -18,7 +18,7 @@ const HorizontalList = ({ products, isLoading }) => {
         slidesOffsetBefore={20}
         slidesOffsetAfter={20}
         freeMode
-        style={{ margin: '-20px', paddingBlock: '20px' }}
+        style={{ margin: '-1.25rem', paddingBlock: '1.25rem' }}
       >
         {Array.from({ length: 4 }).map((_, index) => (
           <SwiperSlide
@@ -39,7 +39,7 @@ const HorizontalList = ({ products, isLoading }) => {
       slidesOffsetBefore={20}
       slidesOffsetAfter={20}
       freeMode
-      style={{ margin: '-20px', paddingBlock: '20px' }}
+      style={{ margin: '-1.25rem', paddingBlock: '1.25rem' }}
     >
       {products?.map((product, index) => (
         <SwiperSlide
@@ -65,10 +65,12 @@ const HorizontalList = ({ products, isLoading }) => {
               <address className='flex items-center overflow-hidden text-[11px] text-ellipsis whitespace-nowrap text-neutral-500 not-italic dark:text-neutral-300'>
                 <Icon
                   name='location'
-                  className='text-neutral-500 dark:text-neutral-300'
+                  className='shrink-0 text-neutral-500 dark:text-neutral-300'
                   size={20}
                 />
-                {product.location[0]}
+                <span className='overflow-hidden text-ellipsis whitespace-nowrap'>
+                  {product.location[0]}
+                </span>
               </address>
               <div className='mt-1 flex items-end gap-1'>
                 <span className='text-sm font-bold text-violet-600 dark:text-violet-500'>

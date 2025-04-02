@@ -14,7 +14,7 @@
 }
 
 body {
-  @apply overflow-hidden w-full max-w-[540px] mx-auto shadow-[0_4px_4px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)];
+  @apply overflow-hidden w-full max-w-[600px] mx-auto shadow-[0_4px_4px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)];
 }
 
 .swiper-pagination .swiper-pagination-bullet {
@@ -25,12 +25,19 @@ body {
   @apply bg-violet-600;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   html,
   body{
     font-size: 14px;
   }
 }
+
+/* @media (max-width: 360px) {
+  html,
+  body{
+    font-size: 14px;
+  }
+} */
 
 @layer utilities {
   .container {
@@ -42,6 +49,6 @@ body {
   }
 
   .center-fixed-item {
-    @apply max-w-[540px] w-full left-1/2 -translate-x-1/2;
+    @apply max-w-[600px] w-full left-1/2 -translate-x-1/2;
   }
 }

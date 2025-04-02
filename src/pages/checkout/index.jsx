@@ -151,8 +151,8 @@ const CheckoutPage = () => {
 
   // 포인트 전체 사용
   const handlePoint = () => {
-    setUsePoint(!usePoint);
     if (usePoint === false) {
+      setUsePoint(true);
       if (points < price) {
         setReservationInfo({
           ...reservationInfo,
@@ -165,6 +165,7 @@ const CheckoutPage = () => {
         });
       }
     } else {
+      setUsePoint(false);
       setReservationInfo({
         ...reservationInfo,
         point: 0,
@@ -175,10 +176,10 @@ const CheckoutPage = () => {
   return (
     <>
       <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
-      <div className='container mt-5 mb-12'>
+      <div className='container pb-42!'>
         <div>
-          <h2 className='mb-2 flex items-center gap-2 font-medium'>
-            <span className='text-lg'>{data.title}</span>
+          <h2 className='mt-5 mb-2 flex items-center gap-2 text-lg font-medium'>
+            {data.title}
           </h2>
           <div className='overflow-hidden rounded-xl'>
             <img className='h-full' src={data.img} alt='' />
@@ -299,7 +300,7 @@ const CheckoutPage = () => {
               type='table-spacebetween'
               contents={[
                 {
-                  label: '숙소 가격 (객실 1개 x 1박)',
+                  label: '숙소 가격',
                   value: `${data.price.toLocaleString()}원`,
                 },
                 {
@@ -318,7 +319,7 @@ const CheckoutPage = () => {
               type='table-spacebetween'
               contents={[
                 {
-                  label: '숙소 가격 (객실 1개 x 1박)',
+                  label: '숙소 가격',
                   value: `${data.price.toLocaleString()}원`,
                 },
                 {
@@ -352,6 +353,9 @@ const CheckoutPage = () => {
                   value={reservationInfo.point || ''}
                   placeholder='포인트를 입력하세요'
                   onChange={value => {
+                    if (usePoint) {
+                      setUsePoint(false);
+                    }
                     if (Number(value) < 0) {
                       handleReservationChange({
                         target: { name: 'point', value: 0 },
@@ -361,6 +365,7 @@ const CheckoutPage = () => {
                         target: { name: 'point', value: Number(value) },
                       });
                     } else {
+                      setUsePoint(true);
                       handleReservationChange({
                         target: {
                           name: 'point',
@@ -385,6 +390,7 @@ const CheckoutPage = () => {
                   <CheckBox
                     name='point'
                     txt='전체사용'
+                    checked={usePoint}
                     onChange={handlePoint}
                   />
                 </div>
@@ -392,7 +398,7 @@ const CheckoutPage = () => {
             )}
           </fieldset>
 
-          <div className='bottom-fixed'>
+          <div className='bottom-fixed center-fixed-item'>
             <div className='mb-3 flex items-center justify-between'>
               <span className='text-sm'>총 결제금액</span>
               <span>

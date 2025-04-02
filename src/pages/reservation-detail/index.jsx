@@ -118,7 +118,7 @@ const ReservationDetailPage = () => {
           type='table-spacebetween'
           contents={[
             {
-              label: '숙소 가격 (객실 1개 x 1박)',
+              label: '숙소 가격',
               value: `${data.price.toLocaleString()}원`,
             },
             {
