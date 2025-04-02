@@ -73,7 +73,7 @@ const LoginPage = () => {
       {/* 서브 헤더 */}
       <SubHeader hasShadow={false} zIndex={10} />
 
-      <div className='mt-18 flex flex-col px-6 pb-5 dark:bg-neutral-800'>
+      <div className='flex h-screen flex-col px-6 pt-18 dark:bg-neutral-800'>
         {/* 페이지 정보 */}
         <div className='mb-10 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
