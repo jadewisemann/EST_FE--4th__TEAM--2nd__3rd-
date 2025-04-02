@@ -48,7 +48,7 @@ const SubHeader = ({
   const homeButtonHandler = () => navigateHome();
 
   const defaultStyle =
-    'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white dark:bg-neutral-800 top-0 left-0';
+    'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white dark:bg-neutral-800 top-0';
 
   let zIndexStyle = '';
   if (zIndex !== null && !isNaN(Number(zIndex))) {
@@ -58,9 +58,9 @@ const SubHeader = ({
   const style =
     defaultStyle
     + (hasShadow
-      ? ' shadow-bottom dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)]'
+      ? ' shadow-bottom dark:bg-neutral-800 dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)]'
       : '')
-    + (fixed ? ' fixed' : '')
+    + (fixed ? ' fixed center-fixed-item' : '')
     + zIndexStyle;
 
   return (

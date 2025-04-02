@@ -21,7 +21,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const { user, logout } = useAuthStore();
-  const { toggleDarkMode } = useDarkModeStore();
+  const { darkMode, toggleDarkMode } = useDarkModeStore();
   const { openPasswordChangeModal } = useModalStore();
   const { points, loadUserData, isLoading } = useUserStore();
 
@@ -147,12 +147,16 @@ const MyPage = () => {
         type='table-spacebetween'
         contents={[
           { label: '비밀번호 변경', showMore: true, showMoreText: '더보기' },
-          { label: '다크모드', anchor: true, anchorText: '적용하기' },
+          {
+            label: `${darkMode === 'dark' ? '라이트모드' : '다크모드'}`,
+            anchor: true,
+            anchorText: '적용하기',
+          },
         ]}
         onclick={item => {
           if (item.label === '비밀번호 변경') {
             openPasswordChangeModal();
-          } else if (item.label === '다크모드') {
+          } else if (item.label.includes('모드')) {
             toggleDarkMode();
           }
         }}

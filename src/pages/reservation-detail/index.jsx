@@ -65,10 +65,10 @@ const ReservationDetailPage = () => {
   return (
     <>
       <SubHeader leftButton='arrow' title='예약 확인' />
-      <div className='container mt-5'>
-        <div className='mb-3'>
-          <h2 className='mb-2 flex items-center gap-2 font-medium'>
-            <span className='text-xl'>{data.hotel_title}</span>
+      <div className='container'>
+        <div className='mt-5 mb-3'>
+          <h2 className='mb-2 flex items-center gap-2 text-xl font-medium'>
+            {data.hotel_title}
           </h2>
           <div className='overflow-hidden rounded-xl'>
             <img className='h-full' src={data.img} alt='' />
@@ -137,7 +137,7 @@ const ReservationDetailPage = () => {
           ]}
         />
 
-        <div className='bottom-fixed'>
+        <div className='bottom-fixed center-fixed-item'>
           <Button
             color='prime'
             size='full'

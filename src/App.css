@@ -2,15 +2,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-.dark {
-  @apply bg-neutral-800 text-neutral-50;
-}
-
 /* theme override */
 @theme {
   --text-xxs: 10px;
   --shadow-bottom: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-top: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  @apply bg-neutral-800 text-neutral-50;
+}
+
+body {
+  @apply overflow-hidden w-full max-w-[540px] mx-auto shadow-[0_4px_4px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)];
 }
 
 .swiper-pagination .swiper-pagination-bullet {
@@ -21,19 +25,23 @@
   @apply bg-violet-600;
 }
 
-.bottom-fixed {
-  @apply shadow-top fixed bottom-0 left-0 w-full items-center justify-center bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)];
+@media (max-width: 400px) {
+  html,
+  body{
+    font-size: 14px;
+  }
 }
 
 @layer utilities {
   .container {
-    max-width: none;
-    padding: 72px 20px 120px;
+    @apply max-w-none min-h-screen pt-18 pb-30 px-5;
+  }
+
+  .bottom-fixed {
+    @apply shadow-top fixed bottom-0 w-full items-center justify-center bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)];
+  }
+
+  .center-fixed-item {
+    @apply max-w-[540px] w-full left-1/2 -translate-x-1/2;
   }
 }
-
-/* 
-@utility button {
-  @apply 
-}
-*/

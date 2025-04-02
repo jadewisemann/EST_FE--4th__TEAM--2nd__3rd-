@@ -46,7 +46,7 @@ const Nav = () => {
   // }, []);
 
   return (
-    <div className='fixed bottom-0 left-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)]'>
+    <div className='center-fixed-item fixed bottom-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-2px_10px_rgba(255,255,255,0.25)]'>
       {navMenus.map(item => (
         <NavLink
           key={item.name}

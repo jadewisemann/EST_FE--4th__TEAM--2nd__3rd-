@@ -238,7 +238,7 @@ const SearchResultPage = () => {
   return (
     <div className='dark:bg-neutral-800'>
       {/* 헤더 */}
-      <div className='fixed top-0 left-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800'>
+      <div className='center-fixed-item fixed top-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800 dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)]'>
         <button
           className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 dark:border-neutral-400'
           onClick={openSearchModal}
@@ -280,7 +280,7 @@ const SearchResultPage = () => {
                 <circle
                   fill='#7f22fe'
                   stroke='#7f22fe'
-                  stroke-width='4'
+                  strokeWidth='4'
                   r='15'
                   cx='40'
                   cy='100'
@@ -298,7 +298,7 @@ const SearchResultPage = () => {
                 <circle
                   fill='#7f22fe'
                   stroke='#7f22fe'
-                  stroke-width='4'
+                  strokeWidth='4'
                   r='15'
                   cx='100'
                   cy='100'
@@ -316,7 +316,7 @@ const SearchResultPage = () => {
                 <circle
                   fill='#7f22fe'
                   stroke='#7f22fe'
-                  stroke-width='4'
+                  strokeWidth='4'
                   r='15'
                   cx='160'
                   cy='100'

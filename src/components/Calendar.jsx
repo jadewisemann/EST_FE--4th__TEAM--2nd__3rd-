@@ -381,7 +381,7 @@ const Calendar = ({ startDate, endDate, onChange }) => {
 
   return (
     <>
-      <div className='shadow-bottom sticky top-0 z-2 mb-4 flex w-full flex-col items-center justify-between bg-white pb-2 dark:bg-black'>
+      <div className='shadow-bottom sticky top-0 z-2 mb-4 flex w-full flex-col items-center justify-between bg-white pb-2 dark:bg-neutral-800'>
         {renderSelectedRange()}
         {renderWeekdayHeader()}
       </div>
