@@ -1,4 +1,3 @@
-import TestPage from './@test';
 import CheckoutPage from './checkout';
 import DetailsPage from './details';
 import FindPasswordPage from './find-password';
@@ -26,7 +25,6 @@ export {
   WishlistPage,
   OrderConfirm,
   ReservationDetailPage,
-  TestPage,
   FindPasswordPage,
   MyPage,
 };
