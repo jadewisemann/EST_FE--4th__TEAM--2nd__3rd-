@@ -47,10 +47,14 @@ const SearchModal = () => {
           inputType='search'
           value={searchValue}
           onChange={setSearchValue}
+          inputClass='placeholder:text-neutral-800'
         />
         <Button
           color='line'
           icon='calendar'
+          className={
+            'border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
+          }
           iconSize='20'
           onClick={() => openDateModal()}
         >
@@ -60,6 +64,9 @@ const SearchModal = () => {
           color='line'
           icon='user'
           iconSize='20'
+          className={
+            'border-neutral-300 text-neutral-400 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-300'
+          }
           onClick={() => openGuestModal()}
         >
           {`객실 ${guests.rooms}개 성인 ${guests.adults}명 아동 ${guests.children}명`}

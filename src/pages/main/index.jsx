@@ -145,6 +145,7 @@ const MainPage = () => {
                 value={searchText}
                 onChange={setSearchText}
                 placeholder={'숙박명 검색'}
+                inputClass='placeholder:text-neutral-800'
               />
               <Button
                 color='line'
