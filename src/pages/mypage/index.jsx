@@ -54,10 +54,10 @@ const MyPage = () => {
             return {
               ...res,
               title:
-                room?.hotel_title
-                || room?.title
-                || res?.roomName
-                || '객실 정보 없음',
+                room?.hotel_title ||
+                room?.title ||
+                res?.roomName ||
+                '객실 정보 없음',
               image: room?.img || '이미지 없음',
               price: room?.price || room?.price_final || '금액 정보 없음',
             };
@@ -169,7 +169,7 @@ const MyPage = () => {
         />
         <button
           onClick={handleLogout}
-          className='mt-8 block w-full text-center text-xs underline underline-offset-2'
+          className='mt-8 block w-full text-center text-xs underline underline-offset-2 hover:cursor-pointer'
         >
           로그아웃
         </button>
