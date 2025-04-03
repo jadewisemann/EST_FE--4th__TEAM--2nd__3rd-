@@ -89,10 +89,6 @@ const MyPage = () => {
     navigate('/search-result');
   };
 
-  useEffect(() => {
-    console.log('isLoading', isLoading);
-  }, isLoading);
-
   return (
     <>
       <header>
