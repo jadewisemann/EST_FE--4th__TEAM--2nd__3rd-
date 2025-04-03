@@ -6,13 +6,12 @@ const ToastProvider = () => {
   return (
     <div
       role='alert'
-      className={`fixed top-10 left-1/2 z-[1000] -translate-x-1/2 rounded-2xl bg-gray-800 px-4 py-3 text-white shadow-md transition-transform duration-500 ${message ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} ${className}`}
+      className={`fixed top-10 left-1/2 z-[1000] -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-3 text-white shadow-md transition-all duration-400 ${message ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-5 opacity-0'} ${className}`}
     >
       {message}
     </div>
   );
 };
-
 export default ToastProvider;
 
 // 토스트 메세지를 전역에서 이용 할 수 있도록 컴포넌트 단위로 수정했습니다
