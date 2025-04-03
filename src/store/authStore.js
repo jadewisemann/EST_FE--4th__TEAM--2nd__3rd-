@@ -1,38 +1,97 @@
-// firebase와의 의존성 분리
-
 import { create } from 'zustand';
-import { listenAuthState, signUp, login, logout } from '../firebase/auth';
+import { persist } from 'zustand/middleware';
 
-const useAuthStore = create(set => {
-  listenAuthState(user => set({ user }));
+import {
+  listenAuthState,
+  signUp,
+  login,
+  logout,
+  resetPassword,
+  googleLogin,
+} from '../firebase/authProvider';
 
-  return {
-    user: null,
-    error: null,
+const useAuthStore = create(
+  persist(
+    set => {
+      listenAuthState(user => {
+        set(state =>
+          !state.user || (user && state.user.uid !== user.uid)
+            ? { user, isLoading: false }
+            : !user && state.user
+              ? { user: null, isLoading: false }
+              : { isLoading: false },
+        );
+      });
 
-    signUp: async (email, password) => {
-      try {
-        const userCredential = await signUp(email, password);
-        set({ user: userCredential.user, error: null });
-      } catch (error) {
-        set({ error: error.message });
-      }
+      return {
+        user: null,
+        isLoading: true,
+        error: null,
+        isLogout: false,
+
+        signUp: async (email, password) => {
+          try {
+            const userCredential = await signUp(email, password);
+            set({ user: userCredential.user, error: null });
+            return userCredential;
+          } catch (error) {
+            set({ error: error.message });
+            throw error;
+          }
+        },
+
+        login: async (email, password) => {
+          try {
+            const userCredential = await login(email, password);
+            set({ user: userCredential.user, error: null });
+            return userCredential;
+          } catch (error) {
+            set({ error: error.message });
+            throw error;
+          }
+        },
+
+        googleLogin: async () => {
+          try {
+            const { user } = await googleLogin();
+            set({ user, error: null });
+            return { user };
+          } catch (error) {
+            set({ error: error.message });
+            throw error;
+          }
+        },
+
+        logout: async () => {
+          set({ isLogout: true });
+          await logout();
+          setTimeout(() => set({ user: null, isLogout: false }), 500);
+          localStorage.removeItem('isFirstLogin');
+        },
+
+        resetPassword: async email => {
+          try {
+            await resetPassword(email);
+          } catch (error) {
+            set({ error: error.message });
+            throw error;
+          }
+        },
+      };
     },
-
-    login: async (email, password) => {
-      try {
-        const userCredential = await login(email, password);
-        set({ user: userCredential.user, error: null });
-      } catch (error) {
-        set({ error: error.message });
-      }
+    {
+      name: 'auth-storage',
+      getStorage: () => localStorage,
+      partialize: state => ({
+        user: state.user,
+      }),
+      onRehydrateStorage: () => state => {
+        if (state) {
+          state.isLoading = false;
+        }
+      },
     },
-
-    logout: async () => {
-      await logout();
-      set({ user: null });
-    },
-  };
-});
+  ),
+);
 
 export default useAuthStore;

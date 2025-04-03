@@ -1,14 +1,54 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* theme override */
 @theme {
   --text-xxs: 10px;
-  --shadow-bottom: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+  --shadow-bottom: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-top: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* 
-@utility button {
-  @apply 
+.dark {
+  @apply bg-neutral-800 text-neutral-50;
 }
-*/
+
+body {
+  @apply overflow-hidden w-full max-w-[600px] mx-auto shadow-[0_4px_4px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)];
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+  @apply bg-white opacity-100;
+}
+
+.swiper-pagination .swiper-pagination-bullet-active {
+  @apply bg-violet-600;
+}
+
+@media (max-width: 480px) {
+  html,
+  body{
+    font-size: 14px;
+  }
+}
+
+/* @media (max-width: 360px) {
+  html,
+  body{
+    font-size: 14px;
+  }
+} */
+
+@layer utilities {
+  .container {
+    @apply max-w-none min-h-screen pt-18 pb-30 px-5;
+  }
+
+  .bottom-fixed {
+    @apply shadow-top fixed bottom-0 w-full items-center justify-center bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)];
+  }
+
+  .center-fixed-item {
+    @apply max-w-[600px] w-full left-1/2 -translate-x-1/2;
+  }
+}
