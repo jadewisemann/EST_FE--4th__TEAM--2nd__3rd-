@@ -70,7 +70,7 @@ const ReservationDetailPage = () => {
       <header>
         <SubHeader leftButton='arrow' title='예약 확인' />
       </header>
-      <div className='container'>
+      <div className='container pb-46!'>
         <section>
           {isReservation ? (
             <Complete

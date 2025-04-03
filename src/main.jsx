@@ -1,8 +1,10 @@
 // import, react
 import { StrictMode } from 'react';
+
 import { createRoot } from 'react-dom/client';
 // import, library
 import { BrowserRouter } from 'react-router-dom';
+
 // import css or jsx
 import './index.css';
 import App from './App.jsx';

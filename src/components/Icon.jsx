@@ -24,7 +24,12 @@ import {
   FaArrowLeft,
 } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
-import { IoIosWifi, IoIosFitness, IoIosArrowDown } from 'react-icons/io';
+import {
+  IoIosWifi,
+  IoIosFitness,
+  IoIosArrowDown,
+  IoIosArrowUp,
+} from 'react-icons/io';
 import {
   IoClose,
   IoShareSocialOutline,
@@ -98,6 +103,8 @@ const Icon = ({
     blank: VscBlank,
     // button
     google_colored: FcGoogle,
+    // top button
+    arrow_up: IoIosArrowUp,
   };
 
   const IconName = icons[name];

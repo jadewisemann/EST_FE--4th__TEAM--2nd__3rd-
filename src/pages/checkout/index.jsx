@@ -179,7 +179,7 @@ const CheckoutPage = () => {
       <header>
         <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
       </header>
-      <div className='container pb-42!'>
+      <div className='container pb-56!'>
         <section>
           <h2 className='mt-5 mb-2 flex items-center gap-2 text-lg font-medium'>
             {data.title}

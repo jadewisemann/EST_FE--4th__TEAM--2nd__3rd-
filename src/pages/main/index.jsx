@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useAuthStore from '../../store/authStore';
-import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
 
 import { searchHotelsAdvanced } from '../../firebase/searchQuery';
@@ -22,7 +21,6 @@ const MainPage = () => {
   const { user } = useAuthStore();
   const { dates, guests } = useAppDataStore();
   const { modals, openDateModal, openGuestModal } = useModalStore();
-  const { toggleDarkMode } = useDarkModeStore();
 
   const [searchText, setSearchText] = useState('');
   const [recommendedHotels, setRecommendedHotels] = useState([]);
@@ -53,15 +51,7 @@ const MainPage = () => {
 
   // 백그라운드 이미지
   useEffect(() => {
-    const hotelImages = [
-      '/src/assets/img/bg-main-01.png',
-      '/src/assets/img/bg-main-02.png',
-      '/src/assets/img/bg-main-03.png',
-      '/src/assets/img/bg-main-04.png',
-      '/src/assets/img/bg-main-05.png',
-      '/src/assets/img/bg-main-06.png',
-      '/src/assets/img/bg-main-07.png',
-    ];
+    const hotelImages = ['/src/assets/img/bg-main-05.png'];
     const randomImage =
       hotelImages[Math.floor(Math.random() * hotelImages.length)];
     setBackgroundImage(randomImage);
@@ -128,18 +118,14 @@ const MainPage = () => {
 
   return (
     <>
-      {/* <button
-        type='button'
-        className='absolute top-4 right-4 cursor-pointer bg-violet-600 dark:bg-violet-400'
-        onClick={() => toggleDarkMode()}
-      >
-        <strong className='text-white'>다크모드</strong>
-      </button> */}
+      <header className='flex h-14 items-center'>
+        <h1 className='dark:text-dark px-6 text-2xl text-white'>POOKJAYO</h1>
+      </header>
       <div
-        className='bg-no-repeat'
+        className='-mt-14 bg-no-repeat'
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
-        <div className='px-5 pt-16 pb-10'>
+        <div className='px-5 pt-20 pb-10'>
           <div className='flex flex-col items-center text-xl font-bold text-white'>
             <Link to={user ? '/mypage' : '/login'}>
               <span className='underline'>

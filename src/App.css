@@ -45,7 +45,7 @@ body {
   }
 
   .bottom-fixed {
-    @apply shadow-top fixed bottom-0 w-full bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)] z-10;
+    @apply shadow-top fixed bottom-0 w-full bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-2px_4px_rgba(255,255,255,0.25)] z-10;
   }
 
   .center-fixed-item {
