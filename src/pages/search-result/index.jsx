@@ -252,10 +252,6 @@ const SearchResultPage = () => {
               {headerInfo.numOfAdults}명
             </span>
           </div>
-          <Icon
-            className='ml-auto text-neutral-600 dark:text-neutral-400'
-            name='close'
-          />
         </button>
       </div>
       <div className='h-16'></div>
@@ -265,7 +261,12 @@ const SearchResultPage = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       >
-        <VerticalList products={visibleProducts} isLoading={isLoading} />
+        <VerticalList
+          products={visibleProducts}
+          isLoading={isLoading}
+          activeTab={activeTab}
+          query={keywordFromQuery}
+        />
 
         {/* 트리거 */}
         {hasMore && !isLoading && (

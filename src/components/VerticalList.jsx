@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -8,8 +8,13 @@ import SkeletonItem from './SkeletonItem';
 
 const SKELETON_ITEM_LENGTH = 10;
 
-const VerticalList = ({ products, isLoading }) => {
+const VerticalList = ({ products, isLoading, activeTab, query }) => {
   const isLoadingRef = useRef(false);
+
+  useEffect(() => {
+    isLoadingRef.current = false;
+  }, [activeTab, query]);
+
   if (isLoading && !isLoadingRef.current) {
     return (
       <div className='flex flex-col'>
