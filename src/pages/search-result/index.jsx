@@ -15,7 +15,7 @@ import VerticalList from '../../components/VerticalList';
 const DEFAULT_KEYWORD = '서울';
 const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외숙소'];
 
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 10;
 const MAX_SEARCH_LIMIT = 20;
 
 const SCROLL_LOAD_DURATION = 500; // ms

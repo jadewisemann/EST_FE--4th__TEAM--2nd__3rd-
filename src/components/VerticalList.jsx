@@ -6,12 +6,14 @@ import Heart from './Heart';
 import Rating from './Rating';
 import SkeletonItem from './SkeletonItem';
 
+const SKELETON_ITEM_LENGTH = 10;
+
 const VerticalList = ({ products, isLoading }) => {
   const isLoadingRef = useRef(false);
   if (isLoading && !isLoadingRef.current) {
     return (
       <div className='flex flex-col'>
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: SKELETON_ITEM_LENGTH }).map((_, index) => (
           <SkeletonItem key={index} />
         ))}
       </div>
