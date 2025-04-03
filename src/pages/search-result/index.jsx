@@ -13,7 +13,12 @@ import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 
 const DEFAULT_KEYWORD = '서울';
-const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외숙소'];
+const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔'];
+const CATEGORY_MAPPING = {
+  1: 'hotel',
+  2: 'pension',
+  3: 'motel',
+};
 
 const ITEMS_PER_PAGE = 10;
 const MAX_SEARCH_LIMIT = 20;
@@ -21,6 +26,11 @@ const MAX_SEARCH_LIMIT = 20;
 const SCROLL_LOAD_DURATION = 500; // ms
 
 const sanitizeKeyword = keyword => keyword.replace(/[~*/\[\]]/g, '');
+
+const getCategoryByTabIndex = tabIndex => {
+  if (tabIndex === 0) return null;
+  return CATEGORY_MAPPING[tabIndex];
+};
 
 const useHotelData = (keywordFromQuery, activeTab) => {
   const [hotelList, setHotelList] = useState([]);
@@ -34,19 +44,22 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       return keywordFromQuery.split(',').map(k => sanitizeKeyword(k.trim()));
     }
 
-    return [sanitizeKeyword(CATEGORIES[activeTab])];
+    return [sanitizeKeyword(keywordFromQuery)];
   }, [keywordFromQuery, activeTab]);
 
-  // 초기 데이터 로딩
   const fetchInitialData = useCallback(async () => {
     setIsLoading(true);
     try {
       const keywords = prepareKeywords();
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+      const category = getCategoryByTabIndex(activeTab);
+
+      console.log(`검색 시작: 키워드=${primaryKeyword}, 카테고리=${category}`);
 
       const response = await searchHotelsAdvanced(
         primaryKeyword,
         null,
+        category,
         MAX_SEARCH_LIMIT,
         MAX_SEARCH_LIMIT,
         null,
@@ -54,10 +67,11 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       );
 
       let results = response.hotels || [];
+      console.log(`검색 결과: ${results.length}개 항목 찾음`);
 
       if (activeTab === 0 && keywords.length > 1) {
         const secondaryResults = await Promise.all(
-          keywords.slice(1).map(k => searchHotelsAdvanced(k)),
+          keywords.slice(1).map(k => searchHotelsAdvanced(k, null, category)),
         );
 
         const secondaryMerged = secondaryResults.flat();
@@ -103,10 +117,12 @@ const useHotelData = (keywordFromQuery, activeTab) => {
     try {
       const keywords = prepareKeywords();
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+      const category = getCategoryByTabIndex(activeTab);
 
       const res = await searchHotelsAdvanced(
         primaryKeyword,
         null,
+        category,
         MAX_SEARCH_LIMIT,
         MAX_SEARCH_LIMIT,
         lastDoc,
@@ -144,6 +160,7 @@ const useHotelData = (keywordFromQuery, activeTab) => {
     lastDoc,
     visibleProducts.length,
     prepareKeywords,
+    activeTab,
   ]);
 
   const resetData = useCallback(() => {
@@ -332,7 +349,6 @@ const SearchResultPage = () => {
                 </circle>
               </svg>
             </div>
-            {/* <div className='inline-block h-8 w-8 animate-spin rounded-full border-t-2 border-b-2 border-violet-600'></div> */}
           </div>
         )}
       </Tab>
