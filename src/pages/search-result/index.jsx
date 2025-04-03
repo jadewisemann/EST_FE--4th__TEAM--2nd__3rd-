@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useModalStore from '../../store/modalStore';
@@ -114,7 +114,7 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       );
 
       if (res.hotels?.length > 0) {
-        // 중복 제거 => 호첼 업데이트
+        // 중복 제거 => 호텔 업데이트
         const existingIds = new Set(hotelList.map(h => h.id));
         const uniqueNewHotels = res.hotels.filter(
           hotel => !existingIds.has(hotel.id),
@@ -206,8 +206,6 @@ const SearchResultPage = () => {
 
   const [searchParams] = useSearchParams();
   const keywordFromQuery = searchParams.get('keyword') || DEFAULT_KEYWORD;
-
-  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(0);
 
