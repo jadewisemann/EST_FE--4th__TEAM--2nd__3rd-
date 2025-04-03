@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Icon from './Icon';
 
@@ -22,7 +22,6 @@ const SubHeader = ({
   const Close = <Icon name='close' className='dark:font-white font-black' />;
 
   const navigate = useNavigate();
-  const navigateHome = () => navigate('/', { replace: true });
 
   const leftButtonHandler = () => {
     if (callback && typeof callback === 'function') {
@@ -34,7 +33,11 @@ const SubHeader = ({
   };
 
   const LeftButton = (
-    <button onClick={leftButtonHandler} className='cursor-pointer p-4'>
+    <button
+      type='button'
+      onClick={leftButtonHandler}
+      className='cursor-pointer p-4'
+    >
       {leftButton === 'close'
         ? Close
         : leftButton === 'arrow'
@@ -44,8 +47,6 @@ const SubHeader = ({
             : ''}
     </button>
   );
-
-  const homeButtonHandler = () => navigateHome();
 
   const defaultStyle =
     'flex h-18 items-center justify-between py-4 gap-3 w-full bg-white dark:bg-neutral-800 top-0';
@@ -69,9 +70,9 @@ const SubHeader = ({
         {LeftButton}
         {title && Title}
         {rightButton && (
-          <button onClick={homeButtonHandler} className='cursor-pointer p-4'>
+          <Link to={'/'} className='p-4' title='홈페이지로 이동'>
             {Home}
-          </button>
+          </Link>
         )}
       </div>
     </>

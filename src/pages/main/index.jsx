@@ -140,17 +140,17 @@ const MainPage = () => {
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className='px-5 pt-16 pb-10'>
-          <div className='flex flex-col items-center text-xl text-white'>
+          <div className='flex flex-col items-center text-xl font-bold text-white'>
             <Link to={user ? '/mypage' : '/login'}>
-              <strong className='underline'>
+              <span className='underline'>
                 {user
                   ? `${user.displayName || user.email?.split('@')[0]}`
                   : '로그인'}
                 {''}
-              </strong>
+              </span>
               님
             </Link>
-            <strong>환영합니다.</strong>
+            환영합니다.
           </div>
           <form onSubmit={handleSearch}>
             <div className='mt-5 flex flex-col gap-3'>
@@ -180,7 +180,7 @@ const MainPage = () => {
                 onClick={openGuestModal}
               >
                 <Icon name='user' />
-                {`객실${guests.rooms}개 성인${guests.adults}명 아동${guests.children}명 유아${guests.infants}명`}
+                {`객실${guests.rooms}개 성인${guests.adults}명 아동${guests.children}명`}
               </Button>
             </div>
             <Button
@@ -194,8 +194,8 @@ const MainPage = () => {
           </form>
         </div>
 
-        <div className='rounded-t-md bg-white p-5 pb-[80px] dark:bg-neutral-800'>
-          <div className='mt-1 flex items-start justify-between gap-5'>
+        <div className='rounded-t-md bg-white p-5 pb-20 dark:bg-neutral-800'>
+          <div className='category-grid grid justify-between gap-2'>
             {categories.map((item, idx) => (
               <button
                 key={idx}
@@ -212,9 +212,9 @@ const MainPage = () => {
             ))}
           </div>
           <div className='mt-7 mb-4 flex items-center justify-between'>
-            <h4 className='text-base font-bold dark:text-neutral-50'>
+            <h2 className='text-base font-bold dark:text-neutral-50'>
               추천호텔
-            </h4>
+            </h2>
             <button
               className='cursor-pointer text-sm text-violet-600 dark:text-violet-400'
               onClick={recommendedHotelviewMore}

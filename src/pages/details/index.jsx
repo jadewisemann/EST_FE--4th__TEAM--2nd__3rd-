@@ -86,173 +86,185 @@ const DetailsPage = () => {
 
   return (
     <>
-      <div className='container pb-10!'>
+      <header>
         <SubHeader
           leftButton='arrow'
           title={data.title}
           hasShadow={false}
           zIndex={10}
         />
-        <Swiper
-          modules={[Pagination]}
-          slidesPerView={1}
-          freeMode
-          pagination={{
-            clickable: true,
-          }}
-          autoplay={{
-            delay: 4500,
-            disableOnInteraction: false,
-          }}
-          speed={500}
-          style={{ marginInline: '-1.25rem' }}
-        >
-          {data.image.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <img className='block w-full' src={slide} alt='' />
-            </SwiperSlide>
-          ))}
-          <div className='absolute top-3 right-3 z-1 cursor-pointer'>
-            <ShareBtn product={data} />
-          </div>
-        </Swiper>
-
-        <div className='mt-5'>
-          <div className='mb-2 flex items-center justify-between'>
-            <h2 className='flex flex-col gap-1 font-medium tracking-tight'>
-              <span className='text-xl'>{data.title}</span>
-            </h2>
-            <Rating rate={data.rating} />
-          </div>
-          <a
-            href={
-              'https://map.kakao.com/link/search/'
-              + encodeURIComponent(data.location[0])
-            }
-            target='_blank'
-            className='flex cursor-pointer items-center gap-1 text-xs text-neutral-500 dark:text-neutral-300'
-            title={data.title + ' 카카오맵 열기'}
+      </header>
+      <div className='container pb-10!'>
+        <section>
+          <Swiper
+            modules={[Pagination]}
+            slidesPerView={1}
+            freeMode
+            pagination={{
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 4500,
+              disableOnInteraction: false,
+            }}
+            speed={500}
+            style={{ marginInline: '-1.25rem' }}
           >
-            <Icon
-              name='location'
-              size={16}
-              className='text-neutral-600 dark:text-neutral-300'
-            />
-            {data.location[0]}
-          </a>
-        </div>
+            {data.image.map((slide, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  className='block w-full'
+                  src={slide}
+                  alt={data.title + (index + 1)}
+                />
+              </SwiperSlide>
+            ))}
+            <div className='absolute top-3 right-3 z-1 cursor-pointer'>
+              <ShareBtn product={data} />
+            </div>
+          </Swiper>
+        </section>
 
-        <hr className='my-4 border-gray-200' />
+        <section>
+          <div className='mt-5'>
+            <div className='mb-2 flex items-center justify-between'>
+              <h3 className='flex flex-col gap-1 text-xl font-medium tracking-tight'>
+                {data.title}
+              </h3>
+              <Rating rate={data.rating} />
+            </div>
+            <a
+              href={
+                'https://map.kakao.com/link/search/'
+                + encodeURIComponent(data.location[0])
+              }
+              target='_blank'
+              className='flex cursor-pointer items-center gap-1 text-xs text-neutral-500 dark:text-neutral-300'
+              title={data.title + ' 카카오맵 열기'}
+            >
+              <Icon
+                name='location'
+                size={16}
+                className='text-neutral-600 dark:text-neutral-300'
+              />
+              {data.location[0]}
+            </a>
+          </div>
 
-        <ul className='grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 [&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li]:text-xs'>
-          {data.facility.map((item, index) => (
-            <li key={index}>
-              <i
-                style={{
-                  background: `url(${item.image}) no-repeat center/contain`,
-                }}
-                className='aspect-square w-4 dark:brightness-114 dark:contrast-94 dark:hue-rotate-210 dark:invert dark:saturate-4096 dark:sepia-1'
-              ></i>
-              <span>{item.text}</span>
-            </li>
-          ))}
-        </ul>
-        <hr className='my-4 border-gray-200' />
+          <hr className='my-4 border-gray-200' />
 
-        <h3 className='text-lg font-bold'>객실선택</h3>
-        <div className='my-2 flex justify-between'>
-          <div className='flex flex-col gap-1'>
-            <span className='text-xs text-neutral-600 dark:text-neutral-400'>
-              체크인 & 체크아웃
-            </span>
-            <span className='text-lg font-bold'>
-              <span>{dates.startDate} ~ </span>
-              <span className='whitespace-nowrap'>
-                {dates.endDate} ({dates.duration}박)
+          <h4 className='sr-only'>호텔 시설 및 부가 서비스</h4>
+          <ul className='grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 [&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li]:text-xs'>
+            {data.facility.map((item, index) => (
+              <li key={index}>
+                <i
+                  style={{
+                    background: `url(${item.image}) no-repeat center/contain`,
+                  }}
+                  className='aspect-square w-4 dark:brightness-114 dark:contrast-94 dark:hue-rotate-210 dark:invert dark:saturate-4096 dark:sepia-1'
+                ></i>
+                <span>{item.text}</span>
+              </li>
+            ))}
+          </ul>
+          <hr className='my-4 border-gray-200' />
+
+          <h4 className='text-lg font-bold'>객실선택</h4>
+          <div className='my-2 flex justify-between'>
+            <div className='flex flex-col gap-1'>
+              <span className='text-xs text-neutral-600 dark:text-neutral-400'>
+                체크인 & 체크아웃
               </span>
-            </span>
+              <span className='text-lg font-bold'>
+                <span>{dates.startDate} ~ </span>
+                <span className='whitespace-nowrap'>
+                  {dates.endDate} ({dates.duration}박)
+                </span>
+              </span>
+            </div>
+            <div className='flex flex-col gap-1'>
+              <span className='text-xs text-neutral-600 dark:text-neutral-400'>
+                투숙객
+              </span>
+              <ul className='flex gap-1 text-lg font-bold [&>li]:flex [&>li]:items-center [&>li]:gap-1'>
+                <li>
+                  <Icon
+                    name='user'
+                    size={16}
+                    className='text-black dark:text-neutral-300'
+                  />
+                  {guests.adults}
+                </li>
+                <li>
+                  <Icon
+                    name='children'
+                    size={16}
+                    className='text-black dark:text-neutral-300'
+                  />
+                  {guests.children}
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className='flex flex-col gap-1'>
-            <span className='text-xs text-neutral-600 dark:text-neutral-400'>
-              투숙객
-            </span>
-            <ul className='flex gap-1 text-lg font-bold [&>li]:flex [&>li]:items-center [&>li]:gap-1'>
-              <li>
-                <Icon
-                  name='user'
-                  size={16}
-                  className='text-black dark:text-neutral-300'
-                />
-                {guests.adults}
-              </li>
-              <li>
-                <Icon
-                  name='children'
-                  size={16}
-                  className='text-black dark:text-neutral-300'
-                />
-                {guests.children}
-              </li>
-            </ul>
-          </div>
-        </div>
 
-        <DetailProduct
-          detailProducts={data.rooms.slice(0, visibleRooms)}
-          rooms={data.rooms}
-        />
+          <DetailProduct
+            detailProducts={data.rooms.slice(0, visibleRooms)}
+            rooms={data.rooms}
+          />
 
-        {remainingRooms > 0 && (
-          <Button
-            color='invert'
-            size='full'
-            childrenClassName='flex items-center justify-center gap-1'
-            onClick={moreRoom}
-          >
-            더보기 ({remainingRooms}개)
-            <Icon name='arrow_down' size={20} />
-          </Button>
-        )}
-
+          {remainingRooms > 0 && (
+            <Button
+              color='invert'
+              size='full'
+              childrenClassName='flex items-center justify-center gap-1'
+              onClick={moreRoom}
+            >
+              더보기 ({remainingRooms}개)
+              <Icon name='arrow_down' size={20} />
+            </Button>
+          )}
+        </section>
         <hr className='my-4 border-gray-200' />
 
-        <DetailSection
-          type='list-left-dot-title'
-          title='숙소 규정'
-          color='text-neutral-600'
-          size='text-xs'
-          weight='font-normal'
-          contents={[
-            {
-              subTitle: '체크인 & 체크아웃 시간',
-              subContents: [
-                '체크인은 오후 3시 이후입니다.',
-                '체크아웃은 오전 11시 이전입니다.',
-              ],
-            },
-            {
-              subTitle: '어린이 정책',
-              subContents: [
-                '어린이 투숙객은 일부 객실에만 가능합니다.',
-                '기존 침대를 사용하면 추가 요금이 부과될 수 있습니다.',
-              ],
-            },
-          ]}
-        />
-        <hr className='my-4 border-gray-200' />
+        <section>
+          <DetailSection
+            type='list-left-dot-title'
+            title='숙소 규정'
+            color='text-neutral-600'
+            size='text-xs'
+            weight='font-normal'
+            contents={[
+              {
+                subTitle: '체크인 & 체크아웃 시간',
+                subContents: [
+                  '체크인은 오후 3시 이후입니다.',
+                  '체크아웃은 오전 11시 이전입니다.',
+                ],
+              },
+              {
+                subTitle: '어린이 정책',
+                subContents: [
+                  '어린이 투숙객은 일부 객실에만 가능합니다.',
+                  '기존 침대를 사용하면 추가 요금이 부과될 수 있습니다.',
+                ],
+              },
+            ]}
+          />
+          <hr className='my-4 border-gray-200' />
 
-        <DetailSection
-          type='list-left'
-          title='판매자 정보'
-          color='text-neutral-600'
-          size='text-xs'
-          weight='font-normal'
-          contents={[
-            `연락처 : ${data.phoneNumber}`,
-            `주소 : ${data.location[0]}`,
-            '고객센터 : 080 - 2465 - 6585',
-          ]}
-        />
+          <DetailSection
+            type='list-left'
+            title='판매자 정보'
+            color='text-neutral-600'
+            size='text-xs'
+            weight='font-normal'
+            contents={[
+              `연락처 : ${data.phoneNumber}`,
+              `주소 : ${data.location[0]}`,
+              '고객센터 : 080 - 2465 - 6585',
+            ]}
+          />
+        </section>
       </div>
     </>
   );

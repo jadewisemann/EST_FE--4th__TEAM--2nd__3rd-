@@ -94,81 +94,91 @@ const MyPage = () => {
   }, isLoading);
 
   return (
-    <div className='container'>
-      <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
+    <>
+      <header>
+        <Nav />
+      </header>
+      <div className='container'>
+        <SubHeader leftButton='arrow' title='마이페이지' zIndex={10} />
 
-      {isLoading ? (
-        <>
-          <div>로딩 중</div>
-        </>
-      ) : !reservations || reservations.length === 0 ? (
-        <>
-          <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
-            <Button color='prime' size='full' onClick={handleSearchHotel}>
-              숙소 검색하기
-            </Button>
-          </Complete>
-          <hr className='mb-6 block border-neutral-300' />
-        </>
-      ) : (
-        <>
-          <h3 className='mt-6 font-bold dark:text-neutral-50'>예약 세부정보</h3>
-          <VerticalList
-            products={displayedReservations}
-            isLoading={isLoading}
-          />
+        {isLoading ? (
+          <>
+            <div>로딩 중</div>
+          </>
+        ) : !reservations || reservations.length === 0 ? (
+          <>
+            <Complete type='notYet' message='아직 예약 된 숙소가 없습니다!'>
+              <Button color='prime' size='full' onClick={handleSearchHotel}>
+                숙소 검색하기
+              </Button>
+            </Complete>
+            <hr className='mb-6 block border-neutral-300' />
+          </>
+        ) : (
+          <>
+            <h3 className='mt-6 font-bold dark:text-neutral-50'>
+              예약 세부정보
+            </h3>
+            <VerticalList
+              products={displayedReservations}
+              isLoading={isLoading}
+            />
 
-          {mergedReservations.length > visibleCount ? (
-            <Button
-              size='full'
-              color='invert'
-              className='mx-auto mt-4 mb-10'
-              onClick={() => setVisibleCount(prev => prev + 5)}
-            >
-              더보기 ({mergedReservations.length - visibleCount}개)
-            </Button>
-          ) : (
-            <hr className='mb-6 block border-0' />
-          )}
-        </>
-      )}
-      <DetailSection
-        title='내 정보'
-        type='table-spacebetween'
-        contents={[
-          { label: '이름', value: userName },
-          { label: '이메일', value: user.email },
-          { label: '보유포인트', value: `${points.toLocaleString()} P` },
-        ]}
-      />
-      <br />
-      <DetailSection
-        title='설정'
-        type='table-spacebetween'
-        contents={[
-          { label: '비밀번호 변경', showMore: true, showMoreText: '더보기' },
-          {
-            label: `${darkMode === 'dark' ? '라이트모드' : '다크모드'}`,
-            anchor: true,
-            anchorText: '적용하기',
-          },
-        ]}
-        onclick={item => {
-          if (item.label === '비밀번호 변경') {
-            openPasswordChangeModal();
-          } else if (item.label.includes('모드')) {
-            toggleDarkMode();
-          }
-        }}
-      />
-      <button
-        onClick={handleLogout}
-        className='mt-8 block w-full text-center text-xs underline underline-offset-2'
-      >
-        로그아웃
-      </button>
-      <Nav />
-    </div>
+            {mergedReservations.length > visibleCount ? (
+              <Button
+                size='full'
+                color='invert'
+                className='mx-auto mt-4 mb-10'
+                onClick={() => setVisibleCount(prev => prev + 5)}
+              >
+                더보기 ({mergedReservations.length - visibleCount}개)
+              </Button>
+            ) : (
+              <hr className='mb-6 block border-0' />
+            )}
+          </>
+        )}
+        <DetailSection
+          title='내 정보'
+          type='table-spacebetween'
+          contents={[
+            { label: '이름', value: userName },
+            { label: '이메일', value: user.email },
+            { label: '보유포인트', value: `${points.toLocaleString()} P` },
+          ]}
+        />
+        <br />
+        <DetailSection
+          title='설정'
+          type='table-spacebetween'
+          contents={[
+            {
+              label: '비밀번호 변경',
+              showMore: true,
+              showMoreText: '더보기',
+            },
+            {
+              label: `${darkMode === 'dark' ? '라이트모드' : '다크모드'}`,
+              anchor: true,
+              anchorText: '적용하기',
+            },
+          ]}
+          onclick={item => {
+            if (item.label === '비밀번호 변경') {
+              openPasswordChangeModal();
+            } else if (item.label.includes('모드')) {
+              toggleDarkMode();
+            }
+          }}
+        />
+        <button
+          onClick={handleLogout}
+          className='mt-8 block w-full text-center text-xs underline underline-offset-2'
+        >
+          로그아웃
+        </button>
+      </div>
+    </>
   );
 };
 

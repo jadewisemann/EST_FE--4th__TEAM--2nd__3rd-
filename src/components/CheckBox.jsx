@@ -15,7 +15,6 @@ const CheckBox = ({
         id={inputId}
         type='checkbox'
         disabled={disabled}
-        aria-disabled={disabled}
         className='peer aspect-square w-[0.875rem] accent-violet-600'
         checked={checked}
         onChange={onChange}

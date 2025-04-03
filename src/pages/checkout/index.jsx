@@ -143,6 +143,7 @@ const CheckoutPage = () => {
     // 결제 요청
     const result = await submitPayment(reservationInfo);
     if (result && result.success) {
+      sessionStorage.setItem('isReservation', JSON.stringify(true));
       navigate(
         `/reservation-detail/${roomId}/${result.reservationId.slice(-13)}`,
       );
@@ -175,41 +176,43 @@ const CheckoutPage = () => {
 
   return (
     <>
-      <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
+      <header>
+        <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
+      </header>
       <div className='container pb-42!'>
-        <div>
+        <section>
           <h2 className='mt-5 mb-2 flex items-center gap-2 text-lg font-medium'>
             {data.title}
           </h2>
           <div className='overflow-hidden rounded-xl'>
             <img className='h-full' src={data.img} alt='' />
           </div>
-        </div>
 
-        <ul className='mt-3 flex flex-col gap-2 [&>li]:flex [&>li]:text-sm [&>li]:text-neutral-600 dark:[&>li]:text-neutral-50'>
-          <li>
-            <span className='whitespace-nowrap'>객실</span>
-            <span className='ml-3 text-black dark:text-neutral-300'>
-              {data.title}
-            </span>
-          </li>
-          <li>
-            <span>일정</span>
-            <div className='ml-3 flex gap-1 text-black dark:text-neutral-300'>
-              <span>{dates.startDate}</span>
-              <span>~</span>
-              <span>{dates.endDate}</span>
-              <span>({dates.duration}박)</span>
-            </div>
-          </li>
-          <li>
-            <span>인원</span>
-            <div className='ml-3 flex gap-1 text-black dark:text-neutral-300'>
-              <span>성인 {guests.adults}명</span>
-              {guests.children !== 0 && <span>성인 {guests.children}명</span>}
-            </div>
-          </li>
-        </ul>
+          <ul className='mt-3 flex flex-col gap-2 [&>li]:flex [&>li]:text-sm [&>li]:text-neutral-600 dark:[&>li]:text-neutral-50'>
+            <li>
+              <span className='whitespace-nowrap'>객실</span>
+              <span className='ml-3 text-black dark:text-neutral-300'>
+                {data.title}
+              </span>
+            </li>
+            <li>
+              <span>일정</span>
+              <div className='ml-3 flex gap-1 text-black dark:text-neutral-300'>
+                <span>{dates.startDate}</span>
+                <span>~</span>
+                <span>{dates.endDate}</span>
+                <span>({dates.duration}박)</span>
+              </div>
+            </li>
+            <li>
+              <span>인원</span>
+              <div className='ml-3 flex gap-1 text-black dark:text-neutral-300'>
+                <span>성인 {guests.adults}명</span>
+                {guests.children !== 0 && <span>성인 {guests.children}명</span>}
+              </div>
+            </li>
+          </ul>
+        </section>
 
         <hr className='my-4 border-gray-200' />
 

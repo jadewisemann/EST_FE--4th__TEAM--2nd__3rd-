@@ -45,10 +45,17 @@ body {
   }
 
   .bottom-fixed {
-    @apply shadow-top fixed bottom-0 w-full items-center justify-center bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)];
+    @apply shadow-top fixed bottom-0 w-full bg-white p-6 dark:bg-neutral-800 dark:shadow-[0_-4px_20px_rgba(255,255,255,0.25)] z-10;
   }
 
   .center-fixed-item {
     @apply max-w-[600px] w-full left-1/2 -translate-x-1/2;
+  }
+
+  .category-grid {
+    @apply grid-cols-4;
+    @media (max-width: 320px) {
+      @apply grid-cols-2;
+    }
   }
 }

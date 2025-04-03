@@ -53,37 +53,35 @@ const HorizontalList = ({ products, isLoading }) => {
               src={product.image[0]}
               alt=''
             />
-            <div className='mt-2'>
-              <div className='flex items-center'>
-                <h2 className='my-1.5 overflow-hidden text-left text-sm text-ellipsis whitespace-nowrap dark:text-neutral-200'>
-                  {product.title}
-                </h2>
-                <div className='ml-auto'>
-                  <Rating rate={product.rating} />
-                </div>
-              </div>
-              <address className='flex items-center overflow-hidden text-[11px] text-ellipsis whitespace-nowrap text-neutral-500 not-italic dark:text-neutral-300'>
-                <Icon
-                  name='location'
-                  className='shrink-0 text-neutral-500 dark:text-neutral-300'
-                  size={20}
-                />
-                <span className='overflow-hidden text-ellipsis whitespace-nowrap'>
-                  {product.location[0]}
-                </span>
-              </address>
-              <div className='mt-1 flex items-end gap-1'>
-                <span className='text-sm font-bold text-violet-600 dark:text-violet-500'>
-                  {product.rooms[0].price_final
-                    ? product.rooms[0].price_final.toLocaleString()
-                    : product.rooms[0].price.toLocaleString()}
-                  원
-                </span>
-                <span className='text-xs text-neutral-500 dark:text-neutral-300'>
-                  /1박
-                </span>
-              </div>
-            </div>
+            <span className='mt-2 flex items-center'>
+              <h2 className='my-1.5 overflow-hidden text-left text-sm text-ellipsis whitespace-nowrap dark:text-neutral-200'>
+                {product.title}
+              </h2>
+              <span className='ml-auto'>
+                <Rating rate={product.rating} />
+              </span>
+            </span>
+            <address className='flex items-center overflow-hidden text-[11px] text-ellipsis whitespace-nowrap text-neutral-500 not-italic dark:text-neutral-300'>
+              <Icon
+                name='location'
+                className='shrink-0 text-neutral-500 dark:text-neutral-300'
+                size={20}
+              />
+              <span className='overflow-hidden text-ellipsis whitespace-nowrap'>
+                {product.location[0]}
+              </span>
+            </address>
+            <span className='mt-1 flex items-end gap-1'>
+              <span className='text-sm font-bold text-violet-600 dark:text-violet-500'>
+                {product.rooms[0].price_final
+                  ? product.rooms[0].price_final.toLocaleString()
+                  : product.rooms[0].price.toLocaleString()}
+                원
+              </span>
+              <span className='text-xs text-neutral-500 dark:text-neutral-300'>
+                /1박
+              </span>
+            </span>
           </button>
           <Heart className={'absolute top-4 right-4'} hotelId={product.id} />
         </SwiperSlide>
