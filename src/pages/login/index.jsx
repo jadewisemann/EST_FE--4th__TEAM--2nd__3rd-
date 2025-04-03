@@ -49,16 +49,12 @@ const LoginPage = () => {
 
   // 토스트 에러 메시지
   const handleAuthError = error => {
-    if (error.message.includes('auth/invalid-email')) {
-      showToast('올바른 이메일을 입력해주세요');
-      setEmail('');
-      setPassword('');
-      setIsEmailValid(false);
-      setIsPasswordValid(false);
-    } else if (error.message.includes('auth/popup-closed-by-user')) {
+    if (error.message.includes('auth/popup-closed-by-user')) {
       showToast('');
     } else if (error.message.includes('auth/invalid-credential')) {
       showToast('존재하지 않는 회원 정보입니다.');
+      setEmail('');
+      setIsEmailValid(false);
       setPassword('');
       setIsPasswordValid(false);
     } else if (error.message.includes('auth/too-many-requests')) {
