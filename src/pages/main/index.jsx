@@ -78,7 +78,7 @@ const MainPage = () => {
   // 검색 실행 함수
   const handleSearch = e => {
     e.preventDefault();
-    if (!searchText.trim()) return;
+    if (!searchText.trim()) setSearchText('서울');
     const encoded = encodeURIComponent(searchText);
     navigate(`/search-result?keyword=${encoded}`);
   };

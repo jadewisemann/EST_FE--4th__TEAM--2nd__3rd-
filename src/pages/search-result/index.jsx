@@ -224,7 +224,10 @@ const SearchResultPage = () => {
   const [searchParams] = useSearchParams();
   const keywordFromQuery = searchParams.get('keyword') || DEFAULT_KEYWORD;
 
-  const [activeTab, setActiveTab] = useState(0);
+  const keywordIndex = CATEGORIES.indexOf(keywordFromQuery);
+  const [activeTab, setActiveTab] = useState(
+    keywordIndex !== -1 ? keywordIndex : 0,
+  );
 
   const {
     visibleProducts,
