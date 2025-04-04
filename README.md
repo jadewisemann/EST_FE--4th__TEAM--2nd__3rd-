@@ -1,6 +1,9 @@
 <p align="center">
   <h1 align="center">Pookjayo</h1>
-  <img align="center" src="/src/assets/img/bg_logo.svg">
+</p>
+
+<p align="center">
+  <img src="docs/ppt/bg_logo.svg"/>
 </p>
 
 <b><i><p align="center">EST soft, FE 4기, 2조</p></i></b>
@@ -478,5 +481,6 @@ sequenceDiagram
 ```
 
 ## 배포 링크
-
-<img src="docs/qr.png">
+<p align="center">
+  <img src="docs/qr.png">
+</p>
