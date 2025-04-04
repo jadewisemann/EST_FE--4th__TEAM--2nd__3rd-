@@ -93,7 +93,6 @@ const CheckoutPage = () => {
             paymentAmount: finalPrice,
           }));
         } else {
-          console.log('해당 ID의 Room이 존재하지 않습니다.');
           navigate('/');
         }
       } catch (error) {

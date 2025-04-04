@@ -95,7 +95,6 @@ const MainPage = () => {
       try {
         const result = await searchHotelsAdvanced('서울');
         setRecommendedHotels(result.slice(0, 5));
-        // console.log('추천 호텔 5개:', result.slice(0, 5));
       } catch (error) {
         console.error('추천 호텔 가져오기 실패:', error);
       }

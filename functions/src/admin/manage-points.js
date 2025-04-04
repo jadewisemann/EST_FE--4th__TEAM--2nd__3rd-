@@ -1,14 +1,7 @@
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions/v1';
 
-/**
- * 관리자가 사용자에게 포인트를 추가하는 함수
- * @param {Object} data - 요청 데이터 (userId, points, reason)
- * @param {Object} context - 인증 컨텍스트
- * @returns {Promise<Object>} 성공 메시지와 함께 결과 반환
- */
 export const addPointsToUserHandler = async (data, context) => {
-  // 인증 확인
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -16,10 +9,8 @@ export const addPointsToUserHandler = async (data, context) => {
     );
   }
 
-  // 함수 호출 시점에 db 인스턴스 가져오기
   const db = getFirestore();
 
-  // 관리자 권한 확인
   const adminChecking = await db
     .collection('admins')
     .doc(context.auth.uid)
@@ -34,7 +25,6 @@ export const addPointsToUserHandler = async (data, context) => {
 
   const { userId, points, reason } = data;
 
-  // 유효성 검사
   if (!userId || !points || points <= 0) {
     throw new functions.https.HttpsError(
       'invalid-argument',
@@ -53,7 +43,6 @@ export const addPointsToUserHandler = async (data, context) => {
       );
     }
 
-    // 트랜잭션으로 포인트 추가
     await db.runTransaction(async transaction => {
       const userSnapshot = await transaction.get(userRef);
       const userData = userSnapshot.data();
@@ -81,7 +70,6 @@ export const addPointsToUserHandler = async (data, context) => {
       message: `${points} 포인트가 사용자 ${userId}에게 성공적으로 지급되었습니다.`,
     };
   } catch (error) {
-    console.error('포인트 추가 중 오류 발생:', error);
     throw new functions.https.HttpsError(
       'internal',
       '포인트 지급 중 오류가 발생했습니다.',

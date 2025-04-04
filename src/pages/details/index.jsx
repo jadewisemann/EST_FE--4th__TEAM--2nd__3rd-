@@ -46,8 +46,6 @@ const DetailsPage = () => {
         if (hotelData) {
           // 페이지 사용 data에 hotel 정보 담기
           setData(hotelData);
-        } else {
-          console.log('해당 ID의 호텔이 존재하지 않습니다.');
         }
       } catch (error) {
         console.error('에러 발생:', error);

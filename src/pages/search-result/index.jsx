@@ -54,8 +54,6 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
       const category = getCategoryByTabIndex(activeTab);
 
-      console.log(`검색 시작: 키워드=${primaryKeyword}, 카테고리=${category}`);
-
       const response = await searchHotelsAdvanced(
         primaryKeyword,
         null,
@@ -67,7 +65,6 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       );
 
       let results = response.hotels || [];
-      console.log(`검색 결과: ${results.length}개 항목 찾음`);
 
       if (activeTab === 0 && keywords.length > 1) {
         const secondaryResults = await Promise.all(

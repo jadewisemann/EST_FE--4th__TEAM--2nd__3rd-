@@ -1,15 +1,9 @@
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
-/**
- * 결제 처리 함수
- * @param {Object} data - 결제 처리에 필요한 데이터
- * @returns {Object} - 결제 결과
- */
 export const processPayment = async data => {
   const { user, roomId, userInput, transactionId, timestamp } = data;
 
   try {
-    // user 검증
     if (!user || !user.uid || typeof user.uid !== 'string') {
       return {
         success: false,
@@ -17,7 +11,6 @@ export const processPayment = async data => {
       };
     }
 
-    // roomId 검증
     if (!roomId || typeof roomId !== 'string') {
       return {
         success: false,
@@ -25,7 +18,6 @@ export const processPayment = async data => {
       };
     }
 
-    // userInput 검증
     if (!userInput) {
       return {
         success: false,
@@ -33,7 +25,6 @@ export const processPayment = async data => {
       };
     }
 
-    // userInput 필수 필드 검증
     const requiredFields = [
       'name',
       'phone',
@@ -57,7 +48,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 결제 금액 검증
     if (
       !userInput.paymentAmount
       || typeof userInput.paymentAmount !== 'number'
@@ -69,7 +59,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 포인트 검증
     if (
       userInput.point !== undefined
       && (typeof userInput.point !== 'number' || userInput.point < 0)
@@ -80,7 +69,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 날짜 형식 검증 및 변환
     const yymmddRegex = /^\d{2}-\d{2}-\d{2}$/;
     const yyyymmddRegex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -117,7 +105,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 날짜 논리 검증
     if (checkInDate >= checkOutDate) {
       return {
         success: false,
@@ -125,7 +112,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 게스트 수 검증
     if (typeof userInput.guestCount !== 'number' || userInput.guestCount <= 0) {
       return {
         success: false,
@@ -133,7 +119,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 이메일 형식 검증
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userInput.email)) {
       return {
@@ -142,7 +127,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 전화번호 형식 검증
     const phoneRegex = /^[\d\-]{10,13}$/;
     if (!phoneRegex.test(userInput.phone)) {
       return {
@@ -151,7 +135,6 @@ export const processPayment = async data => {
       };
     }
 
-    // 동의 확인
     if (userInput.agreement !== true) {
       return {
         success: false,
@@ -159,26 +142,21 @@ export const processPayment = async data => {
       };
     }
 
-    // Firestore 초기화
     const db = getFirestore();
     const userRef = db.collection('users').doc(user.uid);
     const roomRef = db.collection('rooms').doc(roomId);
 
     return await db.runTransaction(async transaction => {
-      // 사용자 정보 조회
       const userDoc = await transaction.get(userRef);
       if (!userDoc.exists) {
-        console.log('사용자를 찾을 수 없음:', user.uid);
         return {
           success: false,
           message: '사용자를 찾을 수 없습니다.',
         };
       }
 
-      // 객실 정보 조회
       const roomDoc = await transaction.get(roomRef);
       if (!roomDoc.exists) {
-        console.log('객실을 찾을 수 없음:', roomId);
         return {
           success: false,
           message: '객실을 찾을 수 없습니다.',
@@ -188,12 +166,10 @@ export const processPayment = async data => {
       const userData = userDoc.data();
       const roomData = roomDoc.data();
 
-      // 사용자 포인트 확인
       const currentPoints =
         typeof userData.points === 'number' ? userData.points : 0;
       const usePoints = userInput.point || 0;
 
-      // 포인트가 충분한지 확인
       if (currentPoints < usePoints) {
         return {
           success: false,
@@ -243,7 +219,6 @@ export const processPayment = async data => {
 
       transaction.set(reservationRef, reservationData);
 
-      // 포인트 사용 기록
       if (usePoints > 0) {
         const pointHistoryRef = db.collection('pointHistory').doc();
         const pointHistoryData = {
@@ -263,7 +238,6 @@ export const processPayment = async data => {
         transaction.set(pointHistoryRef, pointHistoryData);
       }
 
-      // 결제 트랜잭션 기록
       const transactionRef = db
         .collection('transactions')
         .doc(transactionId || `${user.uid}_${currentTimestamp}`);
@@ -283,7 +257,6 @@ export const processPayment = async data => {
 
       transaction.set(transactionRef, transactionData);
 
-      // 결제 완료 응답
       return {
         success: true,
         message: '결제가 성공적으로 처리되었습니다.',

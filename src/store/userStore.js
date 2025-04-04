@@ -18,7 +18,6 @@ export const useUserStore = create((set, get) => ({
   loadUserData: async () => {
     const { user } = useAuthStore.getState() || {};
     if (!user || !user.uid) {
-      console.log('유저 정보가 없어 데이터를 불러 올 수 없습니다.');
       return null;
     }
 
@@ -42,7 +41,6 @@ export const useUserStore = create((set, get) => ({
   loadReservations: async () => {
     const { user } = useAuthStore.getState() || {};
     if (!user || !user.uid) {
-      console.log('유저 정보가 없어 데이터를 불러 올 수 없습니다.');
       return null;
     }
 

@@ -221,8 +221,6 @@ const useReservationStore = create(
             timestamp: Date.now(),
           };
 
-          console.log('paymentData', paymentData);
-          console.log('typeof paymentData', typeof paymentData);
           const result = await requestPayment(paymentData);
 
           if (result.success) {

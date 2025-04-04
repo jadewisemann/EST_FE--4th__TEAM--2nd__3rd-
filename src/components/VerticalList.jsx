@@ -50,7 +50,6 @@ const VerticalList = ({ products, isLoading, activeTab, query }) => {
         const rating = product.rating || 0;
 
         const isReservation = !!product.checkIn && !!product.checkOut;
-        // console.log('product:', product);
 
         return isReservation ? (
           <li

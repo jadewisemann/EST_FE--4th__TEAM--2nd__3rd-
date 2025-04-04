@@ -23,7 +23,6 @@ const PasswordChangeModal = () => {
 
   const handleSubmit = async () => {
     const result = await changePassword(oldPassword, newPassword);
-    console.log('result', result);
     alert(result.message);
 
     if (result.success) {

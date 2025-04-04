@@ -43,7 +43,6 @@ const ReservationDetailPage = () => {
         if (RoomData) {
           setData(RoomData);
         } else {
-          console.log('해당 ID의 호텔이 존재하지 않습니다.');
           navigate('/');
         }
       } catch (error) {
@@ -163,7 +162,6 @@ const ReservationDetailPage = () => {
             className='rounded-2xl'
             onClick={() => {
               sessionStorage.setItem('isReservation', JSON.stringify(false));
-              console.log(1);
               navigate('/');
             }}
           >
