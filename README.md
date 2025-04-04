@@ -135,10 +135,11 @@
 ## 주요 기능 설명
 
 ### 매인 페이지
-
-<img src="docs/ppt/screen-shot/01.png" height="600px">
-<img src="docs/ppt/screen-shot/02.png" height="600px">
-<img src="docs/ppt/screen-shot/03.png" height="600px">
+<p>
+  <img src="docs/ppt/screen-shot/01.png" height="600px">
+  <img src="docs/ppt/screen-shot/02.png" height="600px">
+  <img src="docs/ppt/screen-shot/03.png" height="600px">
+</p>
 
 - 검색 기능
 - 추천 호텔 및 카테고리 바로 가기 가능
