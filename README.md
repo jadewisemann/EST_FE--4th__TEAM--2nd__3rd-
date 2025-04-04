@@ -130,7 +130,7 @@
 
 ## 주요 기능 설명
 
-### 매인 페이지
+### 메인 페이지
 <table>
   <tr>
     <td><img src="docs/ppt/screen-shot/01.png" height="600px"></td>
