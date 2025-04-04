@@ -135,10 +135,10 @@
 ## 주요 기능 설명
 
 ### 매인 페이지
-<p>
-  <img src="docs/ppt/screen-shot/01.png" height="600px">
-  <img src="docs/ppt/screen-shot/02.png" height="600px">
-  <img src="docs/ppt/screen-shot/03.png" height="600px">
+<p align="center">
+  <img src="docs/ppt/screen-shot/01.png" height="500px">
+  <img src="docs/ppt/screen-shot/02.png" height="500px">
+  <img src="docs/ppt/screen-shot/03.png" height="500px">
 </p>
 
 - 검색 기능
