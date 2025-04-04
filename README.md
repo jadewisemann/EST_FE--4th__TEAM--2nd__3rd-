@@ -290,6 +290,27 @@ flowchart TD
     end
 ```
 
+### 결제 상태 관리 (FSM)
+```mermaid
+stateDiagram-v2
+  [*] --> IDLE
+  
+  IDLE --> DATA_LOADED
+  IDLE --> ERROR
+  
+  DATA_LOADED --> PROCESSING
+  DATA_LOADED --> ERROR
+  DATA_LOADED --> IDLE
+  
+  PROCESSING --> COMPLETED
+  PROCESSING --> ERROR
+  
+  COMPLETED --> IDLE
+  
+  ERROR --> IDLE
+  ERROR --> DATA_LOADED
+```
+
 ### reservation(payment) middle ware
 
 ```mermaid
@@ -316,6 +337,29 @@ sequenceDiagram
     reservation Store ->> checkout page : payment result
 ```
 
+### 결제 시퀀스
+
+```mermaid
+sequenceDiagram
+    participant a as component
+    participant c as reservation Store
+    participant f as payment Service
+    participant g as firebase/paymentApi
+    participant d as firebase
+    
+    c -->> a :   give room data to component
+    a -->> c :  component ask payment
+    Note over c : state: processing
+    c ->> f : requestPayment<br/>(user, usersInput, roomUid)
+    f ->> g: processPayment<br/>{data}
+    g ->> d: callFunction('payment', {data})
+    d ->> g: return Success || Fail
+    g ->> f: return Success || Fail
+    f ->> c: return Success || Fail
+    Note over c : state: completed || error
+    c ->> a: return Success || Fail
+    Note over a : Conditional Rendering
+```
 ### Firebase Firestore 데이터베이스 구조
 ```mermaid
 flowchart TD
@@ -389,50 +433,6 @@ sequenceDiagram
     Note over b : Conditional Rednering
 ```
 
-### 결제 상태 관리 (FSM)
-```mermaid
-stateDiagram-v2
-  [*] --> IDLE
-  
-  IDLE --> DATA_LOADED
-  IDLE --> ERROR
-  
-  DATA_LOADED --> PROCESSING
-  DATA_LOADED --> ERROR
-  DATA_LOADED --> IDLE
-  
-  PROCESSING --> COMPLETED
-  PROCESSING --> ERROR
-  
-  COMPLETED --> IDLE
-  
-  ERROR --> IDLE
-  ERROR --> DATA_LOADED
-```
-
-### 결제 시퀀스
-
-```mermaid
-sequenceDiagram
-    participant a as component
-    participant c as reservation Store
-    participant f as payment Service
-    participant g as firebase/paymentApi
-    participant d as firebase
-    
-    c -->> a :   give room data to component
-    a -->> c :  component ask payment
-    Note over c : state: processing
-    c ->> f : requestPayment<br/>(user, usersInput, roomUid)
-    f ->> g: processPayment<br/>{data}
-    g ->> d: callFunction('payment', {data})
-    d ->> g: return Success || Fail
-    g ->> f: return Success || Fail
-    f ->> c: return Success || Fail
-    Note over c : state: completed || error
-    c ->> a: return Success || Fail
-    Note over a : Conditional Rendering
-```
 
 
 ## 프로젝트 구조
