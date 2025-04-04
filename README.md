@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/ppt/bg_logo.svg"/>
+  <img src="/src/assets/img/bg_logo.svg" alt="pookjayo">
 </p>
 
 <b><i><p align="center">EST soft, FE 4기, 2조</p></i></b>
@@ -8,7 +8,7 @@
 
 | 역할 | 이름 | 주요 업무 |
 |------|------|-----------|
-| 팀장 | 정유진 | <ul><li>PM</li><li>User flow 설계</li><li>데이터 크롤</li><li> DB: 설계 및 api 구혀현, n-gram 인덱싱 </li><li>비즈니스 로직 구현 - db, 유저 정보, 결제 서비스, 위시리스트</li><li>형상 관리 및 컨벤션 제정</li><li>발표 및 ppt 제작</li><li>eslint, prettier 등 개발 환경 관리 및 초기 세팅</li><li>Component - modal, calendar, button, counter</li></ul> |
+| 팀장 | 정유진 | <ul><li>PM</li><li>User flow 설계</li><li>데이터 크롤 설계 - db 구조, api</li><li>비즈니스 로직 구현 - db, 유저 정보, 결제 서비스, 위시리스트</li><li>형상 관리 및 컨벤션 제정</li><li>발표 및 ppt 제작</li><li>eslint, prettier 등 개발 환경 관리 및 초기 세팅</li><li>Component - modal, calendar, button, counter</li></ul> |
 | 팀원 | 김석용 | <ul><li>공통 컴포넌트 분리</li></ul> |
 | 팀원 | 김인배 | <ul><li>Component - input, toast, skeleton, heart, loading</li><li>Page - login, signup, find-password</li><li>Protect route 및 private route 구현</li><li>토스트 프로바이더 구현</li><li>인풋 검증 로직 구현</li></ul> |
 | 팀원 | 오초록 | <ul><li>UI design</li><li>Component - Nav, Tab, Complete, DetailSection, Horizontal list</li><li>Page - main page, search-result, my-page</li></ul> |
@@ -69,8 +69,7 @@
   
 ### 프로젝트 관리
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
-![GitHub](https://img.shields.io/badge/github_wiki-181717?style=for-the-badge&logo=github)
-![GitHub](https://img.shields.io/badge/github_project-181717?style=for-the-badge&logo=github)
+![GitHub](https://img.shields.io/badge/githubwiki-181717?style=for-the-badge&logo=github)
 
 [![discord](https://img.shields.io/badge/Discord-blue?style=for-the-badge)](https://discord.com/)
 
@@ -135,11 +134,13 @@
 ## 주요 기능 설명
 
 ### 매인 페이지
-<p align="center">
-  <img src="docs/ppt/screen-shot/01.png" height="500px">
-  <img src="docs/ppt/screen-shot/02.png" height="500px">
-  <img src="docs/ppt/screen-shot/03.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/01.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/02.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/03.png" height="600px"></td>
+  </tr>
+</table>
 
 - 검색 기능
 - 추천 호텔 및 카테고리 바로 가기 가능
@@ -147,12 +148,13 @@
 - 사람수 선택택 모달
 
 ### 검색 결과 페이지
-
-<p align="center">
-  <img src="docs/ppt/screen-shot/04.png" height="500px">
-  <img src="docs/ppt/screen-shot/05.png" height="500px">
-  <img src="docs/ppt/screen-shot/06.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/04.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/05.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/06.png" height="600px"></td>
+  </tr>
+</table>
 
 - 검색어로 검색결과
 - 검색 모달로 검색 가능
@@ -160,10 +162,13 @@
   
 ### 관심 숙소
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/07.png" height="600px">
-  <img src="docs/ppt/screen-shot/08.png" height="600px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/07.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/08.png" height="600px"></td>
+  </tr>
+</table>
+
 
 - 검색 결과에서 하트를 눌러 관심숙소에 추가 가능
 - 관심숙소 페이지에 저장됨
@@ -171,76 +176,88 @@
   
 ### 로그인
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/09.png" height="500px">
-  <img src="docs/ppt/screen-shot/10.png" height="500px">
-  <img src="docs/ppt/screen-shot/11.png" height="500px">
-</p>
+
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/09.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/09.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/11.png" height="600px"></td>
+  </tr>
+</table>
 
 - 입력 검증
-- 서버 측 로그인 검증
+- 서버 측 로그인 검증증
 
 ### 회원가입
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/12.png" height="500px">
-  <img src="docs/ppt/screen-shot/13.png" height="500px">
-  <img src="docs/ppt/screen-shot/14.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/12.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/13.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/14.png" height="600px"></td>
+  </tr>
+</table>
 
 - 입력 검증
-- 서버 측 로그인 검증
-- 회원가입시 자동 로그인 및 라우팅
+- 서버 측 로그인 검증증
+- 회원가입시 자동 로그인 및 라우팅팅
 
 ### 상세 페이지
-
-<p align="center">
-  <img src="docs/ppt/screen-shot/17.png" height="500px">
-  <img src="docs/ppt/screen-shot/18.png" height="500px">
-  <img src="docs/ppt/screen-shot/19.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/17.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/18.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/19.png" height="600px"></td>
+  </tr>
+</table>
 
 
 ### 결제 페이지
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/20.png" height="500px">
-  <img src="docs/ppt/screen-shot/21.png" height="500px">
-  <img src="docs/ppt/screen-shot/22.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/20.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/21.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/22.png" height="600px"></td>
+  </tr>
+</table>
+
 
 - 입력 값에 따라 결제 검증 및 제출
 - 서버에 예약 내역 기록
   
 ### 마이페이지
-
-<p align="center">
-  <img src="docs/ppt/screen-shot/26.png" height="600px">
-</p>
+<img src="docs/ppt/screen-shot/26.png" height="600px">
 
 - 유저 정보 확인 가능
 - 다크모드 가능
 
 ### 예약 상세
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/23.png" height="500px">
-  <img src="docs/ppt/screen-shot/24.png" height="500px">
-  <img src="docs/ppt/screen-shot/25.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/23.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/24.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/25.png" height="600px"></td>
+  </tr>
+</table>
+
 
 - 서버에서 예약 내역 가져오서 상세 확인
 
 ### 다크모드
 
-<p align="center">
-  <img src="docs/ppt/screen-shot/28.png" height="500px">
-  <img src="docs/ppt/screen-shot/29.png" height="500px">
-  <img src="docs/ppt/screen-shot/30.png" height="500px">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/28.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/29.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/30.png" height="600px"></td>
+  </tr>
+</table>
+
 
 - 마이페이지에서 다크모드 
-  - 시스템 설정이랑 로컬 스토리지 확인해서 구현
+  - 시스템 설정이랑 로컬 스토리지 확인해서 구현현
 
 ## 주요 기술 구현
 
@@ -477,6 +494,5 @@ sequenceDiagram
 ```
 
 ## 배포 링크
-<p align="center">
-  <img src="docs/qr.png">
-</p>
+
+<img src="docs/qr.png">
