@@ -12,11 +12,6 @@ import {
 
 import { db } from './config';
 
-/**
- * 문자열 가격을 숫자로 변환하는 함수
- * @param {string|number} price 가격
- * @returns {number} 변환된 숫자 가격
- */
 const convertPriceToNumber = price => {
   if (typeof price === 'number') return price;
   if (!price) return 0;
@@ -24,17 +19,10 @@ const convertPriceToNumber = price => {
   return parseInt(price.replace(/,/g, ''), 10);
 };
 
-/**
- * 가격 필드를 정렬하는 함수
- * @param {number|string} price 원래 가격
- * @param {number|string} priceFinal 할인 가격
- * @returns {array} 정렬된 [큰 가격, 작은 가격] 배열
- */
 const sortPrices = (price, priceFinal) => {
   const numericPrice = convertPriceToNumber(price);
   const numericPriceFinal = priceFinal ? convertPriceToNumber(priceFinal) : '';
 
-  // price, price_final을 비교하여 언제나 price가 더 높도록 순서 변경
   return numericPrice
     && numericPriceFinal !== ''
     && numericPriceFinal > numericPrice
@@ -42,11 +30,6 @@ const sortPrices = (price, priceFinal) => {
     : [numericPrice, numericPriceFinal];
 };
 
-/**
- * 객체의 가격 필드를 변환하는 함수
- * @param {object} item 객체
- * @returns {object} 가격이 변환된 객체
- */
 const convertPriceFields = item => {
   if (!item) return null;
 
@@ -67,15 +50,9 @@ const convertPriceFields = item => {
   return convertedItem;
 };
 
-/**
- * 호텔 가격 변환 함수
- * @param {object} hotel 호텔 객체
- * @returns {object} 가격이 변환된 호텔
- */
 const convertHotelPrices = hotel => {
   if (!hotel) return null;
 
-  // 호텔 객체 깊은 복사
   const convertedHotel = { ...hotel };
 
   // rooms가 있고, 배열인지 확인
@@ -98,10 +75,6 @@ const DB_VERSION = 1;
 const STORE_NAME = 'hotels';
 const CACHE_EXPIRATION = 5 * 60 * 1000; // ms
 
-/**
- * 인덱스트 db 시작
- * @returns
- */
 const initDB = () =>
   new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -115,11 +88,6 @@ const initDB = () =>
     request.onerror = () => reject(request.error);
   });
 
-/**
- * indexedDB에서 호텔 찾아오기
- * @param {string} hotelId 호텔 id
- * @returns {object} 호텔 데이터
- */
 const getFromCache = async hotelId => {
   const db = await initDB();
   return new Promise(resolve => {
@@ -139,11 +107,6 @@ const getFromCache = async hotelId => {
   });
 };
 
-/**
- * indexedDB에 호텔 데이터 저장
- * @param {object} hotelData
- * @returns
- */
 const saveToCache = async hotelData => {
   const db = await initDB();
   return new Promise(resolve => {
@@ -161,11 +124,6 @@ const saveToCache = async hotelData => {
   });
 };
 
-/**
- * id로 호텔 데이터를 받아오는 함수
- * @param {string} hotelId
- * @returns {object} 호텔 데이터
- */
 const getHotelById = async hotelId => {
   try {
     // 호텔 id 검증
@@ -212,11 +170,6 @@ const getHotelById = async hotelId => {
   }
 };
 
-/**
- * 방 id로 검색
- * @param {String} roomId
- * @returns
- */
 const getRoomById = async roomId => {
   try {
     if (!roomId) throw new Error('방 ID가 필요합니다');
@@ -241,11 +194,6 @@ const getRoomById = async roomId => {
   }
 };
 
-/**
- * n gram을 만드는 함수
- * @param {string} text 변환할 글자
- * @returns {array} 변환된 n gram의 배열
- */
 const generateNgrams = text => {
   if (!text) return [];
   const cleanText = text.replace(/\s+/g, '');
@@ -260,11 +208,6 @@ const generateNgrams = text => {
   return [...ngrams];
 };
 
-/**
- * n gram 검색 결과에서 스코어가 같은 호텔들을  title로 정렬하는 함수
- * @param {Object[]} hotels
- * @returns
- */
 const sortHotelsByTitleWithinSameScores = hotels => {
   // 스코어별로 그룹화
   const scoreGroups = hotels.reduce((groups, hotel) => {
@@ -285,7 +228,7 @@ const sortHotelsByTitleWithinSameScores = hotels => {
   });
 
   // 스코어 순서로 다시 하나의 배열로 합치기
-  const isDes = true; // 내림차순
+  const isDes = true;
   return Object.keys(scoreGroups)
     .sort(
       isDes ? (a, b) => Number(b) - Number(a) : (a, b) => Number(a) - Number(b),
@@ -293,17 +236,10 @@ const sortHotelsByTitleWithinSameScores = hotels => {
     .flatMap(score => scoreGroups[score]);
 };
 
-/**
- * N-gram 기반 검색 함수
- * @param {[]} searchNgrams
- * @param {String} region
- * @param {Number} resultLimit
- * @param {Object} lastDoc
- * @returns
- */
 const searchWithNgrams = async (
   searchNgrams,
   region,
+  category,
   resultLimit,
   lastDoc,
   availableOnly = true,
@@ -312,16 +248,21 @@ const searchWithNgrams = async (
 
   await Promise.all(
     searchNgrams.map(async ngram => {
-      // n gram과 일치하는 문서 가져오기
       const searchIndexRef = collection(db, 'search_index');
-      const ngramQuery = query(
-        searchIndexRef,
-        where(`combined_ngrams.${ngram}`, '==', true),
-        ...(region ? [where('region', '==', region)] : []),
-      );
+
+      const conditions = [where(`combined_ngrams.${ngram}`, '==', true)];
+
+      if (region) {
+        conditions.push(where('region', '==', region));
+      }
+
+      if (category) {
+        conditions.push(where('category', '==', category));
+      }
+
+      const ngramQuery = query(searchIndexRef, ...conditions);
       const ngramSnapshot = await getDocs(ngramQuery);
 
-      // 각 문서에서 호텔 id와 스코어를 할당
       ngramSnapshot.forEach(doc => {
         const hotelId = doc.data().hotel_id;
         if (searchResults[hotelId]) {
@@ -338,11 +279,9 @@ const searchWithNgrams = async (
     }),
   );
 
-  // 스코어와 n gram 길이로 정렬
   const sortedResults = Object.values(searchResults).sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
 
-    // 스코어가 같으면 n-gram 길이로 정렬
     const aMaxLength =
       a.matchedNgrams.length > 0
         ? Math.max(...a.matchedNgrams.map(ng => ng.length))
@@ -355,13 +294,10 @@ const searchWithNgrams = async (
     return bMaxLength - aMaxLength;
   });
 
-  // 호텔 id만 추출
   const sortedIds = sortedResults.map(item => item.id);
 
-  // lastDoc이 있으면 시작 index 조정
   const startIndex = lastDoc ? sortedIds.indexOf(lastDoc.id) + 1 : 0;
 
-  // 호텔 정보 받아오기, 빈 배열 필터링
   const hotelPromises = sortedIds
     .slice(startIndex, startIndex + resultLimit)
     .map(async id => {
@@ -380,13 +316,10 @@ const searchWithNgrams = async (
             };
     });
 
-  // false 제거
   const hotelsWithData = (await Promise.all(hotelPromises)).filter(Boolean);
 
-  // 정렬: 스코어 같으면 이름으로
   const sortedHotels = sortHotelsByTitleWithinSameScores(hotelsWithData);
 
-  // 마지막 문서 참조
   const lastHotelDoc =
     sortedHotels.length > 0
       ? await getDoc(
@@ -397,34 +330,45 @@ const searchWithNgrams = async (
   return { hotels: sortedHotels, lastDoc: lastHotelDoc };
 };
 
-/**
- * 일반 쿼리 검색
- * @param {String} region
- * @param {Number} resultLimit
- * @param {Object} lastDoc
- * @returns
- */
 const searchWithBaseQuery = async (
   region,
+  category,
   resultLimit,
   lastDoc,
   availableOnly = true,
 ) => {
-  // 기본 쿼리
-  const queryConditions = [
-    orderBy('title'),
-    firestoreLimit(resultLimit),
-    region ? where('region', '==', region) : null,
-    lastDoc ? startAfter(lastDoc) : null,
-  ].filter(Boolean);
+  const queryConditions = [orderBy('title'), firestoreLimit(resultLimit)];
 
-  // 쿼리 실행
+  if (region) {
+    queryConditions.push(where('region', '==', region));
+  }
+
+  if (lastDoc) {
+    queryConditions.push(startAfter(lastDoc));
+  }
+
   const baseQuery = query(collection(db, 'hotels'), ...queryConditions);
   const snapshot = await getDocs(baseQuery);
 
-  // 호텔 데이터 가져오기, 빈 rooms 제외
+  let categoryHotelIds = null;
+  if (category) {
+    const categoryQuery = query(
+      collection(db, 'search_index'),
+      where('category', '==', category),
+    );
+    const categorySnapshot = await getDocs(categoryQuery);
+    categoryHotelIds = new Set(
+      categorySnapshot.docs.map(doc => doc.data().hotel_id),
+    );
+  }
+
   const hotelPromises = snapshot.docs.map(async (document, index) => {
     const hotelId = document.id;
+
+    if (categoryHotelIds !== null && !categoryHotelIds.has(hotelId)) {
+      return null;
+    }
+
     const hotelData = await getHotelById(hotelId);
 
     return !hotelData
@@ -437,29 +381,18 @@ const searchWithBaseQuery = async (
           };
   });
 
-  // 결과 필터링
   const hotels = (await Promise.all(hotelPromises)).filter(Boolean);
 
-  // 마지막 문서 참조
   const lastHotelDoc =
     snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
 
   return { hotels, lastDoc: lastHotelDoc };
 };
 
-/**
- * 검색어를 n gram으로 처리하는 함수
- * @param {String} searchText
- * @param {String} region
- * @param {Number} limit
- * @param {Number} pageSize
- * @param {Object} lastDoc
- * @param {Boolean} pagination
- * @returns
- */
 const searchHotelsAdvanced = async (
   searchText,
   region = null,
+  category = null,
   limit = 20,
   pageSize = limit,
   lastDoc = null,
@@ -467,22 +400,20 @@ const searchHotelsAdvanced = async (
   availableOnly = true,
 ) => {
   try {
-    // parameter 검증
     const resultLimit = pageSize || limit;
 
-    if (searchText.length === 0 && !region) {
+    if (searchText.length === 0 && !region && !category) {
       return pagination ? { hotels: [], lastDoc: null } : [];
     }
 
-    //  n gram 생성
     const searchNgrams = generateNgrams(searchText);
 
     let result;
-    // n gram ? n gram 검색 : base query 검색
     if (searchNgrams.length > 0) {
       result = await searchWithNgrams(
         searchNgrams,
         region,
+        category,
         resultLimit,
         lastDoc,
         availableOnly,
@@ -490,13 +421,13 @@ const searchHotelsAdvanced = async (
     } else {
       result = await searchWithBaseQuery(
         region,
+        category,
         resultLimit,
         lastDoc,
         availableOnly,
       );
     }
 
-    // pagination 안하면 호텔만 반환
     return pagination ? result : result.hotels;
   } catch (error) {
     console.error('호텔 검색 중 오류 발생:', error);

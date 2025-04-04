@@ -7,10 +7,10 @@ import Icon from './Icon';
 const Nav = () => {
   // const [show, setShow] = useState(true);
   const [navMenus] = useState([
-    { name: 'home', size: '18', path: '/' },
-    { name: 'search', size: '18', path: '/search-result' },
-    { name: 'heart', size: '16', path: '/wishlist' },
-    { name: 'user', size: '16', path: '/mypage' },
+    { name: 'home', size: '18', path: '/', desc: '홈' },
+    { name: 'search', size: '18', path: '/search-result', desc: '검색' },
+    { name: 'heart', size: '16', path: '/wishlist', desc: '찜 목록' },
+    { name: 'user', size: '16', path: '/mypage', desc: '마이' },
   ]);
 
   // //스크롤이벤트
@@ -46,12 +46,13 @@ const Nav = () => {
   // }, []);
 
   return (
-    <div className='center-fixed-item fixed bottom-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-2px_10px_rgba(255,255,255,0.25)]'>
+    <nav className='center-fixed-item fixed bottom-0 z-99 flex w-full items-center justify-between rounded-t-lg bg-white shadow-[0_-4px_4px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out dark:bg-neutral-800 dark:shadow-[0_-2px_4px_rgba(255,255,255,0.25)]'>
       {navMenus.map(item => (
         <NavLink
           key={item.name}
           to={item.path}
           className='flex w-full flex-col items-center py-5'
+          title={`${item.desc} 페이지로 이동`}
         >
           {({ isActive }) => (
             <Icon
@@ -66,7 +67,7 @@ const Nav = () => {
           )}
         </NavLink>
       ))}
-    </div>
+    </nav>
   );
 };
 

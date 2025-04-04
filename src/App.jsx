@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
@@ -27,24 +27,36 @@ import './App.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-const App = () => (
-  <>
-    <ModalProvider />
-    <ToastProvider />
-    <Routes>
-      <Route path='/' element={<MainPage />} />
-      <Route path='/details/:hotelId' element={<DetailsPage />} />
+import TopButton from './components/TopButton';
 
-      <Route path='/order-confirm' element={<OrderConfirm />} />
-      <Route path='/payment' element={<PaymentPage />} />
-      <Route path='/user-info' element={<UserInfoPage />} />
-      <Route path='/wishlist' element={<WishlistPage />} />
-      <Route
-        path='/reservation-detail/:roomId/:reservationId'
-        element={<ReservationDetailPage />}
-      />
-      <Route path='/test' element={<TestPage />} />
-      <Route path='/search-result' element={<SearchResultPage />} />
+const App = () => {
+  const location = useLocation();
+
+  // 페이지별로 bottom 값 설정
+  const bottomValue = () => {
+    if (location.pathname.startsWith('/details/')) return 16;
+    if (location.pathname.startsWith('/checkout/')) return 144;
+    if (location.pathname.startsWith('/reservation-detail/')) return 108;
+  };
+
+  return (
+    <>
+      <ModalProvider />
+      <ToastProvider />
+      <Routes>
+        <Route path='/' element={<MainPage />} />
+        <Route path='/details/:hotelId' element={<DetailsPage />} />
+
+        <Route path='/order-confirm' element={<OrderConfirm />} />
+        <Route path='/payment' element={<PaymentPage />} />
+        <Route path='/user-info' element={<UserInfoPage />} />
+        <Route path='/wishlist' element={<WishlistPage />} />
+        <Route
+          path='/reservation-detail/:roomId/:reservationId'
+          element={<ReservationDetailPage />}
+        />
+        <Route path='/test' element={<TestPage />} />
+        <Route path='/search-result' element={<SearchResultPage />} />
 
       <Route element={<PublicRoute />}>
         <Route path='/login' element={<LoginPage />} />

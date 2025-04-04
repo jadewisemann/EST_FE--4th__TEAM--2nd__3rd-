@@ -37,23 +37,27 @@ const WishlistPage = () => {
 
   return (
     <>
-      <SubHeader leftButton='arrow' title='관심 숙소' zIndex={10} />
+      <header>
+        <SubHeader leftButton='arrow' title='관심 숙소' zIndex={10} />
+        <Nav />
+      </header>
       <div className='container'>
-        {wishlist.length === 0 ? (
-          <div className='flex flex-col items-center gap-4'>
-            <p className='mt-6 text-center text-2xl'>찜 목록이 없습니다</p>
-            <Anchor
-              type={'search-result'}
-              className={'flex items-center gap-2'}
-            >
-              찜하러 가기
-            </Anchor>
-          </div>
-        ) : (
-          <VerticalList products={data} />
-        )}
+        <section>
+          {wishlist.length === 0 ? (
+            <div className='flex flex-col items-center gap-4'>
+              <p className='mt-6 text-center text-2xl'>찜 목록이 없습니다</p>
+              <Anchor
+                type={'search-result'}
+                className={'flex items-center gap-2'}
+              >
+                찜하러 가기
+              </Anchor>
+            </div>
+          ) : (
+            <VerticalList products={data} />
+          )}
+        </section>
       </div>
-      <Nav />
     </>
   );
 };

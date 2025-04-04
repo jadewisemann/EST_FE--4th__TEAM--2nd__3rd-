@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -6,12 +6,19 @@ import Heart from './Heart';
 import Rating from './Rating';
 import SkeletonItem from './SkeletonItem';
 
-const VerticalList = ({ products, isLoading }) => {
+const SKELETON_ITEM_LENGTH = 10;
+
+const VerticalList = ({ products, isLoading, activeTab, query }) => {
   const isLoadingRef = useRef(false);
+
+  useEffect(() => {
+    isLoadingRef.current = false;
+  }, [activeTab, query]);
+
   if (isLoading && !isLoadingRef.current) {
     return (
       <div className='flex flex-col'>
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: SKELETON_ITEM_LENGTH }).map((_, index) => (
           <SkeletonItem key={index} />
         ))}
       </div>
@@ -26,7 +33,7 @@ const VerticalList = ({ products, isLoading }) => {
   isLoadingRef.current = true;
 
   return (
-    <div className='flex flex-col'>
+    <ul className='flex flex-col'>
       {products.map(product => {
         const image =
           typeof product.image === 'object' && product.image !== null
@@ -46,20 +53,19 @@ const VerticalList = ({ products, isLoading }) => {
         // console.log('product:', product);
 
         return isReservation ? (
-          <div
+          <li
             key={product.id}
             className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
           >
             <Link
               to={`/reservation-detail/${product.roomId}/${product.id.slice(-13)}`}
               className='flex w-full cursor-pointer gap-3'
-              title={title}
             >
               <div className='shrink-0'>
                 <img
                   className='block h-20 w-20 rounded-[10px] object-cover'
                   src={image}
-                  alt={title}
+                  alt=''
                 />
               </div>
               <div className='flex grow flex-col'>
@@ -82,9 +88,9 @@ const VerticalList = ({ products, isLoading }) => {
                 </div>
               </div>
             </Link>
-          </div>
+          </li>
         ) : (
-          <div
+          <li
             key={product.id}
             className='relative w-full border-b-1 border-neutral-200 py-4 dark:border-neutral-400'
           >
@@ -123,10 +129,10 @@ const VerticalList = ({ products, isLoading }) => {
               </div>
             </Link>
             <Heart className='absolute right-0 bottom-4' hotelId={product.id} />
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 

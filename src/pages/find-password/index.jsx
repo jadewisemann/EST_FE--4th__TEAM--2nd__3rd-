@@ -22,8 +22,6 @@ const FindPasswordPage = () => {
     } catch (error) {
       if (error.message.includes('auth/user-not-found')) {
         showToast('등록되지 않은 이메일입니다');
-      } else if (error.message.includes('auth/invalid-email')) {
-        showToast('올바른 이메일 형식이 아닙니다');
       } else {
         showToast('비밀번호 재설정 요청에 실패했습니다');
       }

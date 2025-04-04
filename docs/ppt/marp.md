@@ -115,75 +115,13 @@ table { font-size: 12px; }
 
 ## 팀 구성 및 역할
 
-
-<table>
-  <tr>
-    <th>역할</th>
-    <th>이름</th>
-    <th>주요 업무</th>
-  </tr>
-  <tr>
-    <td align="center">팀장</td>
-    <td align="center"><a href="https://github.com/jadewisemann">정유진</a></td>
-    <td>
-      <ul>
-        <li>형상 관리</li>
-        <li>Commit · Coding Convention 관리</li>
-        <li>문서 관리 및 배포 담당</li>
-        <li>컴포넌트 로직 구현</li>
-        <li>공통 컴포넌트(movie-card, card-section ...) 구현</li>
-        <li>메인 페이지 및 찜한 영화 페이지 개발</li>
-      </ul>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center">팀원</td>
-    <td align="center"> <a href="#">김석용</a> </td>
-    <td>
-      <ul>
-        <li>공통 컴포넌트 개발</li>
-      </ul>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center">팀원</td>
-    <td align="center"><a href="https://github.com/kib09">김인배</a></td>
-    <td>
-      <ul>
-        <li>공통 컴포넌트(main-header ...) 제작 및 구현</li>
-        <li>검색 결과 페이지 개발</li>
-        <li>TMDB API 사용하여 추가 검색 기능 개발</li>
-        <li>TMDB API ↔ IMDB API 핸들링 기능 구현</li>
-      </ul>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center">팀원</td>
-    <td align="center"><a href="https://github.com/choroc">오초록</a></td>
-    <td>
-      <ul>
-        <li>프로젝트 목표 설정 및 진행 관리</li>
-        <li>기획 및 전체 일정 관리</li>
-        <li>디자인 및 와이어프레임 제작</li>
-        <li>영화 정보 상세 페이지 개발</li>
-        <li>공통 컴포넌트(swiper--over-ride ...) 제작 및 구현</li>
-      </ul>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center">팀원</td>
-    <td align="center"> <a href="#">한은혁</a> </td>
-    <td>
-      <ul>
-        <li>서버 성능 개선</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+| 역할 | 이름 | 주요 업무 |
+|------|------|-----------|
+| 팀장 | 정유진 | <ul><li>PM</li><li>User flow 설계</li><li>데이터 크롤 설계 - db 구조, api</li><li>비즈니스 로직 구현 - db, 유저 정보, 결제 서비스, 위시리스트</li><li>형상 관리 및 컨벤션 제정</li><li>발표 및 ppt 제작</li><li>eslint, prettier 등 개발 환경 관리 및 초기 세팅</li><li>Component - modal, calendar, button, counter</li></ul> |
+| 팀원 | 김석용 | <ul><li>공통 컴포넌트 분리</li></ul> |
+| 팀원 | 김인배 | <ul><li>Component - input, toast, skeleton, heart, loading</li><li>Page - login, signup, find-password</li><li>Protect route 및 private route 구현</li><li>토스트 프로바이더 구현</li><li>인풋 검증 로직 구현</li></ul> |
+| 팀원 | 오초록 | <ul><li>UI design</li><li>Component - Nav, Tab, Complete, DetailSection, Horizontal list</li><li>Page - main page, search-result, my-page</li></ul> |
+| 팀원 | 한은혁 | <ul><li>Component - checkbox, icon, radio, rating, verticallist</li><li>Page - details, checkout, reservation-detail, wishlist</li><li>다크 모드 구현 (로컬 스토리지 및 시스템 설정)</li><li>웹 표준 및 html 오류 수정</li></ul> |
 
 ---
 # 수행 절차 및 방법
@@ -268,6 +206,92 @@ table { font-size: 12px; }
 
 --- 
 <div class="header">프로젝트 수행 경과 / firestore  </div>
+
+![width:1000px](./mermaid-diagram-db.png)
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  </div>
+
+### ~~full text search~~
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  </div>
+
+
+#### 전문 검색 (full text search)
+
+- 검색어  : "부산"
+- 예상 결과: "부산 호텔", "부산 모텔"
+- 실제 결과: "부산"
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
+<style>
+.left {
+  width: fit-content;
+  margin: 0 auto;
+}
+</style>
+
+<div class="left">
+firestore
+<br/>
+=> no sql
+<br/>
+=> 단순 쿼리만 가능
+<br/>
+=> 부분 문자열 매칭 지원 X
+</div>
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
+#### n-gram
+
+- 문자열을 n개씩 끊어서 인덱싱  
+- 예) "부산 호텔"
+  -  ["부", "부산", "산 ", "산 호", "호", "호텔", ...]  
+  -   부분 문자열 매칭 가능  
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
+주소를 n gram
++
+숙소 이름을 n gram
+
+= `combined_n_gram`
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
+- `search_index` 콜렉션 안의 문서
+
+```json
+{
+  title: "서면 덴바스타 호텔"
+  combined_ngrams: {
+    // ...
+    덴바 : true,
+    덴바스 : true,
+    덴바스타 : true,
+    덴바스타 호텔 : true,
+    // ...
+  }
+  hotel_uid: 000e784048099
+}
+```
+
+---
+
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
+![alt text](image-1.png)
+
+---
+<div class="header">프로젝트 수행 경과 / firestore  / full text search </div>
+
 
 ![width:1000px](./mermaid-diagram-db.png)
 
@@ -513,7 +537,7 @@ submitPayment: async userInput => {
 ---
 <div class="header">프로젝트 수행 경과 / 상태관리 </div>
 
-### modal && toast
+### modal & toast
 
 - `react portal`을 사용해서 렌더링
   - 부모 컨테이너에 영향을 받지 않고 독립적으로 랜더링
@@ -527,7 +551,7 @@ submitPayment: async userInput => {
 #### modal
 
 
-- 전역 상태와 지역 상태를 나누고렌더링은 지역 상태에만 의존
+- 전역 상태와 지역 상태를 나누고 렌더링은 지역 상태에만 의존
   - 단방향의 상태 변화
   - 리렌더링 최적화
   
@@ -740,4 +764,104 @@ return <Outlet />;
 ---
 
 # 자체 평가 의견
+
+---
+<style>
+.small {
+  font-size: 22px;
+  width: 80%;
+  margin: 0 auto;
+}
+</style>
+
+
+#### 김석용
+
+<div class="small">
+  
+- 실력있는 2팀에 합류해서 조원분들 한분한분들에 프로젝트 진행하는 모습을 보면서  많은걸 배웠고 2팀 팀원분들도 정말 고생들 많이 하셨습니다
+
+</div>
+
+---
+
+#### 김인배
+
+<div class="small">
+
+1. 사전기획의 관점에서 완성도 평가(10점 만점)
+   - 사전에 기획했던 디자인 ,기능대로 나왔으며
+    기획했던 것 이상으로 추가한 부분들이 있다는 점으로 10점 이다.
+
+1. 개인 또는 팀이 잘한 부분과 아쉬운 점
+   - 개인이 잘한점으로는 최대한 라이브러리에 의존하지 않은점이고
+    팀이 잘한 부분은 서로 코드 리뷰를 통해 부족한 부분을 알려주고
+    개선 할 수 있도록 도움을 준 점이라 생각한다.
+
+3. 결과물의 추후개선점, 보완할 점
+   - 데스크탑 환경을 구현 하지 못한점과 
+    실제 결제 로직을 도입하지 못하는점이 아쉽고
+    추후에 개선 및 보완 할 수 있는 부분이라고 생각한다.
+ 
+4. 프로젝트를 수행 하면서 느낀 점이나 경험한 성과
+   - 이번 프로젝트를 통해 코드를 읽는법 ,  효율적으로 코드를 작성 하는것,
+    컴포넌트 구조에 대해 더 깊이 있게 생각 할 수 있었던거 같고
+    협업에 중요성을 다시금 느낄수 있었던 기회였던거 같다.
+</div>
+
+
+---
+
+#### 오초록
+<div class="small">
+
+- 검색 결과 화면을 개발하면서 탭 클릭, 정렬 기능, 더보기 버튼 등 다양한 동작이 한 화면에 모이면서 로직이 복잡해졌고, 데이터 처리 흐름도 많아져 화면에 결과가 표시되기까지 시간이 소요되는 문제가 있었습니다. 특히 정렬 기능을 추가하면서 성능 부담이 커졌고, 결과적으로 해당 기능은 제외하게 되었습니다.
+  
+- 이처럼 여러 기능이 얽힌 UI 흐름을 직접 다뤄보며 복잡한 상황을 어떻게 제어할지 고민할 수 있었고, 이를 통해 실무적인 감각을 조금씩 익혀갈 수 있었습니다. 또한 모달 구현 시 스토어 데이터를 활용해보았고, 다른 개발자의 코드를 분석하고 적용해보면서 협업 환경에서 필요한 역량도 체감할 수 있었습니다.
+
+- 아쉬웠던 점은 기획 없이 바로 디자인이 시작되었고, 그 디자인을 바탕으로 개발까지 이어졌다는 점입니다. 명확한 정의서 없이 프로젝트를 진행하다 보니 중간에 UI가 자주 변경되었고, 그때마다 반복적으로 수정 작업이 필요했습니다. 기획이 어느 정도 정리된 상태였다면 더 효율적으로 진행할 수 있었을 것 같습니다.
+
+- 전체적으로 쉽지만은 않았지만 다양한 기술을 다뤄볼 기회였고, 실제 협업 과정의 흐름을 체험해보는 데에 의미가 있었습니다.
+ 
+</div>
+
+---
+
+#### 정유진
+
+<div class="small">
+
+1. 사전기획의 관점에서 완성도 평가(10점 만점)
+   - 사전에 기획과 디자인 대비 오히려 발전된 모습과 여러 기능이 추가되었다.
+    만점을 줄 수 있을 것 같다.
+  
+2. 개인 또는 팀이 잘한 부분과 아쉬운 점
+   - 팀으로서 결과물을 성공적으로 만들었다는 점
+   - 다만 설계가 자주 변경되는 바람에 시간이 부족하여
+    코드 베이스의 완성도가 일부 미비한 부분이 존재한다.
+  
+1. 결과물의 추후개선점, 보완할 점
+   - 지금은 포인트 결제만 가능한데 실제 기능을 도입해보고 싶다
+   - 여러가지 환경에 대응할 수 있는 반응형 디자인과 데스크톱용 디자인의 구현
+
+2. 프로젝트를 수행 하면서 느낀 점이나 경험한 성과
+   - 설계의 변경이 팀원 모두의 노동을 발생시키는 것을 경험하며
+    사전 설계의 중요성을 몸소 체감하였다. 
+   - 팀원들의 코드를 읽고고 조언하고 타인의 코드를 더 잘 읽을 수 있게 되었음.
+   - 단편적이나마 함께 성장하는 법에 대해서 배울 수 있었다.
+</div>
+
+---
+#### 한은혁
+
+<div class="small">
+
+- 이번 프로젝트를 하면서 화면 개발에 있어 기본에 충실한 코드, 클린한 코드로 작성하고자 했습니다. 이전 프로젝트까지는 기능에만 몰두한 반면 이번 프로젝트에서는 기능별로 분리된 코드, 한 눈에 알아볼 수 있는 코드를 유지하며 작업했기에 더 발전할 수 있었습니다. 
+
+- 프로젝트를 진행하면서 팀원들과 꾸준한 소통을 한 것이 좋은 결과를 내는데 도움이 되었다고 생각합니다. 각자의 장점을 살려 프로젝트를 올바른 길로 유도할 수 있었고 서로 소통하면서 자의 생각을 나누며 서로 배울 수 있는 기회가 된 것 같습니다.
+
+- 기획에서의 아쉬움으로 UI가 자주 변경되야하는 아쉬움이 남지만, 이 또한 경험이라 생각하며 얻어가는 것이 많은 프로젝트라고 생각합니다.
+
+</div>
+
 ---

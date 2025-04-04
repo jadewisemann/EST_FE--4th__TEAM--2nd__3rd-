@@ -3,10 +3,6 @@ import { processPayment } from '../firebase/paymentApi';
 export const requestPayment = async paymentData =>
   await processPayment(paymentData);
 
-export const getPaymentStatus = () => {
-  // TODO: 결제 상태 반환 함수 추가 필요
-};
-
 export const validatePaymentData = (userId, amount, reservationData) => {
   const errors = {};
 

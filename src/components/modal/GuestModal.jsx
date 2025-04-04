@@ -57,6 +57,7 @@ const GuestModal = () => {
           callback={closeGuestModal}
           rightButton={false}
           fixed={false}
+          leftButton='close'
         />
         <div className='flex grow flex-col'>
           <Counter

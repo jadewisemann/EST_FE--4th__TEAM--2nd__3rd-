@@ -7,6 +7,7 @@ const Tab = ({ categories = [], activeTab = 0, setActiveTab, children }) => (
       >
         {categories.map((item, idx) => (
           <button
+            type='button'
             key={idx}
             onClick={() => {
               setActiveTab(idx);

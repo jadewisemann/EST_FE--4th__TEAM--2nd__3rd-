@@ -28,6 +28,7 @@ const FilterModal = ({ isOpen, title, onClose, onConfirm, selected }) => {
               className='border-b-1 border-neutral-300 px-5 dark:bg-neutral-800'
             >
               <button
+                type='button'
                 className={`flex w-full cursor-pointer items-center justify-between py-4 text-left ${
                   selected === item
                     ? 'font-bold text-violet-600 dark:text-violet-400'

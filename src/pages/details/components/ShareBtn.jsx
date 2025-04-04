@@ -42,9 +42,9 @@ const ShareBtn = ({ product }) => {
         type='button'
         className='absolute top-3 right-3 z-1 cursor-pointer'
         onClick={shareKakao}
+        aria-label={`${product.title} 공유하기`}
       >
         <Icon name='share' color='white' size={30} />
-        <span className='sr-only'>공유하기</span>
       </button>
     </>
   );

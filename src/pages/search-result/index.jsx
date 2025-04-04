@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useModalStore from '../../store/modalStore';
@@ -13,14 +13,24 @@ import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 
 const DEFAULT_KEYWORD = '서울';
-const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외숙소'];
+const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔'];
+const CATEGORY_MAPPING = {
+  1: 'hotel',
+  2: 'pension',
+  3: 'motel',
+};
 
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 10;
 const MAX_SEARCH_LIMIT = 20;
 
 const SCROLL_LOAD_DURATION = 500; // ms
 
 const sanitizeKeyword = keyword => keyword.replace(/[~*/\[\]]/g, '');
+
+const getCategoryByTabIndex = tabIndex => {
+  if (tabIndex === 0) return null;
+  return CATEGORY_MAPPING[tabIndex];
+};
 
 const useHotelData = (keywordFromQuery, activeTab) => {
   const [hotelList, setHotelList] = useState([]);
@@ -34,19 +44,22 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       return keywordFromQuery.split(',').map(k => sanitizeKeyword(k.trim()));
     }
 
-    return [sanitizeKeyword(CATEGORIES[activeTab])];
+    return [sanitizeKeyword(keywordFromQuery)];
   }, [keywordFromQuery, activeTab]);
 
-  // 초기 데이터 로딩
   const fetchInitialData = useCallback(async () => {
     setIsLoading(true);
     try {
       const keywords = prepareKeywords();
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+      const category = getCategoryByTabIndex(activeTab);
+
+      console.log(`검색 시작: 키워드=${primaryKeyword}, 카테고리=${category}`);
 
       const response = await searchHotelsAdvanced(
         primaryKeyword,
         null,
+        category,
         MAX_SEARCH_LIMIT,
         MAX_SEARCH_LIMIT,
         null,
@@ -54,10 +67,11 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       );
 
       let results = response.hotels || [];
+      console.log(`검색 결과: ${results.length}개 항목 찾음`);
 
       if (activeTab === 0 && keywords.length > 1) {
         const secondaryResults = await Promise.all(
-          keywords.slice(1).map(k => searchHotelsAdvanced(k)),
+          keywords.slice(1).map(k => searchHotelsAdvanced(k, null, category)),
         );
 
         const secondaryMerged = secondaryResults.flat();
@@ -103,10 +117,12 @@ const useHotelData = (keywordFromQuery, activeTab) => {
     try {
       const keywords = prepareKeywords();
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
+      const category = getCategoryByTabIndex(activeTab);
 
       const res = await searchHotelsAdvanced(
         primaryKeyword,
         null,
+        category,
         MAX_SEARCH_LIMIT,
         MAX_SEARCH_LIMIT,
         lastDoc,
@@ -114,7 +130,7 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       );
 
       if (res.hotels?.length > 0) {
-        // 중복 제거 => 호첼 업데이트
+        // 중복 제거 => 호텔 업데이트
         const existingIds = new Set(hotelList.map(h => h.id));
         const uniqueNewHotels = res.hotels.filter(
           hotel => !existingIds.has(hotel.id),
@@ -144,6 +160,7 @@ const useHotelData = (keywordFromQuery, activeTab) => {
     lastDoc,
     visibleProducts.length,
     prepareKeywords,
+    activeTab,
   ]);
 
   const resetData = useCallback(() => {
@@ -207,9 +224,10 @@ const SearchResultPage = () => {
   const [searchParams] = useSearchParams();
   const keywordFromQuery = searchParams.get('keyword') || DEFAULT_KEYWORD;
 
-  const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState(0);
+  const keywordIndex = CATEGORIES.indexOf(keywordFromQuery);
+  const [activeTab, setActiveTab] = useState(
+    keywordIndex !== -1 ? keywordIndex : 0,
+  );
 
   const {
     visibleProducts,
@@ -240,7 +258,7 @@ const SearchResultPage = () => {
       {/* 헤더 */}
       <div className='center-fixed-item fixed top-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800 dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)]'>
         <button
-          className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 dark:border-neutral-400'
+          className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 hover:cursor-pointer dark:border-neutral-400'
           onClick={openSearchModal}
         >
           <Icon
@@ -254,10 +272,6 @@ const SearchResultPage = () => {
               {headerInfo.numOfAdults}명
             </span>
           </div>
-          <Icon
-            className='ml-auto text-neutral-600 dark:text-neutral-400'
-            name='close'
-          />
         </button>
       </div>
       <div className='h-16'></div>
@@ -267,7 +281,12 @@ const SearchResultPage = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       >
-        <VerticalList products={visibleProducts} isLoading={isLoading} />
+        <VerticalList
+          products={visibleProducts}
+          isLoading={isLoading}
+          activeTab={activeTab}
+          query={keywordFromQuery}
+        />
 
         {/* 트리거 */}
         {hasMore && !isLoading && (
@@ -333,7 +352,6 @@ const SearchResultPage = () => {
                 </circle>
               </svg>
             </div>
-            {/* <div className='inline-block h-8 w-8 animate-spin rounded-full border-t-2 border-b-2 border-violet-600'></div> */}
           </div>
         )}
       </Tab>

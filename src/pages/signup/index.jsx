@@ -32,11 +32,7 @@ const SignupPage = () => {
       await signUp(email, password);
       navigate('/login'); // 회원가입 성공 시 로그인 페이지 이동
     } catch (error) {
-      if (error.message.includes('auth/invalid-email')) {
-        showToast('올바른 이메일을 입력해주세요.');
-      } else if (error.message.includes('auth/missing-password')) {
-        showToast('비밀번호를 입력해주세요.');
-      } else if (error.message.includes('auth/email-already-in-use')) {
+      if (error.message.includes('auth/email-already-in-use')) {
         setEmail('');
         setIsEmailValid(false);
         showToast('중복된 이메일이 있습니다.');

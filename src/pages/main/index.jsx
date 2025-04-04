@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import useAppDataStore from '../../store/appDataStore';
 import useAuthStore from '../../store/authStore';
-import useDarkModeStore from '../../store/darkModeStore';
 import useModalStore from '../../store/modalStore';
 
 import { searchHotelsAdvanced } from '../../firebase/searchQuery';
@@ -22,7 +21,6 @@ const MainPage = () => {
   const { user } = useAuthStore();
   const { dates, guests } = useAppDataStore();
   const { modals, openDateModal, openGuestModal } = useModalStore();
-  const { toggleDarkMode } = useDarkModeStore();
 
   const [searchText, setSearchText] = useState('');
   const [recommendedHotels, setRecommendedHotels] = useState([]);
@@ -53,15 +51,7 @@ const MainPage = () => {
 
   // 백그라운드 이미지
   useEffect(() => {
-    const hotelImages = [
-      '/src/assets/img/bg-main-01.png',
-      '/src/assets/img/bg-main-02.png',
-      '/src/assets/img/bg-main-03.png',
-      '/src/assets/img/bg-main-04.png',
-      '/src/assets/img/bg-main-05.png',
-      '/src/assets/img/bg-main-06.png',
-      '/src/assets/img/bg-main-07.png',
-    ];
+    const hotelImages = ['/src/assets/img/bg-main-05.png'];
     const randomImage =
       hotelImages[Math.floor(Math.random() * hotelImages.length)];
     setBackgroundImage(randomImage);
@@ -88,7 +78,7 @@ const MainPage = () => {
   // 검색 실행 함수
   const handleSearch = e => {
     e.preventDefault();
-    if (!searchText.trim()) return;
+    if (!searchText.trim()) setSearchText('서울');
     const encoded = encodeURIComponent(searchText);
     navigate(`/search-result?keyword=${encoded}`);
   };
@@ -128,29 +118,25 @@ const MainPage = () => {
 
   return (
     <>
-      {/* <button
-        type='button'
-        className='absolute top-4 right-4 cursor-pointer bg-violet-600 dark:bg-violet-400'
-        onClick={() => toggleDarkMode()}
-      >
-        <strong className='text-white'>다크모드</strong>
-      </button> */}
+      <header className='flex h-14 items-center'>
+        <h1 className='dark:text-dark px-6 text-2xl text-white'>POOKJAYO</h1>
+      </header>
       <div
-        className='bg-no-repeat'
+        className='-mt-14 bg-no-repeat'
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
-        <div className='px-5 pt-16 pb-10'>
-          <div className='flex flex-col items-center text-xl text-white'>
+        <div className='px-5 pt-20 pb-10'>
+          <div className='flex flex-col items-center text-xl font-bold text-white'>
             <Link to={user ? '/mypage' : '/login'}>
-              <strong className='underline'>
+              <span className='underline'>
                 {user
                   ? `${user.displayName || user.email?.split('@')[0]}`
                   : '로그인'}
                 {''}
-              </strong>
+              </span>
               님
             </Link>
-            <strong>환영합니다.</strong>
+            환영합니다.
           </div>
           <form onSubmit={handleSearch}>
             <div className='mt-5 flex flex-col gap-3'>
@@ -159,6 +145,7 @@ const MainPage = () => {
                 value={searchText}
                 onChange={setSearchText}
                 placeholder={'숙박명 검색'}
+                inputClass='placeholder:text-neutral-800'
               />
               <Button
                 color='line'
@@ -180,7 +167,7 @@ const MainPage = () => {
                 onClick={openGuestModal}
               >
                 <Icon name='user' />
-                {`객실${guests.rooms}개 성인${guests.adults}명 아동${guests.children}명 유아${guests.infants}명`}
+                {`객실${guests.rooms}개 성인${guests.adults}명 아동${guests.children}명`}
               </Button>
             </div>
             <Button
@@ -194,8 +181,8 @@ const MainPage = () => {
           </form>
         </div>
 
-        <div className='rounded-t-md bg-white p-5 pb-[80px] dark:bg-neutral-800'>
-          <div className='mt-1 flex items-start justify-between gap-5'>
+        <div className='rounded-t-md bg-white p-5 pb-20 dark:bg-neutral-800'>
+          <div className='category-grid grid justify-between gap-2'>
             {categories.map((item, idx) => (
               <button
                 key={idx}
@@ -212,9 +199,9 @@ const MainPage = () => {
             ))}
           </div>
           <div className='mt-7 mb-4 flex items-center justify-between'>
-            <h4 className='text-base font-bold dark:text-neutral-50'>
+            <h2 className='text-base font-bold dark:text-neutral-50'>
               추천호텔
-            </h4>
+            </h2>
             <button
               className='cursor-pointer text-sm text-violet-600 dark:text-violet-400'
               onClick={recommendedHotelviewMore}
