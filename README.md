@@ -70,7 +70,8 @@
   
 ### 프로젝트 관리
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
-![GitHub](https://img.shields.io/badge/githubwiki-181717?style=for-the-badge&logo=github)
+![GitHub](https://img.shields.io/badge/github_wiki-181717?style=for-the-badge&logo=github)
+![GitHub](https://img.shields.io/badge/github_project-181717?style=for-the-badge&logo=github)
 
 [![discord](https://img.shields.io/badge/Discord-blue?style=for-the-badge)](https://discord.com/)
 
