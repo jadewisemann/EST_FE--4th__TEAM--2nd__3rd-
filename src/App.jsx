@@ -22,12 +22,11 @@ import {
 
 import ModalProvider from './components/modal/ModalProvider';
 import ToastProvider from './components/ToastProvider';
+import TopButton from './components/TopButton';
 
 import './App.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
-
-import TopButton from './components/TopButton';
 
 const App = () => {
   const location = useLocation();
