@@ -21,6 +21,7 @@ import Button from '../../components/Button';
 import DetailSection from '../../components/DetailSection';
 import Icon from '../../components/Icon';
 import Loading from '../../components/Loading';
+import MetaData from '../../components/MetaData';
 import Rating from '../../components/Rating';
 import SubHeader from '../../components/SubHeader';
 
@@ -81,9 +82,26 @@ const DetailsPage = () => {
 
   // 남아있는 방 개수
   const remainingRooms = data.rooms.length - visibleRooms;
-
+  console.log(data);
   return (
     <>
+      <MetaData
+        title={data ? `${data.title} | 푹자요` : '숙소 상세 | 푹자요'}
+        description={
+          data
+            ? `${data.title}의 상세 정보, 객실, 편의시설 및 리뷰를 확인하세요.`
+            : '숙소의 상세 정보, 객실, 편의시설 및 리뷰를 확인하세요.'
+        }
+        keywords={`${data?.title}, 객실 정보, 호텔 시설, 리뷰, 예약`}
+        ogTitle={data ? `${data.title} | 푹자요` : '숙소 상세 | 푹자요'}
+        ogDescription={
+          data
+            ? `${data.title}의 모든 정보와 최저가 객실을 확인하세요.`
+            : '숙소의 모든 정보와 최저가 객실을 확인하세요.'
+        }
+        ogImage={data?.images?.[0] || '/src/assets/img/bg_logo.svg'}
+      />
+
       <header>
         <SubHeader
           leftButton='arrow'

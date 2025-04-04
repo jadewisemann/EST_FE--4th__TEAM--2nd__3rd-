@@ -13,6 +13,7 @@ import HorizontalList from '../../components/HorizontalList';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
+import MetaData from '../../components/MetaData';
 import DateModal from '../../components/modal/DateModal';
 import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
@@ -117,6 +118,14 @@ const MainPage = () => {
 
   return (
     <>
+      <MetaData
+        title='푹자요 | 최고의 숙박 예약 서비스'
+        description='푹자요에서 최고의 숙박 경험을 시작하세요. 전국 호텔, 리조트, 펜션을 한 곳에서!'
+        keywords='숙박, 호텔, 예약, 펜션, 리조트, 여행'
+        ogTitle='푹자요 - 당신의 완벽한 숙박을 위한 곳'
+        ogDescription='푹자요에서 최고의 숙박 경험을 시작하세요. 전국 호텔, 리조트, 펜션을 한 곳에서!'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       <header className='flex h-14 items-center'>
         <h1 className='dark:text-dark px-6 text-2xl text-white'>POOKJAYO</h1>
       </header>

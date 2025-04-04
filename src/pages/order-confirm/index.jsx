@@ -3,6 +3,7 @@ import useReservationStore from '../../store/reservationStore';
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
+import MetaData from '../../components/MetaData';
 import SubHeader from '../../components/SubHeader';
 
 const OrderConfirm = () => {
@@ -10,6 +11,14 @@ const OrderConfirm = () => {
 
   return (
     <>
+      <MetaData
+        title='예약 확인 | 푹자요'
+        description='예약이 성공적으로 완료되었습니다. 예약 내역을 확인하세요.'
+        keywords='예약 확인, 예약 완료, 예약 내역'
+        ogTitle='예약 확인 | 푹자요'
+        ogDescription='예약이 성공적으로 완료되었습니다. 예약 내역을 확인하세요.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       <SubHeader leftButton='arrow' title='결제 완료' fixed={true} />
       <div className='container mb-[60px]'>
         <Complete

@@ -11,6 +11,7 @@ import useToastStore from '../../store/toastStore';
 // Component
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import MetaData from '../../components/MetaData';
 import SubHeader from '../../components/SubHeader';
 
 const SignupPage = () => {
@@ -44,9 +45,16 @@ const SignupPage = () => {
 
   return (
     <>
+      <MetaData
+        title='회원가입 | 푹자요'
+        description='푹자요의 회원이 되어 다양한 혜택을 누려보세요. 간편한 회원가입 절차로 빠르게 가입할 수 있습니다.'
+        keywords='회원가입, 신규 회원, 가입'
+        ogTitle='회원가입 | 푹자요'
+        ogDescription='푹자요의 회원이 되어 다양한 혜택을 누려보세요. 간편한 회원가입 절차로 빠르게 가입할 수 있습니다.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />{' '}
       {/* 서브 헤더 */}
       <SubHeader hasShadow={false} zIndex={10} />
-
       <div className='flex h-screen flex-col px-6 pt-18 dark:bg-neutral-800'>
         {/* 페이지 정보 */}
         <div className='mb-10 flex flex-col gap-5'>
@@ -99,10 +107,10 @@ const SignupPage = () => {
             content='회원가입'
             childrenClassName='font-bold'
             disabled={
-              !isEmailValid ||
-              !isPasswordValid ||
-              !isNameValid ||
-              !isConfirmValid
+              !isEmailValid
+              || !isPasswordValid
+              || !isNameValid
+              || !isConfirmValid
             }
           />
         </form>

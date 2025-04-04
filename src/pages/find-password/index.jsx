@@ -5,6 +5,7 @@ import useToastStore from '../../store/toastStore';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import MetaData from '../../components/MetaData';
 import SubHeader from '../../components/SubHeader';
 
 const FindPasswordPage = () => {
@@ -30,6 +31,14 @@ const FindPasswordPage = () => {
 
   return (
     <>
+      <MetaData
+        title='비밀번호 찾기 | 푹자요'
+        description='계정의 비밀번호를 찾는 방법을 안내해 드립니다.'
+        keywords='비밀번호 찾기, 계정 복구, 로그인 도움'
+        ogTitle='비밀번호 찾기 | 푹자요'
+        ogDescription='계정의 비밀번호를 찾는 방법을 안내해 드립니다.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       {/* 서브 헤더 */}
       <SubHeader hasShadow={false} zIndex={10} />
 

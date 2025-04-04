@@ -13,6 +13,7 @@ import CheckBox from '../../components/CheckBox';
 import DetailSection from '../../components/DetailSection';
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
+import MetaData from '../../components/MetaData';
 import Radio from '../../components/Radio';
 import SubHeader from '../../components/SubHeader';
 
@@ -175,6 +176,14 @@ const CheckoutPage = () => {
 
   return (
     <>
+      <MetaData
+        title='예약 및 결제 | 푹자요'
+        description='선택하신 객실을 예약하고 결제를 진행합니다. 안전하고 빠른 결제 시스템을 이용해보세요.'
+        keywords='예약, 결제, 객실 예약, 호텔 예약'
+        ogTitle='예약 및 결제 | 푹자요'
+        ogDescription='선택하신 객실을 예약하고 결제를 진행합니다. 안전하고 빠른 결제 시스템을 이용해보세요.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       <header>
         <SubHeader leftButton='arrow' title='예약 확인 및 결제' zIndex={10} />
       </header>

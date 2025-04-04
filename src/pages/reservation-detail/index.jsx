@@ -2,17 +2,15 @@ import { useEffect, useState } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
 
-// store
 import { useUserStore } from '../../store/userStore';
 
-// data
 import { getRoomById } from '../../firebase/searchQuery';
 
-// component
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
 import Loading from '../../components/Loading';
+import MetaData from '../../components/MetaData';
 import SubHeader from '../../components/SubHeader';
 
 const ReservationDetailPage = () => {
@@ -66,6 +64,14 @@ const ReservationDetailPage = () => {
 
   return (
     <>
+      <MetaData
+        title='예약 상세 | 푹자요'
+        description='예약하신 숙소의 상세 정보를 확인하세요.'
+        keywords='예약 상세, 예약 정보, 객실 정보'
+        ogTitle='예약 상세 | 푹자요'
+        ogDescription='예약하신 숙소의 상세 정보를 확인하세요.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       <header>
         <SubHeader leftButton='arrow' title='예약 확인' />
       </header>
