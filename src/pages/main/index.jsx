@@ -51,7 +51,7 @@ const MainPage = () => {
 
   // 백그라운드 이미지
   useEffect(() => {
-    const hotelImages = ['/src/assets/img/bg-main-05.png'];
+    const hotelImages = ['/assets/img/bg-main-05.png'];
     const randomImage =
       hotelImages[Math.floor(Math.random() * hotelImages.length)];
     setBackgroundImage(randomImage);
@@ -59,23 +59,23 @@ const MainPage = () => {
   //카테고리 필터 아이콘 데이터
   const categories = [
     {
-      src: '/src/assets/ico/icon-hotel.png',
+      src: '/assets/ico/icon-hotel.png',
       label: '호텔/리조트',
     },
     {
-      src: '/src/assets/ico/ico-pension.png',
+      src: '/assets/ico/ico-pension.png',
       label: '펜션/풀빌라',
     },
     {
-      src: '/src/assets/ico/icon-motel.png',
+      src: '/assets/ico/icon-motel.png',
       label: '모텔',
     },
     {
-      src: '/src/assets/ico/icon-overseas.png',
+      src: '/assets/ico/icon-overseas.png',
       label: '해외숙소',
     },
   ];
-  // 검색 실행 함수
+
   const handleSearch = e => {
     e.preventDefault();
     if (!searchText.trim()) setSearchText('서울');
