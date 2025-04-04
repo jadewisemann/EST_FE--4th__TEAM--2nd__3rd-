@@ -1,6 +1,5 @@
 <p align="center">
-  <h1 align="center">Pookjayo</h1>
-  <img src="/src/assets/img/bg_logo.svg">
+  <img src="/src/assets/img/bg_logo.svg" alt="pookjayo">
 </p>
 
 <b><i><p align="center">EST soft, FE 4기, 2조</p></i></b>
@@ -135,10 +134,13 @@
 ## 주요 기능 설명
 
 ### 매인 페이지
-
-<img src="docs/ppt/screen-shot/01.png" height="600px">
-<img src="docs/ppt/screen-shot/02.png" height="600px">
-<img src="docs/ppt/screen-shot/03.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/01.png" height="600px">
+    <img src="docs/ppt/screen-shot/02.png" height="600px">
+    <img src="docs/ppt/screen-shot/03.png" height="600px">
+  </tr>
+</table>
 
 - 검색 기능
 - 추천 호텔 및 카테고리 바로 가기 가능
@@ -146,10 +148,13 @@
 - 사람수 선택택 모달
 
 ### 검색 결과 페이지
-
-<img src="docs/ppt/screen-shot/04.png" height="600px">
-<img src="docs/ppt/screen-shot/05.png" height="600px">
-<img src="docs/ppt/screen-shot/06.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/04.png" height="600px">
+    <img src="docs/ppt/screen-shot/05.png" height="600px">
+    <img src="docs/ppt/screen-shot/06.png" height="600px">
+  </tr>
+</table>
 
 - 검색어로 검색결과
 - 검색 모달로 검색 가능
@@ -157,8 +162,13 @@
   
 ### 관심 숙소
 
-<img src="docs/ppt/screen-shot/07.png" height="600px">
-<img src="docs/ppt/screen-shot/08.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/07.png" height="600px">
+    <img src="docs/ppt/screen-shot/08.png" height="600px">
+  </tr>
+</table>
+
 
 - 검색 결과에서 하트를 눌러 관심숙소에 추가 가능
 - 관심숙소 페이지에 저장됨
@@ -166,35 +176,52 @@
   
 ### 로그인
 
-<img src="docs/ppt/screen-shot/09.png" height="600px">
-<img src="docs/ppt/screen-shot/10.png" height="600px">
-<img src="docs/ppt/screen-shot/11.png" height="600px">
+
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/09.png" height="600px">
+    <img src="docs/ppt/screen-shot/10.png" height="600px">
+    <img src="docs/ppt/screen-shot/11.png" height="600px">
+  </tr>
+</table>
 
 - 입력 검증
 - 서버 측 로그인 검증증
 
 ### 회원가입
 
-<img src="docs/ppt/screen-shot/12.png" height="600px">
-<img src="docs/ppt/screen-shot/13.png" height="600px">
-<img src="docs/ppt/screen-shot/14.png" height="600px">
+<table>
+  <tr>
+    <td><img src="docs/ppt/screen-shot/12.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/13.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/14.png" height="600px"></td>
+  </tr>
+</table>
 
 - 입력 검증
 - 서버 측 로그인 검증증
 - 회원가입시 자동 로그인 및 라우팅팅
 
 ### 상세 페이지
-
-<img src="docs/ppt/screen-shot/17.png" height="600px">
-<img src="docs/ppt/screen-shot/18.png" height="600px">
-<img src="docs/ppt/screen-shot/19.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/17.png" height="600px">
+    <img src="docs/ppt/screen-shot/18.png" height="600px">
+    <img src="docs/ppt/screen-shot/19.png" height="600px">
+  </tr>
+</table>
 
 
 ### 결제 페이지
 
-<img src="docs/ppt/screen-shot/20.png" height="600px">
-<img src="docs/ppt/screen-shot/21.png" height="600px">
-<img src="docs/ppt/screen-shot/22.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/20.png" height="600px">
+    <img src="docs/ppt/screen-shot/21.png" height="600px">
+    <img src="docs/ppt/screen-shot/22.png" height="600px">
+  </tr>
+</table>
+
 
 - 입력 값에 따라 결제 검증 및 제출
 - 서버에 예약 내역 기록
@@ -207,17 +234,27 @@
 
 ### 예약 상세
 
-<img src="docs/ppt/screen-shot/23.png" height="600px">
-<img src="docs/ppt/screen-shot/24.png" height="600px">
-<img src="docs/ppt/screen-shot/25.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/23.png" height="600px">
+    <img src="docs/ppt/screen-shot/24.png" height="600px">
+    <img src="docs/ppt/screen-shot/25.png" height="600px">
+  </tr>
+</table>
+
 
 - 서버에서 예약 내역 가져오서 상세 확인
 
 ### 다크모드
 
-<img src="docs/ppt/screen-shot/28.png" height="600px">
-<img src="docs/ppt/screen-shot/29.png" height="600px">
-<img src="docs/ppt/screen-shot/30.png" height="600px">
+<table>
+  <tr>
+    <img src="docs/ppt/screen-shot/28.png" height="600px">
+    <img src="docs/ppt/screen-shot/29.png" height="600px">
+    <img src="docs/ppt/screen-shot/30.png" height="600px">
+  </tr>
+</table>
+
 
 - 마이페이지에서 다크모드 
   - 시스템 설정이랑 로컬 스토리지 확인해서 구현현
