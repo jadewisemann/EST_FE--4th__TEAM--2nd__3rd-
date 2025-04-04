@@ -1,7 +1,7 @@
 {
-  "name": "vite-react-v19-tailwind-v4",
+  "name": "pookjayo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -13,6 +13,7 @@ import { getRoomById } from '../../firebase/searchQuery';
 import Button from '../../components/Button';
 import Complete from '../../components/Complete';
 import DetailSection from '../../components/DetailSection';
+import MetaData from '../../components/MetaData';
 import Nav from '../../components/Nav';
 import SubHeader from '../../components/SubHeader';
 import VerticalList from '../../components/VerticalList';
@@ -54,10 +55,10 @@ const MyPage = () => {
             return {
               ...res,
               title:
-                room?.hotel_title ||
-                room?.title ||
-                res?.roomName ||
-                '객실 정보 없음',
+                room?.hotel_title
+                || room?.title
+                || res?.roomName
+                || '객실 정보 없음',
               image: room?.img || '이미지 없음',
               price: room?.price || room?.price_final || '금액 정보 없음',
             };
@@ -91,6 +92,14 @@ const MyPage = () => {
 
   return (
     <>
+      <MetaData
+        title='마이페이지 | 푹자요'
+        description='회원님의 정보와 예약 내역을 확인하세요. 예약 관리, 정보 수정 등 다양한 기능을 이용할 수 있습니다.'
+        keywords='마이페이지, 회원정보, 예약내역'
+        ogTitle='마이페이지 | 푹자요'
+        ogDescription='회원님의 정보와 예약 내역을 확인하세요. 예약 관리, 정보 수정 등 다양한 기능을 이용할 수 있습니다.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
       <header>
         <Nav />
       </header>

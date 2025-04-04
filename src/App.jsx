@@ -9,9 +9,7 @@ import {
   LoginPage,
   MainPage,
   NotFoundPage,
-  PaymentPage,
   SignupPage,
-  UserInfoPage,
   WishlistPage,
   OrderConfirm,
   ReservationDetailPage,
@@ -46,8 +44,6 @@ const App = () => {
         <Route path='/details/:hotelId' element={<DetailsPage />} />
 
         <Route path='/order-confirm' element={<OrderConfirm />} />
-        <Route path='/payment' element={<PaymentPage />} />
-        <Route path='/user-info' element={<UserInfoPage />} />
         <Route path='/wishlist' element={<WishlistPage />} />
         <Route
           path='/reservation-detail/:roomId/:reservationId'

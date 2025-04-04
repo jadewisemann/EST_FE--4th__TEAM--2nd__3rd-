@@ -8,6 +8,7 @@ import useModalStore from '../../store/modalStore';
 import { searchHotelsAdvanced } from '../../firebase/searchQuery';
 
 import Icon from '../../components/Icon';
+import MetaData from '../../components/MetaData';
 import Nav from '../../components/Nav';
 import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
@@ -251,110 +252,136 @@ const SearchResultPage = () => {
   }, [activeTab, keywordFromQuery, resetData, fetchInitialData]);
 
   return (
-    <div className='dark:bg-neutral-800'>
-      {/* 헤더 */}
-      <div className='center-fixed-item fixed top-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800 dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)]'>
-        <button
-          className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 hover:cursor-pointer dark:border-neutral-400'
-          onClick={openSearchModal}
-        >
-          <Icon
-            className='mr-3 text-violet-600 dark:text-violet-400'
-            name='search'
-          />
-          <div className='flex flex-col items-start text-sm dark:text-neutral-50'>
-            <strong>{headerInfo.name}</strong>
-            <span className='text-xs'>
-              {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{' '}
-              {headerInfo.numOfAdults}명
-            </span>
-          </div>
-        </button>
-      </div>
-      <div className='h-16'></div>
-
-      <Tab
-        categories={CATEGORIES}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      >
-        <VerticalList
-          products={visibleProducts}
-          isLoading={isLoading}
-          activeTab={activeTab}
-          query={keywordFromQuery}
-        />
-
-        {/* 트리거 */}
-        {hasMore && !isLoading && (
-          <div
-            ref={loadMoreButtonRef}
-            className='flex h-20 w-full items-center justify-center'
+    <>
+      <MetaData
+        title={
+          keywordFromQuery
+            ? `"${keywordFromQuery}" 검색 결과 | 푹자요`
+            : '검색 결과 | 푹자요'
+        }
+        description={
+          keywordFromQuery
+            ? `"${keywordFromQuery}"에 대한 검색 결과입니다. 최적의 숙소를 찾아보세요.`
+            : '검색하신 조건에 맞는 숙소 목록입니다.'
+        }
+        keywords={`검색 결과, 숙소 검색, 호텔 검색, ${keywordFromQuery}`}
+        ogTitle={
+          keywordFromQuery
+            ? `"${keywordFromQuery}" 검색 결과 | 푹자요`
+            : '검색 결과 | 푹자요'
+        }
+        ogDescription={
+          keywordFromQuery
+            ? `"${keywordFromQuery}"에 대한 검색 결과입니다. 최적의 숙소를 찾아보세요.`
+            : '검색하신 조건에 맞는 숙소 목록입니다.'
+        }
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
+      <div className='dark:bg-neutral-800'>
+        {/* 헤더 */}
+        <div className='center-fixed-item fixed top-0 z-10 w-full bg-white px-5 py-3 shadow-md dark:bg-neutral-800 dark:shadow-[0_2px_10px_rgba(255,255,255,0.25)]'>
+          <button
+            className='flex w-full items-center rounded-full border border-neutral-300 px-4 py-1 hover:cursor-pointer dark:border-neutral-400'
+            onClick={openSearchModal}
           >
-            <div className='h-12 w-12'>
-              <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-                <circle
-                  fill='#7f22fe'
-                  stroke='#7f22fe'
-                  strokeWidth='4'
-                  r='15'
-                  cx='40'
-                  cy='100'
-                >
-                  <animate
-                    attributeName='opacity'
-                    calcMode='spline'
-                    dur='1'
-                    values='1;0;1;'
-                    keySplines='.5 0 .5 1;.5 0 .5 1'
-                    repeatCount='indefinite'
-                    begin='-.4'
-                  ></animate>
-                </circle>
-                <circle
-                  fill='#7f22fe'
-                  stroke='#7f22fe'
-                  strokeWidth='4'
-                  r='15'
-                  cx='100'
-                  cy='100'
-                >
-                  <animate
-                    attributeName='opacity'
-                    calcMode='spline'
-                    dur='1'
-                    values='1;0;1;'
-                    keySplines='.5 0 .5 1;.5 0 .5 1'
-                    repeatCount='indefinite'
-                    begin='-.2'
-                  ></animate>
-                </circle>
-                <circle
-                  fill='#7f22fe'
-                  stroke='#7f22fe'
-                  strokeWidth='4'
-                  r='15'
-                  cx='160'
-                  cy='100'
-                >
-                  <animate
-                    attributeName='opacity'
-                    calcMode='spline'
-                    dur='1'
-                    values='1;0;1;'
-                    keySplines='.5 0 .5 1;.5 0 .5 1'
-                    repeatCount='indefinite'
-                    begin='0'
-                  ></animate>
-                </circle>
-              </svg>
+            <Icon
+              className='mr-3 text-violet-600 dark:text-violet-400'
+              name='search'
+            />
+            <div className='flex flex-col items-start text-sm dark:text-neutral-50'>
+              <strong>{headerInfo.name}</strong>
+              <span className='text-xs'>
+                {headerInfo.fromToDate} ({headerInfo.totalNights}) 성인{' '}
+                {headerInfo.numOfAdults}명
+              </span>
             </div>
-          </div>
-        )}
-      </Tab>
+          </button>
+        </div>
+        <div className='h-16'></div>
 
-      <Nav />
-    </div>
+        <Tab
+          categories={CATEGORIES}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        >
+          <VerticalList
+            products={visibleProducts}
+            isLoading={isLoading}
+            activeTab={activeTab}
+            query={keywordFromQuery}
+          />
+
+          {/* 트리거 */}
+          {hasMore && !isLoading && (
+            <div
+              ref={loadMoreButtonRef}
+              className='flex h-20 w-full items-center justify-center'
+            >
+              <div className='h-12 w-12'>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+                  <circle
+                    fill='#7f22fe'
+                    stroke='#7f22fe'
+                    strokeWidth='4'
+                    r='15'
+                    cx='40'
+                    cy='100'
+                  >
+                    <animate
+                      attributeName='opacity'
+                      calcMode='spline'
+                      dur='1'
+                      values='1;0;1;'
+                      keySplines='.5 0 .5 1;.5 0 .5 1'
+                      repeatCount='indefinite'
+                      begin='-.4'
+                    ></animate>
+                  </circle>
+                  <circle
+                    fill='#7f22fe'
+                    stroke='#7f22fe'
+                    strokeWidth='4'
+                    r='15'
+                    cx='100'
+                    cy='100'
+                  >
+                    <animate
+                      attributeName='opacity'
+                      calcMode='spline'
+                      dur='1'
+                      values='1;0;1;'
+                      keySplines='.5 0 .5 1;.5 0 .5 1'
+                      repeatCount='indefinite'
+                      begin='-.2'
+                    ></animate>
+                  </circle>
+                  <circle
+                    fill='#7f22fe'
+                    stroke='#7f22fe'
+                    strokeWidth='4'
+                    r='15'
+                    cx='160'
+                    cy='100'
+                  >
+                    <animate
+                      attributeName='opacity'
+                      calcMode='spline'
+                      dur='1'
+                      values='1;0;1;'
+                      keySplines='.5 0 .5 1;.5 0 .5 1'
+                      repeatCount='indefinite'
+                      begin='0'
+                    ></animate>
+                  </circle>
+                </svg>
+              </div>
+            </div>
+          )}
+        </Tab>
+
+        <Nav />
+      </div>
+    </>
   );
 };
 
