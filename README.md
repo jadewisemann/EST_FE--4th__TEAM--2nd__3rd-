@@ -29,7 +29,6 @@
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
@@ -41,7 +40,6 @@
 ### 의존성
 ![Zustand](https://img.shields.io/badge/Zustand-brown.svg?style=for-the-badge&logo=&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
-
 ![React Native](https://img.shields.io/badge/react_icon-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Swiper](https://img.shields.io/badge/Swiper-F06A6A.svg?style=for-the-badge&logo=&logoColor=white)
 
@@ -69,8 +67,8 @@
   
 ### 프로젝트 관리
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
-![GitHub](https://img.shields.io/badge/githubwiki-181717?style=for-the-badge&logo=github)
-
+![GitHub](https://img.shields.io/badge/github_wiki-181717?style=for-the-badge&logo=github)
+![GitHub](https://img.shields.io/badge/github_project-181717?style=for-the-badge&logo=github)
 [![discord](https://img.shields.io/badge/Discord-blue?style=for-the-badge)](https://discord.com/)
 
 - 형상관리: `github`
@@ -80,7 +78,6 @@
 
 ### 데이터 크롤
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-
 ![Python](https://img.shields.io/badge/Beautiful_soup-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Selenium](https://img.shields.io/badge/-selenium-%43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 
