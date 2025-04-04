@@ -31,7 +31,6 @@ import 'swiper/css/pagination';
 const App = () => {
   const location = useLocation();
 
-  // 페이지별로 bottom 값 설정
   const bottomValue = () => {
     if (location.pathname.startsWith('/details/')) return 16;
     if (location.pathname.startsWith('/checkout/')) return 144;
@@ -54,23 +53,24 @@ const App = () => {
           path='/reservation-detail/:roomId/:reservationId'
           element={<ReservationDetailPage />}
         />
-        <Route path='/test' element={<TestPage />} />
         <Route path='/search-result' element={<SearchResultPage />} />
 
-      <Route element={<PublicRoute />}>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/signup' element={<SignupPage />} />
-        <Route path='/find-password' element={<FindPasswordPage />} />
-      </Route>
+        <Route element={<PublicRoute />}>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/find-password' element={<FindPasswordPage />} />
+        </Route>
 
-      <Route element={<PrivateRoute />}>
-        <Route path='/mypage' element={<MyPage />} />
-        <Route path='/checkout/:roomId' element={<CheckoutPage />} />
-      </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path='/mypage' element={<MyPage />} />
+          <Route path='/checkout/:roomId' element={<CheckoutPage />} />
+        </Route>
 
-      <Route path='/*' element={<NotFoundPage />} />
-    </Routes>
-  </>
-);
+        <Route path='/*' element={<NotFoundPage />} />
+      </Routes>
+      <TopButton bottom={bottomValue()} />
+    </>
+  );
+};
 
 export default App;
