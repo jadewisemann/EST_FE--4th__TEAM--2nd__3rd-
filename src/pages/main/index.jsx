@@ -51,7 +51,7 @@ const MainPage = () => {
 
   // 백그라운드 이미지
   useEffect(() => {
-    const hotelImages = ['/assets/img/bg-main-05.png'];
+    const hotelImages = ['/img/bg-main-05.png'];
     const randomImage =
       hotelImages[Math.floor(Math.random() * hotelImages.length)];
     setBackgroundImage(randomImage);
@@ -59,19 +59,19 @@ const MainPage = () => {
   //카테고리 필터 아이콘 데이터
   const categories = [
     {
-      src: '/assets/ico/icon-hotel.png',
+      src: '/ico/icon-hotel.png',
       label: '호텔/리조트',
     },
     {
-      src: '/assets/ico/ico-pension.png',
+      src: '/ico/ico-pension.png',
       label: '펜션/풀빌라',
     },
     {
-      src: '/assets/ico/icon-motel.png',
+      src: '/ico/icon-motel.png',
       label: '모텔',
     },
     {
-      src: '/assets/ico/icon-overseas.png',
+      src: '/ico/icon-overseas.png',
       label: '해외숙소',
     },
   ];
