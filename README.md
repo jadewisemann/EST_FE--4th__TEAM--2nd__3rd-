@@ -172,9 +172,9 @@
 ### 로그인
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/09.png" height="600px">
-  <img src="docs/ppt/screen-shot/10.png" height="600px">
-  <img src="docs/ppt/screen-shot/11.png" height="600px">
+  <img src="docs/ppt/screen-shot/09.png" height="500px">
+  <img src="docs/ppt/screen-shot/10.png" height="500px">
+  <img src="docs/ppt/screen-shot/11.png" height="500px">
 </p>
 
 - 입력 검증
@@ -183,9 +183,9 @@
 ### 회원가입
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/12.png" height="600px">
-  <img src="docs/ppt/screen-shot/13.png" height="600px">
-  <img src="docs/ppt/screen-shot/14.png" height="600px">
+  <img src="docs/ppt/screen-shot/12.png" height="500px">
+  <img src="docs/ppt/screen-shot/13.png" height="500px">
+  <img src="docs/ppt/screen-shot/14.png" height="500px">
 </p>
 
 - 입력 검증
@@ -195,18 +195,18 @@
 ### 상세 페이지
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/17.png" height="600px">
-  <img src="docs/ppt/screen-shot/18.png" height="600px">
-  <img src="docs/ppt/screen-shot/19.png" height="600px">
+  <img src="docs/ppt/screen-shot/17.png" height="500px">
+  <img src="docs/ppt/screen-shot/18.png" height="500px">
+  <img src="docs/ppt/screen-shot/19.png" height="500px">
 </p>
 
 
 ### 결제 페이지
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/20.png" height="600px">
-  <img src="docs/ppt/screen-shot/21.png" height="600px">
-  <img src="docs/ppt/screen-shot/22.png" height="600px">
+  <img src="docs/ppt/screen-shot/20.png" height="500px">
+  <img src="docs/ppt/screen-shot/21.png" height="500px">
+  <img src="docs/ppt/screen-shot/22.png" height="500px">
 </p>
 
 - 입력 값에 따라 결제 검증 및 제출
@@ -224,9 +224,9 @@
 ### 예약 상세
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/23.png" height="600px">
-  <img src="docs/ppt/screen-shot/24.png" height="600px">
-  <img src="docs/ppt/screen-shot/25.png" height="600px">
+  <img src="docs/ppt/screen-shot/23.png" height="500px">
+  <img src="docs/ppt/screen-shot/24.png" height="500px">
+  <img src="docs/ppt/screen-shot/25.png" height="500px">
 </p>
 
 - 서버에서 예약 내역 가져오서 상세 확인
@@ -234,9 +234,9 @@
 ### 다크모드
 
 <p align="center">
-  <img src="docs/ppt/screen-shot/28.png" height="600px">
-  <img src="docs/ppt/screen-shot/29.png" height="600px">
-  <img src="docs/ppt/screen-shot/30.png" height="600px">
+  <img src="docs/ppt/screen-shot/28.png" height="500px">
+  <img src="docs/ppt/screen-shot/29.png" height="500px">
+  <img src="docs/ppt/screen-shot/30.png" height="500px">
 </p>
 
 - 마이페이지에서 다크모드 
