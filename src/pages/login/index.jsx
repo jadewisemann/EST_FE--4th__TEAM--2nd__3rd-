@@ -1,10 +1,7 @@
-// React import
 import { useState } from 'react';
 
-// Library import
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// Store import
 import useAuthStore from '../../store/authStore';
 import useToastStore from '../../store/toastStore';
 
@@ -12,9 +9,8 @@ import Anchor from '../../components/Anchor';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
+import MetaData from '../../components/MetaData';
 import SubHeader from '../../components/SubHeader';
-
-// Component import
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -66,11 +62,18 @@ const LoginPage = () => {
 
   return (
     <>
-      {/* 서브 헤더 */}
+      <MetaData
+        title='로그인 | 푹자요'
+        description='푹자요 계정으로 로그인하세요. 로그인 후 더 많은 서비스를 이용하실 수 있습니다.'
+        keywords='로그인, 계정, 회원'
+        ogTitle='로그인 | 푹자요'
+        ogDescription='푹자요 계정으로 로그인하세요. 로그인 후 더 많은 서비스를 이용하실 수 있습니다.'
+        ogImage='/src/assets/img/bg_logo.svg'
+      />
+
       <SubHeader hasShadow={false} zIndex={10} />
 
       <div className='flex h-screen flex-col px-6 pt-18 dark:bg-neutral-800'>
-        {/* 페이지 정보 */}
         <div className='mb-10 flex flex-col gap-5'>
           <h2 className='text-4xl font-bold text-violet-600'>로그인</h2>
           <p>
