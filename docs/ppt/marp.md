@@ -749,8 +749,15 @@ return <Outlet />;
   <img src="./screen-shot/20.png" height="600px">
   <img src="./screen-shot/21.png" height="600px">
   <img src="./screen-shot/22.png" height="600px">
-
 </div>
+
+---
+<div class="header">프로젝트 수행 경과 / page / my-page </div>
+
+<div class="container">
+  <img src="./screen-shot/26.png" height="600px">
+</div>
+
 
 ---
 <div class="header">프로젝트 수행 경과 / page / reservation-detail </div>
@@ -759,6 +766,15 @@ return <Outlet />;
   <img src="./screen-shot/23.png" height="600px">
   <img src="./screen-shot/24.png" height="600px">
   <img src="./screen-shot/25.png" height="600px">
+</div>
+
+---
+<div class="header">프로젝트 수행 경과 / page / ...: dark mode </div>
+
+<div class="container">
+  <img src="./screen-shot/28.png" height="500px">
+  <img src="./screen-shot/29.png" height="500px">
+  <img src="./screen-shot/30.png" height="500px">
 </div>
 
 ---
