@@ -136,9 +136,9 @@
 ### 매인 페이지
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/01.png" height="600px">
-    <img src="docs/ppt/screen-shot/02.png" height="600px">
-    <img src="docs/ppt/screen-shot/03.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/01.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/02.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/03.png" height="600px"></td>
   </tr>
 </table>
 
@@ -150,9 +150,9 @@
 ### 검색 결과 페이지
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/04.png" height="600px">
-    <img src="docs/ppt/screen-shot/05.png" height="600px">
-    <img src="docs/ppt/screen-shot/06.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/04.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/05.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/06.png" height="600px"></td>
   </tr>
 </table>
 
@@ -164,8 +164,8 @@
 
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/07.png" height="600px">
-    <img src="docs/ppt/screen-shot/08.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/07.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/08.png" height="600px"></td>
   </tr>
 </table>
 
@@ -179,9 +179,9 @@
 
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/09.png" height="600px">
-    <img src="docs/ppt/screen-shot/10.png" height="600px">
-    <img src="docs/ppt/screen-shot/11.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/09.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/09.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/11.png" height="600px"></td>
   </tr>
 </table>
 
@@ -205,9 +205,9 @@
 ### 상세 페이지
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/17.png" height="600px">
-    <img src="docs/ppt/screen-shot/18.png" height="600px">
-    <img src="docs/ppt/screen-shot/19.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/17.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/18.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/19.png" height="600px"></td>
   </tr>
 </table>
 
@@ -216,9 +216,9 @@
 
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/20.png" height="600px">
-    <img src="docs/ppt/screen-shot/21.png" height="600px">
-    <img src="docs/ppt/screen-shot/22.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/20.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/21.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/22.png" height="600px"></td>
   </tr>
 </table>
 
@@ -236,9 +236,9 @@
 
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/23.png" height="600px">
-    <img src="docs/ppt/screen-shot/24.png" height="600px">
-    <img src="docs/ppt/screen-shot/25.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/23.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/24.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/25.png" height="600px"></td>
   </tr>
 </table>
 
@@ -249,9 +249,9 @@
 
 <table>
   <tr>
-    <img src="docs/ppt/screen-shot/28.png" height="600px">
-    <img src="docs/ppt/screen-shot/29.png" height="600px">
-    <img src="docs/ppt/screen-shot/30.png" height="600px">
+    <td><img src="docs/ppt/screen-shot/28.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/29.png" height="600px"></td>
+    <td><img src="docs/ppt/screen-shot/30.png" height="600px"></td>
   </tr>
 </table>
 
