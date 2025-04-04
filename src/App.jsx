@@ -29,13 +29,12 @@ import UserTestPage from './pages/@test/UserTestPage';
 
 import ModalProvider from './components/modal/ModalProvider';
 import ToastProvider from './components/ToastProvider';
+import TopButton from './components/TopButton';
 
 // CSS
 import './App.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
-
-import TopButton from './components/TopButton';
 
 const App = () => {
   const location = useLocation();
