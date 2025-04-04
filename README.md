@@ -88,6 +88,7 @@
 
 ## 기능 요구사항
 
+
 ### 필수 기능
 - [x] 회원인증
   - [x] 기본정보 가입 (이메일, 비밀번호, 이름)
@@ -130,7 +131,11 @@
 
 ## 주요 기능 설명
 
-### 메인 페이지
+### pagination - infinite scroll
+
+![img](/docs/infinite-scroll.gif)
+
+### 매인 페이지
 <table>
   <tr>
     <td><img src="docs/ppt/screen-shot/01.png" height="600px"></td>
