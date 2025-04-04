@@ -1,8 +1,4 @@
 <p align="center">
-  <h1 align="center">Pookjayo</h1>
-</p>
-
-<p align="center">
   <img src="docs/ppt/bg_logo.svg"/>
 </p>
 
