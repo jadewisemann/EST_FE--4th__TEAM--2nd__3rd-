@@ -94,7 +94,11 @@ const MainPage = () => {
   useEffect(() => {
     const fetchRecommentedHotels = async () => {
       try {
-        const result = await searchHotelsAdvanced('서울');
+        const result = await searchHotelsAdvanced({
+          searchText: '서울',
+          checkIn: dates.startDate,
+          checkOut: dates.startDate,
+        });
         setRecommendedHotels(result.slice(0, 5));
       } catch (error) {
         console.error('추천 호텔 가져오기 실패:', error);
