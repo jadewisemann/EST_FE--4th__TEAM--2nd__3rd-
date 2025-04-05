@@ -14,11 +14,12 @@ import Tab from '../../components/Tab';
 import VerticalList from '../../components/VerticalList';
 
 const DEFAULT_KEYWORD = '서울';
-const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔'];
+const CATEGORIES = ['전체', '호텔/리조트', '펜션/풀빌라', '모텔', '해외 숙소'];
 const CATEGORY_MAPPING = {
   1: 'hotel',
   2: 'pension',
   3: 'motel',
+  4: 'overseas',
 };
 
 const ITEMS_PER_PAGE = 10;

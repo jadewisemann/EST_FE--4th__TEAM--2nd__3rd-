@@ -20,16 +20,20 @@ const RECOMMENDED_HOTEL_QUERY = '서울';
 
 const CATEGORY_ICONS = [
   {
-    src: '/src/assets/ico/icon-hotel.png',
+    src: '/ico/icon-hotel.png',
     label: '호텔/리조트',
   },
   {
-    src: '/src/assets/ico/ico-pension.png',
+    src: '/ico/ico-pension.png',
     label: '펜션/풀빌라',
   },
   {
-    src: '/src/assets/ico/icon-motel.png',
+    src: '/ico/icon-motel.png',
     label: '모텔',
+  },
+  {
+    src: '/ico/icon-overseas.png',
+    label: '해외 숙소',
   },
 ];
 
