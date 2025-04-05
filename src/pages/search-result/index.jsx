@@ -26,7 +26,7 @@ const MAX_SEARCH_LIMIT = 20;
 
 const SCROLL_LOAD_DURATION = 500; // ms
 
-const sanitizeKeyword = keyword => keyword.replace(/[~*/\[\]]/g, '');
+const removeSpecialChars = keyword => keyword.replace(/[~*/[\]]/g, '');
 
 const getCategoryByTabIndex = tabIndex => {
   if (tabIndex === 0) return null;
@@ -34,6 +34,8 @@ const getCategoryByTabIndex = tabIndex => {
 };
 
 const useHotelData = (keywordFromQuery, activeTab) => {
+  const { dates } = useAppDataStore();
+
   const [hotelList, setHotelList] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
@@ -42,10 +44,10 @@ const useHotelData = (keywordFromQuery, activeTab) => {
 
   const prepareKeywords = useCallback(() => {
     if (activeTab === 0) {
-      return keywordFromQuery.split(',').map(k => sanitizeKeyword(k.trim()));
+      return keywordFromQuery.split(',').map(k => removeSpecialChars(k.trim()));
     }
 
-    return [sanitizeKeyword(keywordFromQuery)];
+    return [removeSpecialChars(keywordFromQuery)];
   }, [keywordFromQuery, activeTab]);
 
   const fetchInitialData = useCallback(async () => {
@@ -55,15 +57,15 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
       const category = getCategoryByTabIndex(activeTab);
 
-      const response = await searchHotelsAdvanced(
-        primaryKeyword,
-        null,
+      const response = await searchHotelsAdvanced({
+        searchText: primaryKeyword,
         category,
-        MAX_SEARCH_LIMIT,
-        MAX_SEARCH_LIMIT,
-        null,
-        true,
-      );
+        limit: MAX_SEARCH_LIMIT,
+        pageSize: ITEMS_PER_PAGE,
+        pagination: true,
+        checkIn: dates.startDate,
+        checkOut: dates.endDate,
+      });
 
       let results = response.hotels || [];
 
@@ -110,22 +112,22 @@ const useHotelData = (keywordFromQuery, activeTab) => {
       return;
     }
 
-    // 패칭이 필요한 경우 => 패칭
     setIsLoading(true);
     try {
       const keywords = prepareKeywords();
       const primaryKeyword = keywords[0] || DEFAULT_KEYWORD;
       const category = getCategoryByTabIndex(activeTab);
 
-      const res = await searchHotelsAdvanced(
-        primaryKeyword,
-        null,
+      const res = await searchHotelsAdvanced({
+        searchText: primaryKeyword,
         category,
-        MAX_SEARCH_LIMIT,
-        MAX_SEARCH_LIMIT,
+        limit: MAX_SEARCH_LIMIT,
+        pageSize: MAX_SEARCH_LIMIT,
         lastDoc,
-        true,
-      );
+        pagination: true,
+        checkIn: dates.startDate,
+        checkOut: dates.endDate,
+      });
 
       if (res.hotels?.length > 0) {
         // 중복 제거 => 호텔 업데이트

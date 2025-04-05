@@ -88,6 +88,7 @@
 
 ## 기능 요구사항
 
+
 ### 필수 기능
 - [x] 회원인증
   - [x] 기본정보 가입 (이메일, 비밀번호, 이름)
@@ -129,6 +130,10 @@
 - [x] 프로텍트, 퍼블릭 라우트
 
 ## 주요 기능 설명
+
+### pagination - infinite scroll
+
+![img](/docs/infinite-scroll.gif)
 
 ### 매인 페이지
 <table>

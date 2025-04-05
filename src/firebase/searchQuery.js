@@ -10,160 +10,190 @@ import {
   orderBy,
 } from 'firebase/firestore';
 
+import { createCacheUtil } from '../utils/cache';
+import { convertPriceFields } from '../utils/prices';
+
 import { db } from './config';
 
-const convertPriceToNumber = price => {
-  if (typeof price === 'number') return price;
-  if (!price) return 0;
-
-  return parseInt(price.replace(/,/g, ''), 10);
-};
-
-const sortPrices = (price, priceFinal) => {
-  const numericPrice = convertPriceToNumber(price);
-  const numericPriceFinal = priceFinal ? convertPriceToNumber(priceFinal) : '';
-
-  return numericPrice
-    && numericPriceFinal !== ''
-    && numericPriceFinal > numericPrice
-    ? [numericPriceFinal, numericPrice]
-    : [numericPrice, numericPriceFinal];
-};
-
-const convertPriceFields = item => {
-  if (!item) return null;
-
-  // 객체 깊은 복사
-  const convertedItem = { ...item };
-
-  // price와 price_final 필드가 있는지 확인
-  if ('price' in convertedItem) {
-    const [price, priceFinal] = sortPrices(
-      convertedItem.price,
-      convertedItem.price_final,
-    );
-
-    convertedItem.price = price;
-    convertedItem.price_final = priceFinal;
-  }
-
-  return convertedItem;
-};
+const hotelCache = createCacheUtil('hotels', {
+  cacheExpiration: 5 * 60 * 1000,
+});
 
 const convertHotelPrices = hotel => {
   if (!hotel) return null;
 
   const convertedHotel = { ...hotel };
 
-  // rooms가 있고, 배열인지 확인
   if (convertedHotel.rooms && Array.isArray(convertedHotel.rooms)) {
-    // rooms를 순회하면서 각 room의 가격 필드 변환
-    convertedHotel.rooms = convertedHotel.rooms.map(room =>
-      convertPriceFields(room),
-    );
+    convertedHotel.rooms = convertedHotel.rooms.map(convertPriceFields);
   }
 
   return convertedHotel;
 };
 
-// 메모리 캐시
-const memoryCache = new Map();
+const generateDateRange = (checkIn, checkOut) => {
+  const checkInDate = new Date(checkIn);
+  const checkOutDate = new Date(checkOut);
 
-// indexedDB 이용하여 호텔을 캐슁
-const DB_NAME = 'HotelCacheDB';
-const DB_VERSION = 1;
-const STORE_NAME = 'hotels';
-const CACHE_EXPIRATION = 5 * 60 * 1000; // ms
+  if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+    throw new Error('유효하지 않은 날짜입니다');
+  }
 
-const initDB = () =>
-  new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-      }
-    };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+  if (checkInDate >= checkOutDate) {
+    throw new Error('체크아웃 날짜는 체크인 날짜 이후여야 합니다');
+  }
 
-const getFromCache = async hotelId => {
-  const db = await initDB();
-  return new Promise(resolve => {
-    const tx = db.transaction(STORE_NAME, 'readonly');
-    const store = tx.objectStore(STORE_NAME);
-    const request = store.get(hotelId);
+  const dateRange = [];
+  const tempDate = new Date(checkInDate);
 
-    request.onsuccess = () => {
-      const cache = request.result;
-      if (cache && cache.expiry > Date.now()) {
-        resolve(cache.data);
-      } else {
-        resolve(null);
-      }
-    };
-    request.onerror = () => resolve(null);
-  });
+  while (tempDate < checkOutDate) {
+    dateRange.push(tempDate.toISOString().split('T')[0]); // YYYY-MM-DD 형식
+    tempDate.setDate(tempDate.getDate() + 1);
+  }
+
+  return dateRange;
 };
 
-const saveToCache = async hotelData => {
-  const db = await initDB();
-  return new Promise(resolve => {
-    const tx = db.transaction(STORE_NAME, 'readwrite');
-    const store = tx.objectStore(STORE_NAME);
-
-    store.put({
-      id: hotelData.id,
-      data: hotelData,
-      expiry: Date.now() + CACHE_EXPIRATION,
-    });
-
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => resolve();
-  });
+const validateDates = (checkIn, checkOut) => {
+  if (!checkIn || !checkOut) return null;
+  return generateDateRange(checkIn, checkOut);
 };
 
-const getHotelById = async hotelId => {
+const isRoomAvailable = (roomData, dateRange) => {
+  const reservedDates = roomData.reservedDates || {};
+  return !dateRange.some(date => reservedDates[date]);
+};
+
+const getAvailableRooms = async (hotelId, checkIn, checkOut) => {
   try {
-    // 호텔 id 검증
+    if (!hotelId) throw new Error('호텔 ID가 필요합니다');
+
+    if (!checkIn || !checkOut) {
+      const roomsQuery = query(
+        collection(db, 'rooms'),
+        where('hotel_uid', '==', hotelId),
+      );
+      const roomSnapshot = await getDocs(roomsQuery);
+
+      return roomSnapshot.docs.map(doc => ({
+        room_id: doc.id,
+        ...doc.data(),
+      }));
+    }
+
+    // 날짜 처리
+    const dateRange = validateDates(checkIn, checkOut);
+
+    // 호텔의 모든 객실 가져오기
+    const roomsQuery = query(
+      collection(db, 'rooms'),
+      where('hotel_uid', '==', hotelId),
+    );
+    const roomSnapshot = await getDocs(roomsQuery);
+
+    const availableRooms = roomSnapshot.docs
+      .map(doc => ({
+        room_id: doc.id,
+        ...doc.data(),
+      }))
+      .filter(roomData => isRoomAvailable(roomData, dateRange))
+      .map(convertPriceFields);
+
+    return availableRooms;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const isHotelAvailable = async (hotelId, checkIn, checkOut) => {
+  try {
+    if (!checkIn || !checkOut) return true;
+
+    const dateRange = validateDates(checkIn, checkOut);
+
+    const availabilityRef = doc(db, 'availability', hotelId);
+    const availabilityDoc = await getDoc(availabilityRef);
+
+    if (!availabilityDoc.exists()) {
+      const searchIndexRef = doc(db, 'search_index', hotelId);
+      const searchIndexDoc = await getDoc(searchIndexRef);
+
+      if (searchIndexDoc.exists()) {
+        const reservedDates = searchIndexDoc.data().reservedDates || [];
+        return !dateRange.some(date => reservedDates.includes(date));
+      }
+
+      const availableRooms = await getAvailableRooms(
+        hotelId,
+        checkIn,
+        checkOut,
+      );
+      return availableRooms.length > 0;
+    }
+
+    const availabilityData = availabilityDoc.data();
+    const dates = availabilityData.dates || {};
+
+    return !dateRange.some(date => dates[date] === 0);
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
+};
+
+const getHotelById = async (hotelId, checkIn = null, checkOut = null) => {
+  try {
     if (!hotelId) {
       throw new Error('호텔 ID가 필요합니다');
     }
 
-    // 메모리 캐시 확인
-    if (memoryCache.has(hotelId)) {
-      return memoryCache.get(hotelId);
+    if (!checkIn && !checkOut) {
+      const cachedHotel = await hotelCache.get(hotelId);
+      if (cachedHotel) {
+        return cachedHotel;
+      }
     }
 
-    // indexedDB에 캐시되어 있는 데이터 확인 ? 바로 반환 : 패칭
-    const cachedHotel = await getFromCache(hotelId);
-    if (cachedHotel) {
-      return cachedHotel;
-    }
-
-    // firestore에서 문서 찾아오기
     const hotelDocRef = doc(db, 'hotels', hotelId);
     const hotelDoc = await getDoc(hotelDocRef);
 
-    // id를 가진 문서 확인 ? 데이터 : null
-    if (hotelDoc.exists()) {
-      const hotelData = {
-        id: hotelDoc.id,
-        ...hotelDoc.data(),
-      };
-
-      // 데이터를 변환
-      const processedData = convertHotelPrices(hotelData);
-      // 인덱스드 db에 캐쉬에 저장
-      await saveToCache(processedData);
-      // 메모리 캐시
-      memoryCache.set(hotelId, processedData);
-
-      return processedData;
-    } else {
+    if (!hotelDoc.exists()) {
       return null;
     }
+
+    const hotelData = {
+      id: hotelDoc.id,
+      ...hotelDoc.data(),
+    };
+
+    if (checkIn && checkOut) {
+      const dateRange = validateDates(checkIn, checkOut);
+
+      const roomsQuery = query(
+        collection(db, 'rooms'),
+        where('hotel_uid', '==', hotelId),
+      );
+      const roomsSnapshot = await getDocs(roomsQuery);
+
+      const availableRooms = roomsSnapshot.docs
+        .map(roomDoc => ({
+          room_id: roomDoc.id,
+          ...roomDoc.data(),
+        }))
+        .filter(roomData => isRoomAvailable(roomData, dateRange))
+        .map(convertPriceFields);
+
+      hotelData.rooms = availableRooms;
+      return convertHotelPrices(hotelData);
+    }
+
+    const processedData = convertHotelPrices(hotelData);
+
+    if (!checkIn && !checkOut) {
+      await hotelCache.set(hotelId, processedData);
+    }
+
+    return processedData;
   } catch (error) {
     console.error(`호텔 ID ${hotelId} 조회 중 오류:`, error);
     throw error;
@@ -176,25 +206,27 @@ const getRoomById = async roomId => {
 
     const roomDocRef = doc(db, 'rooms', roomId);
     const roomDoc = await getDoc(roomDocRef);
-    //
-    if (roomDoc.exists()) {
-      const roomData = {
-        room_id: roomDoc.id,
-        ...roomDoc.data(),
-      };
 
-      // 가격 필드 변환
-      return convertPriceFields(roomData);
-    } else {
+    if (!roomDoc.exists()) {
       return null;
     }
+
+    const roomData = {
+      room_id: roomDoc.id,
+      ...roomDoc.data(),
+    };
+
+    return convertPriceFields(roomData);
   } catch (error) {
     console.error('방 정보 가져오기 실패:', error);
     throw error;
   }
 };
 
-const generateNgrams = text => {
+// ======= 검색 관련 유틸리티 =======
+const generateNgrams = props => {
+  const text = typeof props === 'object' ? props.searchText : props;
+
   if (!text) return [];
   const cleanText = text.replace(/\s+/g, '');
   const ngrams = new Set();
@@ -209,7 +241,6 @@ const generateNgrams = text => {
 };
 
 const sortHotelsByTitleWithinSameScores = hotels => {
-  // 스코어별로 그룹화
   const scoreGroups = hotels.reduce((groups, hotel) => {
     const score = hotel._debug.score;
     if (!groups[score]) groups[score] = [];
@@ -217,7 +248,6 @@ const sortHotelsByTitleWithinSameScores = hotels => {
     return groups;
   }, {});
 
-  // 각 스코어 그룹 내에서 title로 정렬
   Object.values(scoreGroups).forEach(group => {
     group.sort((a, b) => {
       if (a.title && b.title) {
@@ -227,13 +257,54 @@ const sortHotelsByTitleWithinSameScores = hotels => {
     });
   });
 
-  // 스코어 순서로 다시 하나의 배열로 합치기
   const isDes = true;
   return Object.keys(scoreGroups)
     .sort(
       isDes ? (a, b) => Number(b) - Number(a) : (a, b) => Number(a) - Number(b),
     )
     .flatMap(score => scoreGroups[score]);
+};
+
+const getUnavailableHotelIds = async (checkIn, checkOut) => {
+  const unavailableHotelIds = new Set();
+
+  if (!checkIn || !checkOut) {
+    return unavailableHotelIds;
+  }
+
+  try {
+    const dateRange = validateDates(checkIn, checkOut);
+
+    for (const date of dateRange) {
+      const searchIndexQuery = query(
+        collection(db, 'search_index'),
+        where('reservedDates', 'array-contains', date),
+      );
+
+      const snapshot = await getDocs(searchIndexQuery);
+      snapshot.forEach(doc => {
+        unavailableHotelIds.add(doc.data().hotel_id);
+      });
+    }
+
+    const availabilityQuery = query(collection(db, 'availability'));
+    const availabilitySnapshot = await getDocs(availabilityQuery);
+
+    availabilitySnapshot.forEach(availabilityDoc => {
+      const hotelId = availabilityDoc.id;
+      const dates = availabilityDoc.data().dates || {};
+
+      const isUnavailable = dateRange.some(date => dates[date] === 0);
+
+      if (isUnavailable) {
+        unavailableHotelIds.add(hotelId);
+      }
+    });
+  } catch (error) {
+    console.error('가용성 필터 생성 중 오류:', error);
+  }
+
+  return unavailableHotelIds;
 };
 
 const searchWithNgrams = async (
@@ -243,13 +314,15 @@ const searchWithNgrams = async (
   resultLimit,
   lastDoc,
   availableOnly = true,
+  checkIn = null,
+  checkOut = null,
 ) => {
   const searchResults = {};
+  const unavailableHotelIds = await getUnavailableHotelIds(checkIn, checkOut);
 
   await Promise.all(
     searchNgrams.map(async ngram => {
       const searchIndexRef = collection(db, 'search_index');
-
       const conditions = [where(`combined_ngrams.${ngram}`, '==', true)];
 
       if (region) {
@@ -265,6 +338,10 @@ const searchWithNgrams = async (
 
       ngramSnapshot.forEach(doc => {
         const hotelId = doc.data().hotel_id;
+        if (unavailableHotelIds.has(hotelId)) {
+          return;
+        }
+
         if (searchResults[hotelId]) {
           searchResults[hotelId].score += 1;
           searchResults[hotelId].matchedNgrams.push(ngram);
@@ -295,29 +372,43 @@ const searchWithNgrams = async (
   });
 
   const sortedIds = sortedResults.map(item => item.id);
-
   const startIndex = lastDoc ? sortedIds.indexOf(lastDoc.id) + 1 : 0;
 
   const hotelPromises = sortedIds
     .slice(startIndex, startIndex + resultLimit)
     .map(async id => {
       const hotelData = await getHotelById(id);
+      if (!hotelData) return null;
 
-      return !hotelData
+      if (availableOnly && checkIn && checkOut) {
+        const isAvailable = await isHotelAvailable(id, checkIn, checkOut);
+        if (!isAvailable) return null;
+
+        const availableRooms = await getAvailableRooms(id, checkIn, checkOut);
+        if (!availableRooms || availableRooms.length === 0) return null;
+
+        return {
+          ...hotelData,
+          rooms: availableRooms,
+          _debug: {
+            score: searchResults[id].score,
+            matchedNgrams: searchResults[id].matchedNgrams,
+          },
+        };
+      }
+
+      return availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
         ? null
-        : availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
-          ? null
-          : {
-              ...hotelData,
-              _debug: {
-                score: searchResults[id].score,
-                matchedNgrams: searchResults[id].matchedNgrams,
-              },
-            };
+        : {
+            ...hotelData,
+            _debug: {
+              score: searchResults[id].score,
+              matchedNgrams: searchResults[id].matchedNgrams,
+            },
+          };
     });
 
   const hotelsWithData = (await Promise.all(hotelPromises)).filter(Boolean);
-
   const sortedHotels = sortHotelsByTitleWithinSameScores(hotelsWithData);
 
   const lastHotelDoc =
@@ -336,7 +427,11 @@ const searchWithBaseQuery = async (
   resultLimit,
   lastDoc,
   availableOnly = true,
+  checkIn = null,
+  checkOut = null,
 ) => {
+  const unavailableHotelIds = await getUnavailableHotelIds(checkIn, checkOut);
+
   const queryConditions = [orderBy('title'), firestoreLimit(resultLimit)];
 
   if (region) {
@@ -369,28 +464,48 @@ const searchWithBaseQuery = async (
       return null;
     }
 
-    const hotelData = await getHotelById(hotelId);
+    if (unavailableHotelIds.has(hotelId)) {
+      return null;
+    }
 
-    return !hotelData
+    const hotelData = await getHotelById(hotelId);
+    if (!hotelData) return null;
+
+    if (availableOnly && checkIn && checkOut) {
+      const isAvailable = await isHotelAvailable(hotelId, checkIn, checkOut);
+      if (!isAvailable) return null;
+
+      const availableRooms = await getAvailableRooms(
+        hotelId,
+        checkIn,
+        checkOut,
+      );
+      if (!availableRooms || availableRooms.length === 0) return null;
+
+      return {
+        ...hotelData,
+        rooms: availableRooms,
+        _debug: { index },
+      };
+    }
+
+    return availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
       ? null
-      : availableOnly && (!hotelData.rooms || hotelData.rooms.length === 0)
-        ? null
-        : {
-            ...hotelData,
-            _debug: { index },
-          };
+      : {
+          ...hotelData,
+          _debug: { index },
+        };
   });
 
   const hotels = (await Promise.all(hotelPromises)).filter(Boolean);
-
   const lastHotelDoc =
     snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
 
   return { hotels, lastDoc: lastHotelDoc };
 };
 
-const searchHotelsAdvanced = async (
-  searchText,
+const searchHotelsAdvanced = async ({
+  searchText = '',
   region = null,
   category = null,
   limit = 20,
@@ -398,11 +513,19 @@ const searchHotelsAdvanced = async (
   lastDoc = null,
   pagination = false,
   availableOnly = true,
-) => {
+  checkIn = null,
+  checkOut = null,
+}) => {
   try {
     const resultLimit = pageSize || limit;
 
-    if (searchText.length === 0 && !region && !category) {
+    if (
+      searchText.length === 0
+      && !region
+      && !category
+      && !checkIn
+      && !checkOut
+    ) {
       return pagination ? { hotels: [], lastDoc: null } : [];
     }
 
@@ -417,6 +540,8 @@ const searchHotelsAdvanced = async (
         resultLimit,
         lastDoc,
         availableOnly,
+        checkIn,
+        checkOut,
       );
     } else {
       result = await searchWithBaseQuery(
@@ -425,6 +550,8 @@ const searchHotelsAdvanced = async (
         resultLimit,
         lastDoc,
         availableOnly,
+        checkIn,
+        checkOut,
       );
     }
 
@@ -438,9 +565,10 @@ const searchHotelsAdvanced = async (
 export {
   getHotelById,
   getRoomById,
+  getAvailableRooms,
+  isHotelAvailable,
   searchHotelsAdvanced,
   convertHotelPrices,
-  convertPriceToNumber,
   convertPriceFields,
-  sortPrices,
+  sortHotelsByTitleWithinSameScores,
 };

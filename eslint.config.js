@@ -133,7 +133,7 @@ export default {
           },
           // Hooks
           {
-            pattern: './hooks/**',
+            pattern: '{./hooks/**,../hooks/**,../../hooks/**}',
             group: 'internal',
             position: 'before',
           },
