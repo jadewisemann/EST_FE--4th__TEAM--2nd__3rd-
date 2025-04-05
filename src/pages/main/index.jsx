@@ -14,33 +14,39 @@ import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import Loading from '../../components/Loading';
 import MetaData from '../../components/MetaData';
-import DateModal from '../../components/modal/DateModal';
-import GuestModal from '../../components/modal/GuestModal';
 import Nav from '../../components/Nav';
+
+const RECOMMENDED_HOTEL_QUERY = '서울';
+
+const CATEGORY_ICONS = [
+  {
+    src: '/src/assets/ico/icon-hotel.png',
+    label: '호텔/리조트',
+  },
+  {
+    src: '/src/assets/ico/ico-pension.png',
+    label: '펜션/풀빌라',
+  },
+  {
+    src: '/src/assets/ico/icon-motel.png',
+    label: '모텔',
+  },
+];
 
 const MainPage = () => {
   const { user } = useAuthStore();
   const { dates, guests } = useAppDataStore();
-  const { modals, openDateModal, openGuestModal } = useModalStore();
+  const { openDateModal, openGuestModal } = useModalStore();
 
   const [searchText, setSearchText] = useState('');
   const [recommendedHotels, setRecommendedHotels] = useState([]);
-  const [backgroundImage, setBackgroundImage] = useState('');
-
-  const navigate = useNavigate();
-
-  const fromToDate = `${dates.startDate} ~ ${dates.endDate}`;
-  const totalNights = `${dates.duration}박`;
-  const isAnyModalOpen = modals.date.isOpen || modals.guest.isOpen;
-
-  //로딩 관련 상태 - 첫방문시 세션에 상태저장
+  const [isLoading, setIsLoading] = useState(true);
   const [isFirstVisit, setIsFirstVisit] = useState(
     sessionStorage.getItem('firstVisit') === null,
   );
-  // 스켈레톤에 보낼 로딩 상태
-  const [isLoading, setIsLoading] = useState(true);
 
-  // 첫방문시 3초간 로딩 페이지 호출
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isFirstVisit) {
       setTimeout(() => {
@@ -50,33 +56,18 @@ const MainPage = () => {
     }
   }, [isFirstVisit]);
 
-  // 백그라운드 이미지
   useEffect(() => {
-    const hotelImages = ['/src/assets/img/bg-main-05.png'];
-    const randomImage =
-      hotelImages[Math.floor(Math.random() * hotelImages.length)];
-    setBackgroundImage(randomImage);
+    (async () => {
+      try {
+        const result = await searchHotelsAdvanced(RECOMMENDED_HOTEL_QUERY);
+        setRecommendedHotels(result.slice(0, 5));
+      } catch (error) {
+        console.error('추천 호텔 가져오기 실패:', error);
+      }
+      setIsLoading(false);
+    })();
   }, []);
-  //카테고리 필터 아이콘 데이터
-  const categories = [
-    {
-      src: '/src/assets/ico/icon-hotel.png',
-      label: '호텔/리조트',
-    },
-    {
-      src: '/src/assets/ico/ico-pension.png',
-      label: '펜션/풀빌라',
-    },
-    {
-      src: '/src/assets/ico/icon-motel.png',
-      label: '모텔',
-    },
-    {
-      src: '/src/assets/ico/icon-overseas.png',
-      label: '해외숙소',
-    },
-  ];
-  // 검색 실행 함수
+
   const handleSearch = e => {
     e.preventDefault();
     if (!searchText.trim()) setSearchText('서울');
@@ -84,41 +75,7 @@ const MainPage = () => {
     navigate(`/search-result?keyword=${encoded}`);
   };
 
-  // 카테고리 클릭 함수
-  const navigateToCategory = categoryLabel => {
-    const encoded = encodeURI(categoryLabel);
-    navigate(`/search-result?keyword=${encoded}`);
-  };
-
-  //추천호텔 데이터 가져오기
-  useEffect(() => {
-    const fetchRecommentedHotels = async () => {
-      try {
-        const result = await searchHotelsAdvanced({
-          searchText: '서울',
-          checkIn: dates.startDate,
-          checkOut: dates.startDate,
-        });
-        setRecommendedHotels(result.slice(0, 5));
-      } catch (error) {
-        console.error('추천 호텔 가져오기 실패:', error);
-      }
-      setIsLoading(false); // 데이터 가져온후 로딩상태 변경
-    };
-    fetchRecommentedHotels();
-  }, []);
-
-  //추천호텔 전체보기 버튼
-  const recommendedHotelviewMore = () => {
-    const keyword = '추천호텔';
-    const encoded = encodeURI(keyword);
-    navigate(`/search-result?keyword=${encoded}`);
-  };
-
-  // 세션 상태 확인후 로딩페이지 호출
-  if (isFirstVisit) {
-    return <Loading />;
-  }
+  if (isFirstVisit) return <Loading />;
 
   return (
     <>
@@ -130,13 +87,12 @@ const MainPage = () => {
         ogDescription='푹자요에서 최고의 숙박 경험을 시작하세요. 전국 호텔, 리조트, 펜션을 한 곳에서!'
         ogImage='/src/assets/img/bg_logo.svg'
       />
+
       <header className='flex h-14 items-center'>
         <h1 className='dark:text-dark px-6 text-2xl text-white'>POOKJAYO</h1>
       </header>
-      <div
-        className='-mt-14 bg-no-repeat'
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      >
+
+      <div className="-mt-14 bg-[url('/src/assets/img/bg-main-05.png')] bg-no-repeat">
         <div className='px-5 pt-20 pb-10'>
           <div className='flex flex-col items-center text-xl font-bold text-white'>
             <Link to={user ? '/mypage' : '/login'}>
@@ -168,7 +124,7 @@ const MainPage = () => {
                 onClick={openDateModal}
               >
                 <Icon name='calendar' />
-                {fromToDate}
+                {`${dates.startDate} ~ ${dates.endDate}`}
               </Button>
               <Button
                 color='line'
@@ -188,45 +144,43 @@ const MainPage = () => {
               className='mt-5 rounded-2xl'
               type='submit'
             >
-              {`확인 (${totalNights})`}
+              {`확인 ${dates.duration}박`}
             </Button>
           </form>
         </div>
 
         <div className='rounded-t-md bg-white p-5 pb-20 dark:bg-neutral-800'>
-          <div className='category-grid grid justify-between gap-2'>
-            {categories.map((item, idx) => (
-              <button
+          <div className='flex justify-evenly'>
+            {CATEGORY_ICONS.map((item, idx) => (
+              <Link
+                to={`/search-result?keyword=${item.label}`}
                 key={idx}
-                className='flex flex-1 cursor-pointer flex-col items-center'
-                onClick={() => {
-                  navigateToCategory(item.label);
-                }}
+                className='flex cursor-pointer flex-col items-center'
               >
                 <img className='h-18 object-contain' src={item.src} alt='' />
                 <span className='text-sm dark:text-neutral-50'>
                   {item.label}
                 </span>
-              </button>
+              </Link>
+              // </button>
             ))}
           </div>
+
           <div className='mt-7 mb-4 flex items-center justify-between'>
             <h2 className='text-base font-bold dark:text-neutral-50'>
               추천호텔
             </h2>
-            <button
+            <Link
               className='cursor-pointer text-sm text-violet-600 dark:text-violet-400'
-              onClick={recommendedHotelviewMore}
+              to={`/search-result?keyword=${RECOMMENDED_HOTEL_QUERY}`}
             >
               전체보기
-            </button>
+            </Link>
           </div>
           <HorizontalList products={recommendedHotels} isLoading={isLoading} />
         </div>
       </div>
-      {!isAnyModalOpen && <Nav />}
-      <DateModal />
-      <GuestModal />
+      <Nav />
     </>
   );
 };
