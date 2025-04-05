@@ -156,7 +156,7 @@ const MainPage = () => {
         </div>
 
         <div className='rounded-t-md bg-white p-5 pb-20 dark:bg-neutral-800'>
-          <div className='flex justify-evenly'>
+          <div className='flex justify-between'>
             {CATEGORY_ICONS.map((item, idx) => (
               <Link
                 to={`/search-result?keyword=${item.label}`}
