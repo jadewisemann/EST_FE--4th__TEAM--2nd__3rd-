@@ -59,26 +59,22 @@ const validateDates = (checkIn, checkOut) => {
   return generateDateRange(checkIn, checkOut);
 };
 
-// ======= 가용성 확인 함수 =======
-
-// 객실의 예약 가능 여부 확인
 const isRoomAvailable = (roomData, dateRange) => {
   const reservedDates = roomData.reservedDates || {};
   return !dateRange.some(date => reservedDates[date]);
 };
 
-// 특정 호텔의 객실 목록을, 가용성 필터링하여 가져오기
 const getAvailableRooms = async (hotelId, checkIn, checkOut) => {
   try {
     if (!hotelId) throw new Error('호텔 ID가 필요합니다');
 
-    // 체크인/체크아웃 날짜가 없으면 모든 객실 반환
     if (!checkIn || !checkOut) {
       const roomsQuery = query(
         collection(db, 'rooms'),
-        where('hotelId', '==', hotelId),
+        where('hotel_uid', '==', hotelId),
       );
       const roomSnapshot = await getDocs(roomsQuery);
+
       return roomSnapshot.docs.map(doc => ({
         room_id: doc.id,
         ...doc.data(),
@@ -91,25 +87,24 @@ const getAvailableRooms = async (hotelId, checkIn, checkOut) => {
     // 호텔의 모든 객실 가져오기
     const roomsQuery = query(
       collection(db, 'rooms'),
-      where('hotelId', '==', hotelId),
+      where('hotel_uid', '==', hotelId),
     );
     const roomSnapshot = await getDocs(roomsQuery);
 
-    // 각 객실마다 가용성 확인하여 필터링
-    return roomSnapshot.docs
+    const availableRooms = roomSnapshot.docs
       .map(doc => ({
         room_id: doc.id,
         ...doc.data(),
       }))
       .filter(roomData => isRoomAvailable(roomData, dateRange))
       .map(convertPriceFields);
+
+    return availableRooms;
   } catch (error) {
-    console.error('가용 객실 정보 가져오기 실패:', error);
-    throw error;
+    console.error(error);
   }
 };
 
-// 특정 호텔이 특정 날짜에 가용한지 확인하는 함수
 const isHotelAvailable = async (hotelId, checkIn, checkOut) => {
   try {
     if (!checkIn || !checkOut) return true;
@@ -124,8 +119,8 @@ const isHotelAvailable = async (hotelId, checkIn, checkOut) => {
       const searchIndexDoc = await getDoc(searchIndexRef);
 
       if (searchIndexDoc.exists()) {
-        const reservatedDates = searchIndexDoc.data().reservatedDates || [];
-        return !dateRange.some(date => reservatedDates.includes(date));
+        const reservedDates = searchIndexDoc.data().reservedDates || [];
+        return !dateRange.some(date => reservedDates.includes(date));
       }
 
       const availableRooms = await getAvailableRooms(
@@ -139,17 +134,12 @@ const isHotelAvailable = async (hotelId, checkIn, checkOut) => {
     const availabilityData = availabilityDoc.data();
     const dates = availabilityData.dates || {};
 
-    return !dateRange.some(date => {
-      const availableCount = dates[date] || 0;
-      return availableCount === 0;
-    });
+    return !dateRange.some(date => dates[date] === 0);
   } catch (error) {
-    console.error(`호텔 ID ${hotelId} 가용성 확인 중 오류:`, error);
+    console.error(error);
     return true;
   }
 };
-
-// ======= 호텔 데이터 가져오기 =======
 
 const getHotelById = async (hotelId, checkIn = null, checkOut = null) => {
   try {
@@ -157,7 +147,6 @@ const getHotelById = async (hotelId, checkIn = null, checkOut = null) => {
       throw new Error('호텔 ID가 필요합니다');
     }
 
-    // 캐시는 체크인/체크아웃 날짜가 없을 때만 사용
     if (!checkIn && !checkOut) {
       const cachedHotel = await hotelCache.get(hotelId);
       if (cachedHotel) {
@@ -200,7 +189,6 @@ const getHotelById = async (hotelId, checkIn = null, checkOut = null) => {
 
     const processedData = convertHotelPrices(hotelData);
 
-    // 캐시 저장 (체크인/체크아웃 날짜가 없을 경우)
     if (!checkIn && !checkOut) {
       await hotelCache.set(hotelId, processedData);
     }
@@ -236,7 +224,6 @@ const getRoomById = async roomId => {
 };
 
 // ======= 검색 관련 유틸리티 =======
-
 const generateNgrams = props => {
   const text = typeof props === 'object' ? props.searchText : props;
 
@@ -291,7 +278,7 @@ const getUnavailableHotelIds = async (checkIn, checkOut) => {
     for (const date of dateRange) {
       const searchIndexQuery = query(
         collection(db, 'search_index'),
-        where('reservatedDates', 'array-contains', date),
+        where('reservedDates', 'array-contains', date),
       );
 
       const snapshot = await getDocs(searchIndexQuery);
@@ -299,6 +286,20 @@ const getUnavailableHotelIds = async (checkIn, checkOut) => {
         unavailableHotelIds.add(doc.data().hotel_id);
       });
     }
+
+    const availabilityQuery = query(collection(db, 'availability'));
+    const availabilitySnapshot = await getDocs(availabilityQuery);
+
+    availabilitySnapshot.forEach(availabilityDoc => {
+      const hotelId = availabilityDoc.id;
+      const dates = availabilityDoc.data().dates || {};
+
+      const isUnavailable = dateRange.some(date => dates[date] === 0);
+
+      if (isUnavailable) {
+        unavailableHotelIds.add(hotelId);
+      }
+    });
   } catch (error) {
     console.error('가용성 필터 생성 중 오류:', error);
   }
@@ -503,8 +504,8 @@ const searchWithBaseQuery = async (
   return { hotels, lastDoc: lastHotelDoc };
 };
 
-const searchHotelsAdvanced = async (
-  searchText,
+const searchHotelsAdvanced = async ({
+  searchText = '',
   region = null,
   category = null,
   limit = 20,
@@ -514,7 +515,7 @@ const searchHotelsAdvanced = async (
   availableOnly = true,
   checkIn = null,
   checkOut = null,
-) => {
+}) => {
   try {
     const resultLimit = pageSize || limit;
 

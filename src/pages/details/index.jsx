@@ -67,7 +67,6 @@ const DetailsPage = () => {
   if (!data) {
     return <Loading />;
   }
-
   // event
   // 더보기 버튼 클릭 시 room 더 보여주기
 

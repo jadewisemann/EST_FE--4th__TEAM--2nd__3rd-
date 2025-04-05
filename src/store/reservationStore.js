@@ -242,6 +242,7 @@ const useReservationStore = create(
       },
 
       resetSession: () => {
+        sessionStorage.removeItem('payment-session');
         set({
           currentState: STATE.IDLE,
           transactionId: null,
@@ -343,6 +344,7 @@ const useReservationStore = create(
         userData: state.userData,
         userInput: state.userInput,
       }),
+      // skipHydration: true,
     },
   ),
 );

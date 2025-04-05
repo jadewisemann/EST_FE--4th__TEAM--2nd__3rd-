@@ -59,7 +59,9 @@ const MainPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const result = await searchHotelsAdvanced(RECOMMENDED_HOTEL_QUERY);
+        const result = await searchHotelsAdvanced({
+          searchText: RECOMMENDED_HOTEL_QUERY,
+        });
         setRecommendedHotels(result.slice(0, 5));
       } catch (error) {
         console.error('추천 호텔 가져오기 실패:', error);

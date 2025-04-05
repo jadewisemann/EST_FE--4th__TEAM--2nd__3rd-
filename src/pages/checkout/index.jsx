@@ -64,7 +64,6 @@ const CheckoutPage = () => {
     checkOut: dates.endDate,
   });
 
-  // useEffect
   useEffect(() => {
     resetSession();
 
