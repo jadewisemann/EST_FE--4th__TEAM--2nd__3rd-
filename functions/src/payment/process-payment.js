@@ -58,6 +58,27 @@ export const processPayment = async data => {
 
       const hotelData = hotelDoc.data();
 
+      const reservationsQuery = db
+        .collection('reservations')
+        .where('roomId', '==', roomId)
+        .where('status', '==', 'confirmed');
+
+      const reservationsSnapshot = await transaction.get(reservationsQuery);
+
+      // 동일한 호텔의 모든 rooms 확인
+      const roomsQuery = db
+        .collection('rooms')
+        .where('hotel_uid', '==', hotelUid);
+
+      const roomsSnapshot = await transaction.get(roomsQuery);
+
+      // 'availability' collections에 추가
+      const availabilityRef = db.collection('availability').doc(hotelUid);
+      const availabilityDoc = await transaction.get(availabilityRef);
+
+      const searchIndexRef = db.collection('search_index').doc(hotelUid);
+      const searchIndexDoc = await transaction.get(searchIndexRef);
+
       // 날짜 검증
       const checkInDate = new Date(userInput.checkIn);
       const checkOutDate = new Date(userInput.checkOut);
@@ -69,13 +90,6 @@ export const processPayment = async data => {
         reservationDates.push(tempDate.toISOString().split('T')[0]);
         tempDate.setDate(tempDate.getDate() + 1);
       }
-
-      const reservationsQuery = db
-        .collection('reservations')
-        .where('roomId', '==', roomId)
-        .where('status', '==', 'confirmed');
-
-      const reservationsSnapshot = await transaction.get(reservationsQuery);
 
       for (const doc of reservationsSnapshot.docs) {
         const reservation = doc.data();
@@ -139,8 +153,8 @@ export const processPayment = async data => {
         phone: userInput.phone,
         email: userInput.email,
         request: userInput.request || '',
-        checkIn: checkIn,
-        checkOut: checkOut,
+        checkIn: userInput.checkIn,
+        checkOut: userInput.checkOut,
         agreement: userInput.agreement,
         transactionId: transactionId,
         createdAt: serverTimestamp,
@@ -162,13 +176,6 @@ export const processPayment = async data => {
         updatedAt: serverTimestamp,
       });
 
-      // 동일한 호텔의 모든 rooms 확인
-      const roomsQuery = db
-        .collection('rooms')
-        .where('hotel_uid', '==', hotelUid);
-
-      const roomsSnapshot = await transaction.get(roomsQuery);
-
       //
       const dateAvailability = {};
 
@@ -187,10 +194,6 @@ export const processPayment = async data => {
 
         dateAvailability[date] = availableRoomCount;
       }
-
-      // 'availability' collections에 추가
-      const availabilityRef = db.collection('availability').doc(hotelUid);
-      const availabilityDoc = await transaction.get(availabilityRef);
 
       if (availabilityDoc.exists) {
         const currentAvailability = availabilityDoc.data().dates || {};
@@ -219,9 +222,6 @@ export const processPayment = async data => {
         .map(([date]) => date);
 
       if (datesWithNoAvailability.length > 0) {
-        const searchIndexRef = db.collection('search_index').doc(hotelUid);
-        const searchIndexDoc = await transaction.get(searchIndexRef);
-
         if (searchIndexDoc.exists) {
           const currentReservedDates =
             searchIndexDoc.data().reservedDates || [];
