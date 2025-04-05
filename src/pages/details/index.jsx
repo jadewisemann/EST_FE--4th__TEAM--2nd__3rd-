@@ -25,24 +25,26 @@ import MetaData from '../../components/MetaData';
 import Rating from '../../components/Rating';
 import SubHeader from '../../components/SubHeader';
 
+const VISIBLE_ROOM = 3;
+
 const DetailsPage = () => {
-  // params
-  const { hotelId } = useParams(); // 호텔 ID
+  const { hotelId } = useParams();
 
-  // state
-  const [data, setData] = useState(null); // page 사용 데이터(호텔 데이터)
-  const [visibleRooms, setVisibleRooms] = useState(2); // 보여질 방의 갯수(초기 값 2)
+  const [data, setData] = useState(null);
+  const [visibleRooms, setVisibleRooms] = useState(VISIBLE_ROOM);
 
-  // 사용자 정보
   const { dates, guests } = useAppDataStore();
 
-  // useEffect
   // 페이지 로딩 직후 실행
   useEffect(() => {
     const fetchHotel = async () => {
       try {
         // hotel정보 담기
-        const hotelData = await getHotelById(hotelId);
+        const hotelData = await getHotelById(
+          hotelId,
+          dates.startDate,
+          dates.endDate,
+        );
 
         if (hotelData) {
           // 페이지 사용 data에 hotel 정보 담기
@@ -57,7 +59,7 @@ const DetailsPage = () => {
 
     // data가 있는경우 room의 길이가 1개인 경우 처리
     if (data) {
-      setVisibleRooms(Math.min(2, data.rooms.length));
+      setVisibleRooms(Math.min(VISIBLE_ROOM, data.rooms.length));
     }
   }, []);
 
@@ -65,24 +67,22 @@ const DetailsPage = () => {
   if (!data) {
     return <Loading />;
   }
-
   // event
   // 더보기 버튼 클릭 시 room 더 보여주기
+
   const moreRoom = () => {
     const remainingRooms = data.rooms.length - visibleRooms;
 
-    if (remainingRooms > 2) {
-      // 남아있는 room의 갯수가 2보다 크면 현재 보여주고 있는 room의 갯수에 2를 더해서 보여줌
-      setVisibleRooms(visibleRooms + 2);
+    if (remainingRooms > VISIBLE_ROOM) {
+      setVisibleRooms(visibleRooms + VISIBLE_ROOM);
     } else {
-      // 남아있는 room의 갯수가 2이하면 다 보여줌
       setVisibleRooms(visibleRooms + remainingRooms);
     }
   };
 
   // 남아있는 방 개수
   const remainingRooms = data.rooms.length - visibleRooms;
-  console.log(data);
+
   return (
     <>
       <MetaData

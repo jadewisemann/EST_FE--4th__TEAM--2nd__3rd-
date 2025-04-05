@@ -62,7 +62,7 @@ const DetailProduct = ({ detailProducts, rooms }) => {
               color='prime'
               size='full'
               onClick={() => {
-                navigate(`/checkout/${rooms[index].room_uid}`);
+                navigate(`/checkout/${rooms[index].room_id}`);
               }}
             >
               예약
