@@ -321,7 +321,7 @@ const SearchResultPage = () => {
               className='flex h-20 w-full items-center justify-center'
             >
               <div className='h-12 w-12'>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+                <svg xmlns='https://www.w3.org/2000/svg' viewBox='0 0 200 200'>
                   <circle
                     fill='#7f22fe'
                     stroke='#7f22fe'
