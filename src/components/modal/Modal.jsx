@@ -18,7 +18,7 @@ const Modal = ({ children, isOpen, isFull = true }) => {
     <div className='center-fixed-item fixed inset-0 z-100 flex items-start justify-center bg-black/50'>
       <div
         className={`mt-0 max-h-screen w-full overflow-hidden bg-white ${
-          isFull ? 'h-screen overflow-y-auto' : 'max-h-[70vh] overflow-y-auto'
+          isFull ? 'h-screen' : 'max-h-[70vh] overflow-y-auto'
         }`}
       >
         {children}
