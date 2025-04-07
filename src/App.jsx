@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import PrivateRoute from './routes/PrivateRoute';
@@ -27,6 +29,10 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 const App = () => {
+  useEffect(() => {
+    document.body.style.overflowY = 'auto';
+  }, []);
+
   const location = useLocation();
 
   const bottomValue = () => {

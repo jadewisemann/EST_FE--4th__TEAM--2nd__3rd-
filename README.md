@@ -116,7 +116,6 @@
 - [x] 카테고리를 분류하여 상품을 출력합니다.
 - [x] 장바구니 담기 => 위시리스트
   - [x] 체크박스를 통해 상품을 선택/제외합니다.
-  - [ ] 체크박스를 통해 상품을 선택/제외합니다.
   - [ ] 주문하기 버튼으로 결제화면으로 이동합니다.
 - [x] 주문내역확인
   - [x] 별도 주문 내역페이지에 주문한 이력을 출력합니다.  
@@ -130,10 +129,6 @@
 - [x] 프로텍트, 퍼블릭 라우트
 
 ## 주요 기능 설명
-
-### pagination - infinite scroll
-
-![img](/docs/infinite-scroll.gif)
 
 ### 매인 페이지
 <table>
@@ -264,26 +259,100 @@
 ## 주요 기술 구현
 
 ### 데이터 수집 (크롤링)
+
 - Python, Beautiful Soup, Selenium을 활용한 웹 스크래핑
-- 전국 9개 지역의 숙소 정보 수집
+- 전국 9개 지역의 숙소 정보 수집 (각 100개씩, 900개)
 
 ### 상태 관리 (Zustand)
+
 - 간결한 상태 구현
 - 로컬 스토리지 연동 (persist)
-- FSM(Finite State Machine) 패턴 적용한 결제 프로세스
+- FSM(Finite State Machine) 패턴과 세션 스토리지를 적용한 결제 프로세스
+  - side-effect 방지
 
 ### 모달 및 토스트 알림
+
 - React Portal을 활용한 독립적 렌더링
 - 전역 및 지역 상태 분리로 렌더링 최적화
 
 ### 라우팅
+
 - public/private 라우팅 구현
 - 인증 상태에 따른 경로 보호
 
 ### 스타일링
-- Tailwind CSS 활용
-- 다크 모드 지원
 
+- Tailwind CSS 활용
+  - **우수한 DX**
+  - 성능 저하 없음 (CSS in Js)
+  - 컴포넌트 설계에 적합 (CSS Module)
+- 내장 기능(`dark:`)으로 다크 모드 간결하고 컴포넌트 단에서 구현
+
+### 페이지네이션
+
+- 모바일이라는 특성에 맞춰 무한 스크롤로 페이지 네이션 구현
+- 최하단에 observer를 부착한 요소를 로딩 애니메이션(svg)로 배치
+  - 로딩 애니메이션을 사용자가 보게되는 동시에 옵저버가 트리거되며 새로운 정보를 로딩
+![img](/docs/infinite-scroll.gif)
+
+### 예약
+
+- 예약 요청 검증 (client && firebase functions)
+  - 사용자 정보, 객실 ID, 날짜, 결제 정보 등의 필수 입력값 검증
+  - 날짜 형식 및 유효성 검증 (체크아웃 > 체크인)
+- 객실 가용성 확인 (일반적으로는 검색에서 필터링되어 접근이 불가)
+  - 요청된 날짜 범위에 해당 객실이 예약 가능한지 확인
+  - 이미 예약된 날짜와 겹치는지 검증
+- 트랜잭션 처리 
+  - 예약 정보 생성 (reservations 컬렉션)
+  - 객실 예약 상태 업데이트 (rooms.reservedDates)
+  - 호텔 예약 가능 여부 카운터 업데이트 (availability.dates)
+  - 검색 인덱스 갱신 (예약 가능 객실이 0개인 날짜는 search_index.reservedDates에 추가)
+- 결제 및 포인트 처리
+  - 사용자 포인트 차감 및 기록
+  - 결제 트랜잭션 생성
+
+### n-gram 인덱싱
+- firestore는 no sql이라 전문 검색이 불가
+- 호텔의 이름과 주소를 ngram으로 쪼개고 합쳐서 `combined_ngram`을 구성
+- 상수시간 복잡도로 찾을수 있도록 객체에 ngram을 키로, 값은 모두 `true`로 할당하여 구상
+- 호텔마다 n-gram이 있으면 호텔의 uid를 가지고 있음
+  - 호텔은 호텔의 정보만 가지고 기타 예약 사항, 가격 정보는 search_index로 보내 추상화 및 쿼리 최적화
+  
+### 검색 (필터링)
+
+- 검색 요청 처리
+  - 검색어, 지역, 카테고리, 날짜 범위 등 조건 확인
+  - 검색어 ngram 생성
+- 날짜 기반 사전 필터링
+  - 요청된 날짜 범위에 예약 불가능한 호텔 필터링
+  - search_index.reservedDates 배열 활용
+    - 여행 일정 사이의 모든 날 중 하나라도 reservedDate에 있으면 필터링
+- 호텔 검색 처리
+  - (검색 결과에서 이미 필터링된 호텔 제외)
+  - 일반 조건 검색 (ngram, 지역, 카테고리)
+- 예약 가능 객실 확인
+  - 검색 결과 호텔 (적어도 1개 이상의 예약 가능한 방이 있음이 확인됨)의 모든 방을 조회
+    - 호텔은 방의 uid를 가지고 있어 rooms 콜렉션을 uid로 조회
+    - rooms안의 문서에 reservedDate가 여행 일정 사이에 있으면 필터링
+- 검색 => 호텔 필터링 => 호텔 내에서 객실 필터링
+
+
+### 성능 최적화 전략
+
+- 캐싱 전략
+  - 인메모리 캐시와 IndexedDB를 활용한 클라이언트 측 캐싱
+- 데이터 구조 최적화
+  - 모든 날을 생성하는 것이 아니라 예약된 날만 저장
+    - 날짜 데이터를 배열이 아닌 객체 형태로 저장 (O(1) 접근 가능)
+    - 데이터 크기 최소화 및 빠른 조회 가능
+  - 검색 인덱스에 예약 불가 날짜만 저장하여 데이터 크기 최소화
+- 트랜잭션 처리
+  - 모든 데이터 변경 작업을 단일 트랜잭션으로 처리하여 일관성 유지
+  - 예약 처리 시 원자적 업데이트 보장
+- 효율적인 쿼리 설계  
+  - 날짜 필터링을 검색 초기 단계에서 수행하여 처리할 데이터 최소화
+  - 필요한 데이터만 정확하게 조회하는 쿼리 설계 
 
 ## 기능 구현 세부 사항
 
@@ -329,7 +398,91 @@ flowchart TD
     end
 ```
 
+### 검색 필터링
+
+#### 숙박 업체 필터링
+
+```mermaid
+sequenceDiagram
+    actor 사용자
+    participant API
+    participant 검색미들웨어
+    participant 인덱스DB
+    participant 메인DB
+    
+    사용자->>API: 검색 요청(검색어, 지역, 날짜 범위)
+    activate API
+    
+    API->>검색미들웨어: 검색 요청 전달
+    activate 검색미들웨어
+    
+    검색미들웨어->>검색미들웨어: 검색어 ngram 생성(한글 자모)
+    
+    검색미들웨어->>인덱스DB: ngram 인덱스 조회
+    activate 인덱스DB
+    인덱스DB-->>검색미들웨어: 검색어 일치 항목들
+    deactivate 인덱스DB
+    
+    검색미들웨어->>인덱스DB: 날짜 기반 필터링(search_index.reservatedDates)
+    activate 인덱스DB
+    인덱스DB-->>검색미들웨어: 날짜 가용성 정보
+    deactivate 인덱스DB
+    
+    검색미들웨어->>검색미들웨어: 필터링 로직 적용
+    
+    검색미들웨어->>검색미들웨어: 결과 정렬 및 페이징
+    Note right of 검색미들웨어: 상위 20개 항목 선택
+    
+    검색미들웨어->>메인DB: 최종 필터링된 호텔 ID로 상세 정보 요청
+    activate 메인DB
+    메인DB-->>검색미들웨어: 20개 호텔 상세 정보
+    deactivate 메인DB
+    
+    검색미들웨어-->>API: 필터링된 최종 결과(20개)
+    deactivate 검색미들웨어
+    
+    API-->>사용자: 검색 결과 반환
+    deactivate API
+```
+#### 객실 필터링
+
+```mermaid
+sequenceDiagram
+    participant 검색미들웨어
+    participant 객실필터링서비스
+    participant 메인DB
+    
+    검색미들웨어->>객실필터링서비스: 호텔 uid 목록 전달
+    activate 객실필터링서비스
+    
+    객실필터링서비스->>메인DB: 호텔 uid로 객실 uid 목록 요청
+    activate 메인DB
+    메인DB-->>객실필터링서비스: 호텔의 모든 객실 uid 목록
+    deactivate 메인DB
+    
+    loop 각 객실에 대해
+        객실필터링서비스->>메인DB: 객실 uid로 예약일 정보 요청
+        activate 메인DB
+        메인DB-->>객실필터링서비스: 객실 예약일 정보(reservatedDates)
+        deactivate 메인DB
+        
+        객실필터링서비스->>객실필터링서비스: 요청 날짜 범위와 예약일 비교
+        Note right of 객실필터링서비스: 요청 날짜와 reservatedDates가<br>겹치지 않으면 가용 객실로 판단
+    end
+    
+    객실필터링서비스->>객실필터링서비스: 가용 객실 목록 생성
+    
+    객실필터링서비스->>메인DB: 가용 객실 상세 정보 요청
+    activate 메인DB
+    메인DB-->>객실필터링서비스: 객실 상세 정보(가격, 옵션 등)
+    deactivate 메인DB
+    
+    객실필터링서비스-->>검색미들웨어: 가용 객실 목록 및 상세 정보
+    deactivate 객실필터링서비스
+```
+
 ### 결제 상태 관리 (FSM)
+
 ```mermaid
 stateDiagram-v2
   [*] --> IDLE
@@ -399,34 +552,6 @@ sequenceDiagram
     c ->> a: return Success || Fail
     Note over a : Conditional Rendering
 ```
-### Firebase Firestore 데이터베이스 구조
-```mermaid
-flowchart TD
-    subgraph 호텔 관련
-        Hotels[Hotels 컬렉션]
-        Rooms[Rooms 컬렉션]
-        SearchIndex[Search_Index 컬렉션<br/>문서 ID: 호텔 이름]
-    end
-    
-    subgraph 사용자 관련
-        Users[Users 컬렉션<br/>문서 ID: uid]
-        PointHistory[PointHistory 컬렉션<br/>문서 참조: uid]
-        Reservations[Reservations 컬렉션<br/>사용자 참조: uid<br/>방 참조: roomUid]
-    end
-    
-    %% 연결 관계
-    Hotels -->|rooms 배열에 uid 포함| Rooms
-    Hotels -->|동일한 이름으로 참조| SearchIndex
-    Users -->|uid로 연결| PointHistory
-    Users -->|uid로 연결| Reservations
-    Rooms -->|roomUid로 연결| Reservations
-    
-    classDef hotel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px;
-    classDef user fill:#f6ffed,stroke:#52c41a,stroke-width:1px;
-    
-    class Hotels,Rooms,SearchIndex hotel;
-    class Users,PointHistory,Reservations user;
-```
 
 ### firebase 통신
 
@@ -461,7 +586,7 @@ sequenceDiagram
 
     b ->> c : submitPayment (users input)
     Note over c : state: processing
-    c ->> f : requsetPayment<br/> (user info, users input,room uid)
+    c ->> f : requestPayment<br/> (user info, users input,room uid)
     f ->> g: processPayment<br/>{data}
     g ->> d: callFunction('payment', {data})
     d ->> g: return Success || Fail
@@ -469,9 +594,127 @@ sequenceDiagram
     f ->> c: return Success || Fail
     Note over c : state: completed || error
     c ->> b: return Success || Fail
-    Note over b : Conditional Rednering
+    Note over b : Conditional Rendering
 ```
 
+
+### Firebase Firestore 데이터베이스 구조
+
+```mermaid
+flowchart TD
+    subgraph 호텔 관련
+        Hotels[Hotels 컬렉션]
+        Rooms[Rooms 컬렉션]
+        SearchIndex[Search_Index 컬렉션<br/>문서 ID: 호텔 이름]
+    end
+    
+    subgraph 사용자 관련
+        Users[Users 컬렉션<br/>문서 ID: uid]
+        PointHistory[PointHistory 컬렉션<br/>문서 참조: uid]
+        Reservations[Reservations 컬렉션<br/>사용자 참조: uid<br/>방 참조: roomUid]
+    end
+    
+    %% 연결 관계
+    Hotels -->|rooms 배열에 uid 포함| Rooms
+    Hotels -->|동일한 이름으로 참조| SearchIndex
+    Users -->|uid로 연결| PointHistory
+    Users -->|uid로 연결| Reservations
+    Rooms -->|roomUid로 연결| Reservations
+    
+    classDef hotel fill:#e6f7ff,stroke:#1890ff,stroke-width:1px;
+    classDef user fill:#f6ffed,stroke:#52c41a,stroke-width:1px;
+    
+    class Hotels,Rooms,SearchIndex hotel;
+    class Users,PointHistory,Reservations user;
+```
+
+```mermaid
+graph TD
+    users["users
+    문서ID: user_uid
+    - name
+    - email
+    - points
+    - password_hash
+    - created_at"]
+        
+    hotels["hotels
+    문서ID: hotel_uid
+    - name
+    - location
+    - description
+    - category
+    - amenities[]
+    - images[]
+    - rating"]
+        
+    rooms["rooms
+    문서ID: room_uid
+    - hotel_uid
+    - name
+    - price
+    - description
+    - capacity
+    - amenities[]
+    - images[]
+    - reservatedDates[]"]
+        
+    availability["availability
+    문서ID: hotel_uid
+    - dates{date: count}"]
+        
+    search_index["search_index
+    문서ID: hotel_uid
+    - ngram_name{ngram: true}
+    - ngram_location{ngram: true}
+    - reservatedDates[]"]
+        
+    reservations["reservations
+    문서ID: reservation_uid
+    - user_uid
+    - hotel_uid
+    - room_uid
+    - check_in
+    - check_out
+    - total_price
+    - status
+    - created_at"]
+        
+    transactions["transactions
+    문서ID: transaction_uid
+    - user_uid
+    - reservation_uid
+    - amount
+    - payment_method
+    - status
+    - created_at"]
+        
+    point_history["point_history
+    문서ID: point_history_uid
+    - user_uid
+    - reservation_uid
+    - points
+    - type
+    - created_at"]
+    
+    %% 참조 관계 표시
+    users -.-> reservations
+    users -.-> transactions
+    users -.-> point_history
+    
+    hotels -.-> rooms
+    hotels -.-> availability
+    hotels -.-> search_index
+    
+    rooms -.-> reservations
+    
+    reservations -.-> transactions
+    reservations -.-> point_history
+    
+    %% 스타일 적용
+    classDef collection fill:#f9f9f9,stroke:#333,stroke-width:2px
+    class users,hotels,rooms,availability,search_index,reservations,transactions,point_history collection
+```
 
 
 ## 프로젝트 구조
